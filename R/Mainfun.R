@@ -3,7 +3,7 @@
 #' \code{MF_single}:\cr
 #' Multi-functionality measures in a single ecosystem. This is a function in the framework of Hill-Chao numbers
 #'
-#' @param func_data the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions).\cr
+#' @param func_data the ecosystem aaa function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions).\cr
 #' The data input must be normalized between 0 and 1 already and must contain only the ecosystem function columns.\cr
 #' For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.
 #' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
