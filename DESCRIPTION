@@ -1,0 +1,26 @@
+Package: MF.beta4
+Type: Package
+Title: MF.beta4
+Version: 0.1.0
+Author: Chun-Yu Liu
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Quantifying and measuring multifunctionality of ecosystem.
+License: GPL (>= 3)
+Depends: R (>= 4.0)
+Imports: broom,
+         devtools,
+         ggplot2,
+         dplyr,
+         stats,
+         ggpubr,
+	       grid,
+         purrr,
+         patchwork,
+         tidyr,
+         lme4,
+         lmerTest,
+	       tidyverse,
+         iNEXT.3D
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
