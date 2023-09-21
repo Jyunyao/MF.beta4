@@ -355,7 +355,7 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
     }) %>% do.call(rbind,.)
   }
 
-  output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrelated","Correlated")),
+  output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrected_for_correlations","Corrected_for_correlations")),
                                            names_to = c("Type","Scale"),
                                            names_pattern = "(.*)_(.*)",
                                            values_to = "qMF") %>%
