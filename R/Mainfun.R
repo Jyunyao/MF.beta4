@@ -80,7 +80,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
       AUC
     }) %>% as.data.frame()
     # if(nrow(norm_data)==1) qMF_tau_output <- t(qMF_tau_output)
-    names(qMF_tau_output) <- paste0("qMF_Correlated_",q)
+    names(qMF_tau_output) <- paste0("qMF_d_",q)
 
     output <- cbind(id_data,qMF_output,qMF_tau_output) %>%
       pivot_longer(cols = starts_with("qMF"),
