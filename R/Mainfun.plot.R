@@ -7,7 +7,7 @@
 #' @param facets_scale Are scales shared across all facets (the default, \code{"fixed"}), or do they vary across rows (\code{"free_x"}), columns (\code{"free_y"}), or both rows and columns (\code{"free"})?
 #' @param fit method of the fitted line. Select \code{fit = "lm"} for the linear model, or \code{fit = "LMM.intercept"}, \code{fit = "LMM.slope"} and \code{fit = "LMM.both"} for the linear mixed model with random effect 'intercept', 'slope' and 'both intercept and slope', respectively. Default is \code{fit = "LMM.intercept"}
 #' @param text what text information would show in plots? Select \code{text = "Slope"} to see estimated of slopes, or \code{text = "R.squared"} to see model performance.Default is \code{text = "Slope"}.
-#' @param by_group whether classify by group.
+#' @param by_group whether classify by group or not.
 #'
 #' @import tidyverse
 #' @import dplyr
