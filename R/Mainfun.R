@@ -275,8 +275,8 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
                              "group"=rep(group,length(q)),
                              "Order.q"=paste0("q = ",q),
                              "Uncorrected_for_correlations_Gamma"=rF,
-                             "Uncorrelated_for_correlations_Alpha"=aF,
-                             "Uncorrelated_for_correlations_Beta"=bF)
+                             "Uncorrected_for_correlations_Alpha"=aF,
+                             "Uncorrected_for_correlations_Beta"=bF)
         colnames(result)[2] <- by_group
 
 
