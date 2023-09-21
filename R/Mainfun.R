@@ -63,7 +63,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 
   qMF_output <- sapply(q,function(i) apply(func_data,1,function(x) qMF(v=x,q=i))) %>% as.data.frame()
   # if(nrow(data)==1) qMF_output <- t(qMF_output)
-  names(qMF_output) <- paste0("qMF_Uncorrelated_",q)
+  names(qMF_output) <- paste0("qMF_Uncorrected_for_correlations_",q)
 
   if(ncol(func_data)>1){
     tau <- seq(0,1,0.01)
@@ -80,7 +80,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
       AUC
     }) %>% as.data.frame()
     # if(nrow(norm_data)==1) qMF_tau_output <- t(qMF_tau_output)
-    names(qMF_tau_output) <- paste0("qMF_d_",q)
+    names(qMF_tau_output) <- paste0("qMF_Corrected_for_correlations_",q)
 
     output <- cbind(id_data,qMF_output,qMF_tau_output) %>%
       pivot_longer(cols = starts_with("qMF"),
