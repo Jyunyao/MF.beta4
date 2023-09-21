@@ -82,7 +82,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
 
   # For MF_single output
   else if(!("Scale" %in% names(output))){
-    output$Type <- factor(output$Type, levels = c("Uncorrelated", "Correlated"))
+    output$Type <- factor(output$Type, levels = c("Uncorrected_for_correlations", "Corrected_for_correlations"))
 
     if(is.null(by_group)){
       lm_data <- output %>% group_by(Type, Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .)))
