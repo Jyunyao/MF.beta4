@@ -173,9 +173,9 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
       two_plot <- rownames(spe_data)[c(two_idx[1,i],two_idx[2,i])]
       result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " v.s. "),length(q)),
                            "Order.q"=paste0("q = ",q),
-                           "Uncorrelated_Gamma"=rF,
-                           "Uncorrelated_Alpha"=aF,
-                           "Uncorrelated_Beta"=bF)
+                           "Uncorrected_for_correlations_Gamma"=rF,
+                           "Uncorrected_for_correlations_Alpha"=aF,
+                           "Uncorrected_for_correlations_Beta"=bF)
 
 
       if(ncol(fun_data)>1){
@@ -274,9 +274,9 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
         result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " v.s. "),length(q)),
                              "group"=rep(group,length(q)),
                              "Order.q"=paste0("q = ",q),
-                             "Uncorrelated_Gamma"=rF,
-                             "Uncorrelated_Alpha"=aF,
-                             "Uncorrelated_Beta"=bF)
+                             "Uncorrected_for_correlations_Gamma"=rF,
+                             "Uncorrected_for_correlations_Alpha"=aF,
+                             "Uncorrected_for_correlations_Beta"=bF)
         colnames(result)[2] <- by_group
 
 
