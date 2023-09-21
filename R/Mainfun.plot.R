@@ -1,6 +1,6 @@
 #' ggplot2 extension for a MF object
 #'
-#' \code{ggMF}: the \code{\link[ggplot2]{ggplot}} extension for \code{MF} object to plot the correlation between species diversity and multi-functionality
+#' \code{ggMF}: the \code{\link[ggplot2]{ggplot}} extension for \code{MF} object to plot the correlation between species diversity and multifunctionality
 #'
 #' @param output the output from \code{MF_single} or \code{MF_multiple}.\cr
 #' For \code{fit} is selected to be linear mixed model, you must offer the \code{by_group} argument.
@@ -20,7 +20,7 @@
 #' @import purrr
 #' @importFrom dplyr %>%
 #'
-#' @return For \code{MF_single} output, return a figure for multi-functionality with uncorrelated and correlated functions. For \code{MF_multiple} output, return a list of uncorrelated and correlated figures.
+#' @return For \code{MF_single} output, return a figure for multifunctionality with uncorrelated and correlated functions. For \code{MF_multiple} output, return a list of uncorrelated and correlated figures.
 #'
 #' @examples
 #'
@@ -107,7 +107,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
         guides(
           linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
         )+
-        labs(x = "Species diversity", y = "Multi-functionality")
+        labs(x = "Species diversity", y = "Multifunctionality")
 
 
     }
@@ -189,7 +189,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0))+
-          labs(x = "Species diversity", y = "Multi-functionality")
+          labs(x = "Species diversity", y = "Multifunctionality")
       }
       else{
         lm_text <- lm_all %>% select(Type, Order.q,R2_C,R2_M) %>%
@@ -206,7 +206,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0))+
-          labs(x = "Species diversity", y = "Multi-functionality")
+          labs(x = "Species diversity", y = "Multifunctionality")
       }
     }
   }
@@ -344,13 +344,13 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
 
 
       gamma_data <- data %>% filter(Scale=="Gamma")
-      gamma <- scale_plot(gamma_data, "Gamma species diversity", "Gamma MF")
+      gamma <- scale_plot(gamma_data, "Gamma species diversity", "Gamma Multifunctionality")
 
       alpha_data <- data %>% filter(Scale=="Alpha")
-      alpha <- scale_plot(alpha_data, "Alpha species diversity", "Alpha MF")
+      alpha <- scale_plot(alpha_data, "Alpha species diversity", "Alpha Multifunctionality")
 
       beta_data0 <- data %>% filter(Scale=="Beta", Order.q == "q = 0")
-      beta0 <- scale_plot(beta_data0, NULL, "Beta MF", 3,h_j=-1.25)
+      beta0 <- scale_plot(beta_data0, NULL, "Beta Multifunctionality", 3,h_j=-1.25)
 
       beta_data12 <- data %>% filter(Scale=="Beta", Order.q != "q = 0")
       beta12 <- scale_plot(beta_data12, NULL, NULL,h_j=-1.25)
