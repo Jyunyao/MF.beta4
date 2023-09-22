@@ -108,7 +108,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
         )+
         labs(x = "Species diversity", y = "Multifunctionality")+
-        theme(element_text(size=20))
+        theme(element_text(size=40))
 
 
     }
@@ -148,7 +148,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           geom_point(size=0.9,alpha=0.2)+
           geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.8, formula = y ~ x)+
           geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)+
-          theme(element_text(size=20))
+          theme(element_text(size=40))
       }
       else{
         lm_data <- output %>% group_by(Type, Order.q) %>%
@@ -167,7 +167,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           geom_point(size=0.9,alpha=0.2)+
           geom_segment(aes(x=x0,xend=x1,y=Intercept+Slope*x0,yend=Intercept+Slope*x1),size=0.5)+
           geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)+
-          theme(element_text(size=20))
+          theme(element_text(size=40))
       }
 
 
@@ -239,7 +239,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
             )+
             labs(x = xlab, y = ylab)+
-            theme(element_text(size=20))
+            theme(element_text(size=40))
 
 
         }
@@ -279,7 +279,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               geom_point(size=0.7,alpha=0.05)+
               geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.8, formula = y ~ x)+
               geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)+
-              theme(element_text(size=20))
+              theme(element_text(size=40))
           }
           else{
             lm_data <- out %>% group_by(Order.q) %>%
@@ -298,7 +298,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               geom_point(size=0.7,alpha=0.05)+
               geom_segment(aes(x=x0,xend=x1,y=Intercept+Slope*x0,yend=Intercept+Slope*x1),size=0.5)+
               geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)+
-              theme(element_text(size=20))
+              theme(element_text(size=40))
           }
 
 
