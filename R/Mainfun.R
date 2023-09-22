@@ -131,13 +131,13 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 #' @export
 
 MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group = NULL){
-
+  
   if ((length(func_data) == 1) && (inherits(func_data, c("numeric", "integer"))))
     stop("Error: Your data does not have enough information.")
-
+  
   if (FALSE %in% (0 <= (func_data %>% dplyr::select(-by_group)) & (func_data %>% dplyr::select(-by_group)) <= 1))
     stop("Error: Your data does not be normalized, please transform the data between 0 and 1 first.")
-
+  
   if(!is.null(species_data)){
     if(!all(names(species_data) %in% c("plotID","species","abundance")))
       stop("Error: The species_data should include the following three columns: 'plotID', 'species' and 'abundance'.")
@@ -146,38 +146,38 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
     else if(sum(is.na(species_data))!=0)
       stop("Error: There exists NA values in species_data.")
   }
-
+  
   if (is.vector(func_data)) func_data <- matrix(func_data,nrow=1)
-
-
+  
+  
   if(is.null(by_group)){
     func_data <- ungroup(func_data)
-
+    
     spe_data <- func_data
     two_idx <- combn(1:nrow(spe_data),2)
-
+    
     fun_data <- func_data
     if(ncol(fun_data)>1){
       tau <- seq(0,1,0.01)
       fun_data[is.na(fun_data)] <- 0
       transform_D <- sqrt(1-abs(cor(fun_data)))
     }
-
+    
     output <- lapply(1:ncol(two_idx),function(i){
       d_x <- cbind(x1=t(spe_data[two_idx[1,i],]),
                    x2=t(spe_data[two_idx[2,i],]))
       rF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "gamma"))
       aF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "alpha"))
       bF <- rF/aF
-
+      
       two_plot <- rownames(spe_data)[c(two_idx[1,i],two_idx[2,i])]
       result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " v.s. "),length(q)),
                            "Order.q"=paste0("q = ",q),
-                           "Uncorrelated_Gamma"=rF,
-                           "Uncorrelated_Alpha"=aF,
-                           "Uncorrelated_Beta"=bF)
-
-
+                           "Uncorrected_for_correlations_Gamma"=rF,
+                           "Uncorrected_for_correlations_Alpha"=aF,
+                           "Uncorrected_for_correlations_Beta"=bF)
+      
+      
       if(ncol(fun_data)>1){
         rF_tau <- lapply(tau,function(t){
           out <- data.frame("Order.q"=paste0("q = ",q),
@@ -185,14 +185,14 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
                             "Tau"=t)
           out
         }) %>% do.call(rbind,.)
-
+        
         aF_tau <- parallel::mclapply(tau,function(t){
           out <- data.frame("Order.q"=paste0("q = ",q),
                             "value"=sapply(q,function(y) qMF_diversity(d_x,y,t,transform_D,diversity = "alpha")),
                             "Tau"=t)
         }) %>% do.call(rbind,.)
         bF_tau <- rF_tau$value/aF_tau$value
-
+        
         result_tau <- data.frame("Order.q"=rF_tau$Order.q,
                                  "Tau"=rF_tau$Tau,
                                  "MF_g"=rF_tau$value,
@@ -204,22 +204,22 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
                     R_a = sum(MF_a[-1]*diff(Tau)),
                     L_b = sum(MF_b[seq_along(MF_b[-1])]*diff(Tau)),
                     R_b = sum(MF_b[-1]*diff(Tau))) %>% ungroup %>%
-          mutate(Correlated_Gamma = (L_g+R_g)/2,
-                 Correlated_Alpha = (L_a+R_a)/2,
-                 Correlated_Beta = (L_b+R_b)/2) %>%
-          dplyr::select(c(Correlated_Gamma:Correlated_Beta))
-
+          mutate(Corrected_for_correlations_Gamma = (L_g+R_g)/2,
+                 Corrected_for_correlations_Alpha = (L_a+R_a)/2,
+                 Corrected_for_correlations_Beta = (L_b+R_b)/2) %>%
+          dplyr::select(c(Corrected_for_correlations_Gamma:Corrected_for_correlations_Beta))
+        
         result <- cbind(result,result_tau)
       }
-
+      
       if(!is.null(species_data)){
-
+        
         Obs_div <- function(data,q){
           data_gamma = rowSums(data)
           data_gamma = data_gamma[data_gamma > 0]
           data_alpha = as.matrix(data) %>% as.vector
           data_alpha = data_alpha[data_alpha > 0]
-
+          
           gamma = iNEXT.3D::AO3D(data_gamma,q=q,nboot = 0,method = "Observed")
           g = gamma$qD
           alpha = iNEXT.3D::AO3D(data_alpha,q=q,nboot = 0,method = "Observed")
@@ -227,7 +227,7 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
           b = g/a
           return(list(gamma=g,alpha=a,beta=b))
         }
-
+        
         spec_data1 <- (species_data %>% filter(plotID==two_plot[1])) %>%
           group_by(species) %>% summarise(x1 = sum(abundance)) %>% select(c(species,x1))
         spec_data2 <- (species_data %>% filter(plotID==two_plot[2])) %>%
@@ -238,15 +238,15 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
         s_r <- div_out$gamma
         s_a <- div_out$alpha
         s_b <- div_out$beta
-
+        
         result <- cbind(result,data.frame("Species_Gamma"=s_r,
                                           "Species_Alpha"=s_a,
                                           "Species_Beta"=s_b))
       }
-
+      
       result
     }) %>% do.call(rbind,.)
-
+    
   }
   else if(length(by_group)!=1) stop("Error: The number of the group variable should not be more than 1.")
   else if(!(by_group %in% colnames(func_data))) stop("Error: The group variable is not included in the given data.")
@@ -255,31 +255,31 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
     output <- lapply(unique(unlist(func_data %>% dplyr::select(by_group)) %>% as.character()),function(group){
       spe_data <- func_data %>% filter(across(by_group) == group) %>% select(-by_group)
       two_idx <- combn(1:nrow(spe_data),2)
-
+      
       fun_data <- func_data %>% select(-by_group)
       if(ncol(fun_data)>1){
         tau <- seq(0,1,0.01)
         fun_data[is.na(fun_data)] <- 0
         transform_D <- sqrt(1-abs(cor(fun_data)))
       }
-
+      
       out <- lapply(1:ncol(two_idx),function(i){
         d_x <- cbind(x1=t(spe_data[two_idx[1,i],]),
                      x2=t(spe_data[two_idx[2,i],]))
         rF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "gamma"))
         aF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "alpha"))
         bF <- rF/aF
-
+        
         two_plot <- rownames(spe_data)[c(two_idx[1,i],two_idx[2,i])]
         result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " v.s. "),length(q)),
                              "group"=rep(group,length(q)),
                              "Order.q"=paste0("q = ",q),
-                             "Uncorrelated_Gamma"=rF,
-                             "Uncorrelated_Alpha"=aF,
-                             "Uncorrelated__Beta"=bF)
+                             "Uncorrected_for_correlations_Gamma"=rF,
+                             "Uncorrected_for_correlations_Alpha"=aF,
+                             "Uncorrected_for_correlations_Beta"=bF)
         colnames(result)[2] <- by_group
-
-
+        
+        
         if(ncol(fun_data)>1){
           rF_tau <- lapply(tau,function(t){
             out <- data.frame("Order.q"=paste0("q = ",q),
@@ -287,14 +287,14 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
                               "Tau"=t)
             out
           }) %>% do.call(rbind,.)
-
+          
           aF_tau <- parallel::mclapply(tau,function(t){
             out <- data.frame("Order.q"=paste0("q = ",q),
                               "value"=sapply(q,function(y) qMF_diversity(d_x,y,t,transform_D,diversity = "alpha")),
                               "Tau"=t)
           }) %>% do.call(rbind,.)
           bF_tau <- rF_tau$value/aF_tau$value
-
+          
           result_tau <- data.frame("Order.q"=rF_tau$Order.q,
                                    "Tau"=rF_tau$Tau,
                                    "MF_g"=rF_tau$value,
@@ -306,22 +306,22 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
                       R_a = sum(MF_a[-1]*diff(Tau)),
                       L_b = sum(MF_b[seq_along(MF_b[-1])]*diff(Tau)),
                       R_b = sum(MF_b[-1]*diff(Tau))) %>% ungroup %>%
-            mutate(Correlated_Gamma = (L_g+R_g)/2,
-                   Correlated_Alpha = (L_a+R_a)/2,
-                   Correlated_Beta = (L_b+R_b)/2) %>%
-            dplyr::select(c(Correlated_Gamma:Correlated_Beta))
-
+            mutate(Corrected_for_correlations_Gamma = (L_g+R_g)/2,
+                   Corrected_for_correlations_Alpha = (L_a+R_a)/2,
+                   Corrected_for_correlations_Beta = (L_b+R_b)/2) %>%
+            dplyr::select(c(Corrected_for_correlations_Gamma:Corrected_for_correlations_Beta))
+          
           result <- cbind(result,result_tau)
         }
-
+        
         if(!is.null(species_data)){
-
+          
           Obs_div <- function(data,q){
             data_gamma = rowSums(data)
             data_gamma = data_gamma[data_gamma > 0]
             data_alpha = as.matrix(data) %>% as.vector
             data_alpha = data_alpha[data_alpha > 0]
-
+            
             gamma = iNEXT.3D::AO3D(data_gamma,q=q,nboot = 0,method = "Observed")
             g = gamma$qD
             alpha = iNEXT.3D::AO3D(data_alpha,q=q,nboot = 0,method = "Observed")
@@ -329,7 +329,7 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
             b = g/a
             return(list(gamma=g,alpha=a,beta=b))
           }
-
+          
           spec_data1 <- (species_data %>% filter(plotID==two_plot[1])) %>%
             group_by(species) %>% summarise(x1 = sum(abundance)) %>% select(c(species,x1))
           spec_data2 <- (species_data %>% filter(plotID==two_plot[2])) %>%
@@ -340,7 +340,7 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
           s_r <- div_out$gamma
           s_a <- div_out$alpha
           s_b <- div_out$beta
-
+          
           result <- cbind(result,data.frame("Species_Gamma"=s_r,
                                             "Species_Alpha"=s_a,
                                             "Species_Beta"=s_b))
@@ -349,13 +349,13 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
         # other <- paste(other_data[two_idx[1,i],],other_data[two_idx[2,i],],sep = "-") %>%
         #   rep(each=length(q)) %>% matrix(nrow = length(q)) %>% as.data.frame()
         # names(other) <- names(other_data)
-
+        
         result
       }) %>% do.call(rbind,.)
     }) %>% do.call(rbind,.)
   }
-
-  output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrelated","Correlated")),
+  
+  output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrected_for_correlations","Corrected_for_correlations")),
                                            names_to = c("Type","Scale"),
                                            names_pattern = "(.*)_(.*)",
                                            values_to = "qMF") %>%
@@ -363,10 +363,9 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
                                            ifelse(Scale=="Alpha",Species_Alpha,
                                                   Species_Beta))) %>%
     dplyr::select(-c(Species_Gamma:Species_Beta))
-
+  
   return(output)
 }
-
 
 
 #' For functions normalized
