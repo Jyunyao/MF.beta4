@@ -103,7 +103,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                   hjust= -0.1, vjust= 2, size=3, key_glyph = draw_key_path)+
         scale_color_manual(values = "red")+
         theme_bw() +
-        theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0), legend.title = element_blank(),text = element_text(size=18,face = "bold"),axis.text.x = element_text(size=10))+
+        theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0), legend.title = element_blank(),text = element_text(size=18,face = "bold"),axis.text = element_text(size=8))+
         guides(
           linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
         )+
@@ -187,7 +187,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
                  col = guide_legend(title = by_group))+
-          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text.x = element_text(size=10))+
+          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text = element_text(size=8))+
           labs(x = "Species diversity", y = "Multifunctionality")
       }
       else{
@@ -204,7 +204,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
                  col = guide_legend(title = by_group))+
-          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text.x = element_text(size=10))+
+          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text = element_text(size=8))+
           labs(x = "Species diversity", y = "Multifunctionality")
       }
     }
@@ -230,7 +230,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                       hjust= -0.1, vjust= 2, size=3, key_glyph = draw_key_path)+
             scale_color_manual(values = "red")+
             theme_bw() +
-            theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0), legend.title = element_blank(),text = element_text(size=18,face = "bold"),axis.text.x = element_text(size=10))+
+            theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0), legend.title = element_blank(),text = element_text(size=18,face = "bold"),axis.text = element_text(size=8))+
             guides(
               linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
             )+
@@ -316,7 +316,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
                      col = guide_legend(title = by_group))+
-              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text.x = element_text(size=10))+
+              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text = element_text(size=8))+
               labs(x = xlab, y = ylab)
           }
           else{
@@ -333,7 +333,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
                      col = guide_legend(title = by_group))+
-              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text.x = element_text(size=10))+
+              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),text = element_text(size=18,face = "bold"),axis.text = element_text(size=8))+
               labs(x = xlab, y = ylab)
           }
 
