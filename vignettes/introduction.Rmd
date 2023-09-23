@@ -15,7 +15,7 @@ library(MF.beta4)
 library(tidyverse)
 library(grid)
 library(dplyr)
-load("~/Desktop/Chao meeting/Meeting report/MF.beta4/Demo_EF.rda")
+#load("C:/Users/stat_835/Desktop/lab chao/RA/MF 修改 檢查/MF.beta4 shiny/Demo_EF.rda")
 ```
 
 <font color=#FF6600>
