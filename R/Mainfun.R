@@ -31,15 +31,15 @@
 
 
 MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
-
+  
   if ((length(func_data) == 1) && (inherits(func_data, c("numeric", "integer"))))
     stop("Error: Your data does not have enough information.")
-
+  
   if (FALSE %in% (0 <= func_data & func_data <= 1))
     stop("Error: Your data does not be normalized, please transform the data between 0 and 1 first.")
   # if (is.vector(data) & (FALSE %in% (0 <= data & data <= 1)))
   #   stop("Error: Your data does not have enough information to be normalized automatically, please transform the data between 0 and 1 first.")
-
+  
   if(!is.null(species_data)){
     if(!all(names(species_data) %in% c("plotID","species","abundance")))
       stop("Error: The species_data should include the following three columns: 'plotID', 'species' and 'abundance'.")
@@ -48,23 +48,23 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
     else if(sum(is.na(species_data))!=0)
       stop("Error: There exists NA values in species_data.")
   }
-
+  
   if (is.vector(func_data)) func_data <- matrix(func_data,nrow=1)
-
-
+  
+  
   # if (nrow(fun_data)<2 & (FALSE %in% (0 <= fun_data & fun_data <= 1)))
   #   stop("Error: Your data does not have enough information to be normalized automatically, please transform the data between 0 and 1 first.")
   # if ((FALSE %in% (0 <= fun_data & fun_data <= 1)) && is_normalized)
   #   stop("Error: Your data does not be normalized between 0 and 1, please change the argument is_normalized to be FALSE.")
-
-
+  
+  
   func_data[is.na(func_data)] <- 0
   id_data <- data.frame(plotID = rownames(func_data))
-
+  
   qMF_output <- sapply(q,function(i) apply(func_data,1,function(x) qMF(v=x,q=i))) %>% as.data.frame()
   # if(nrow(data)==1) qMF_output <- t(qMF_output)
   names(qMF_output) <- paste0("qMF_Uncorrected_for_correlations_",q)
-
+  
   if(ncol(func_data)>1){
     tau <- seq(0,1,0.01)
     transform_D <- sqrt(1-abs(cor(func_data)))
@@ -81,7 +81,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
     }) %>% as.data.frame()
     # if(nrow(norm_data)==1) qMF_tau_output <- t(qMF_tau_output)
     names(qMF_tau_output) <- paste0("qMF_Corrected_for_correlations_",q)
-
+    
     output <- cbind(id_data,qMF_output,qMF_tau_output) %>%
       pivot_longer(cols = starts_with("qMF"),
                    names_to = c("Type", "Order.q"),
@@ -97,20 +97,20 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
                    values_to = "qMF") %>%
       mutate(Order.q = factor(paste0("q = ",Order.q)))
   }
-
-
-
+  
+  
+  
   if(!is.null(species_data)){
     species_div <- lapply(id_data$plotID,function(p){
       data_s <- species_data %>% filter(plotID == p) %>% group_by(species) %>%
         summarise(abundance = sum(abundance))
       div = iNEXT.3D::AO3D(data_s$abundance,q=q,nboot = 0,method = "Observed")
-      return(data.frame("Species diversity"=rep(div$qD,ifelse(ncol(func_data)>1,2,1))))
+      return(data.frame("Species diversity"=rep(div$qTD,ifelse(ncol(func_data)>1,2,1))))
     }) %>% do.call(rbind,.)
-
+    
     output <- cbind(output,species_div)
   }
-
+  
   return(output)
 }
 
@@ -221,9 +221,9 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
           data_alpha = data_alpha[data_alpha > 0]
           
           gamma = iNEXT.3D::AO3D(data_gamma,q=q,nboot = 0,method = "Observed")
-          g = gamma$qD
+          g = gamma$qTD
           alpha = iNEXT.3D::AO3D(data_alpha,q=q,nboot = 0,method = "Observed")
-          a = alpha$qD/2
+          a = alpha$qTD/2
           b = g/a
           return(list(gamma=g,alpha=a,beta=b))
         }
@@ -323,9 +323,9 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
             data_alpha = data_alpha[data_alpha > 0]
             
             gamma = iNEXT.3D::AO3D(data_gamma,q=q,nboot = 0,method = "Observed")
-            g = gamma$qD
+            g = gamma$qTD
             alpha = iNEXT.3D::AO3D(data_alpha,q=q,nboot = 0,method = "Observed")
-            a = alpha$qD/2
+            a = alpha$qTD/2
             b = g/a
             return(list(gamma=g,alpha=a,beta=b))
           }
@@ -394,7 +394,7 @@ func_normalized <- function(data, fun_cols = 1:ncol(data), negative = NULL, by_g
   if(is.null(negative)) neg_cols <- 0
   else if (!all(negative %in% colnames(fun_data))) stop("Error: Negative columns must be included in function columns.")
   else neg_cols <- which(colnames(fun_data) %in% negative)
-
+  
   trans_fun <- function(x, positive=TRUE){
     mi <- min(x,na.rm = T)
     ma <- max(x,na.rm = T)
@@ -403,7 +403,7 @@ func_normalized <- function(data, fun_cols = 1:ncol(data), negative = NULL, by_g
     y[x==0] <- NA
     return(y)
   }
-
+  
   if(is.null(by_group)){
     trans_out <- lapply(1:ncol(fun_data),function(i){
       if(i %in% neg_cols) trans_fun(fun_data[,i],F)
@@ -414,7 +414,7 @@ func_normalized <- function(data, fun_cols = 1:ncol(data), negative = NULL, by_g
   else{
     if(length(by_group)!=1) stop("Error: The number of the group variable for normalization should not be more than 1.")
     else if(!(by_group %in% colnames(data))) stop("Error: The group variable is not included in the given data.")
-
+    
     data <- data %>% dplyr::arrange(across(by_group))
     gr_data <- cbind(data %>% dplyr::select(all_of(by_group)),data[,fun_cols])
     trans_out <- lapply(unique(gr_data[,1]),function(g){
@@ -511,7 +511,7 @@ qMF_diversity <- function(v,q,tau=0.5,di=NULL,diversity="gamma"){
     ai_bar <- (1-d_tau/tau)%*%f_bar
     v_tau <- ifelse(f_bar==0,0,f_bar*f_bar/ai_bar)
     V <- w*v_tau
-
+    
     if (q==1) {
       Vv <- ifelse(ai==0,0,(ai/sum(V%*%ai))*log(ai/sum(V%*%ai)))
       1/N*exp(-sum(t(V)%*%Vv))
@@ -530,14 +530,14 @@ qMF_diversity <- function(v,q,tau=0.5,di=NULL,diversity="gamma"){
     ai_bar <- (1-d_tau/tau)%*%f_bar
     v_tau <- ifelse(f_bar==0,0,f_bar*f_bar/ai_bar)
     V <- w*v_tau
-
+    
     if(q==1) {
       Vv <- ifelse(ai_bar==0,0,((ai_bar)/sum(V*ai_bar))*log((ai_bar)/sum(V*ai_bar)))
       exp(-sum(V*Vv))
     }
     else (sum(V*((ai_bar)/sum(V*ai_bar))^q))^(1/(1-q))
   }
-
+  
   if(is.null(di) | tau == 0){
     if(diversity=="gamma") out = F_gamma(v=v,q=q)
     else out = F_alpha(v=v,q=q)
