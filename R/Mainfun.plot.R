@@ -105,7 +105,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
         theme_bw() +
         theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),
               strip.text = element_text(size=18),axis.text = element_text(size=8),axis.title=element_text(size=18),
-              legend.key.size = unit(1,'cm'), legend.title = element_text(size=18), legend.text = element_text(size=18))+
+              legend.title = element_text(size=10), legend.text = element_text(size=10))+
         guides(
           linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
         )+
@@ -191,7 +191,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),
                 strip.text = element_text(size=18),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                legend.key.size = unit(1,'cm'), legend.title = element_text(size=18), legend.text = element_text(size=18))+
+                legend.title = element_text(size=10), legend.text = element_text(size=10))+
           labs(x = "Species diversity", y = "Multifunctionality")
       }
       else{
@@ -210,7 +210,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),
                 strip.text = element_text(size=18),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                legend.key.size = unit(1,'cm'), legend.title = element_text(size=18), legend.text = element_text(size=18))+
+                legend.title = element_text(size=10), legend.text = element_text(size=10))+
           labs(x = "Species diversity", y = "Multifunctionality")
       }
     }
@@ -238,7 +238,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
             theme_bw() +
             theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0), legend.title = element_blank(),
                   strip.text = element_text(size=18),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                  legend.key.size = unit(1,'cm'), legend.title = element_text(size=18), legend.text = element_text(size=18))+
+                  legend.title = element_text(size=10), legend.text = element_text(size=10))+
             guides(
               linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
             )+
@@ -326,7 +326,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                      col = guide_legend(title = by_group))+
               theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),
                     strip.text = element_text(size=18),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                    legend.key.size = unit(1,'cm'), legend.title = element_text(size=18), legend.text = element_text(size=18))+
+                    legend.title = element_text(size=10), legend.text = element_text(size=10))+
               labs(x = xlab, y = ylab)
           }
           else{
@@ -345,7 +345,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                      col = guide_legend(title = by_group))+
               theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,0,0,0),
                     strip.text = element_text(size=18),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                    legend.key.size = unit(1,'cm'), legend.title = element_text(size=18), legend.text = element_text(size=18))+
+                    legend.title = element_text(size=10), legend.text = element_text(size=10))+
               labs(x = xlab, y = ylab)
           }
           
