@@ -355,14 +355,23 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
     }) %>% do.call(rbind,.)
   }
   
-  output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrected_for_correlations","Corrected_for_correlations")),
-                                           names_to = c("Type","Scale"),
-                                           names_pattern = "(.*)_(.*)",
-                                           values_to = "qMF") %>%
-    dplyr::mutate(Species.diversity=ifelse(Scale=="Gamma",Species_Gamma,
-                                           ifelse(Scale=="Alpha",Species_Alpha,
-                                                  Species_Beta))) %>%
-    dplyr::select(-c(Species_Gamma:Species_Beta))
+  if(!is.null(species_data)){
+    output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrected_for_correlations","Corrected_for_correlations")),
+                                             names_to = c("Type","Scale"),
+                                             names_pattern = "(.*)_(.*)",
+                                             values_to = "qMF") %>%
+      dplyr::mutate(Species.diversity=ifelse(Scale=="Gamma",Species_Gamma,
+                                             ifelse(Scale=="Alpha",Species_Alpha,
+                                                    Species_Beta))) %>%
+      dplyr::select(-c(Species_Gamma:Species_Beta))
+  }else{
+    output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrected_for_correlations","Corrected_for_correlations")),
+                                             names_to = c("Type","Scale"),
+                                             names_pattern = "(.*)_(.*)",
+                                             values_to = "qMF")
+  }
+  
+  
   
   return(output)
 }
