@@ -98,9 +98,9 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
       plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF))+
         facet_grid(Type ~ Order.q, scales = facets_scale) +
         geom_point(size=0.7)+
-        geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=1.2, formula = y ~ x)+
+        geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=1.9, formula = y ~ x)+
         geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
-                  hjust= -0.1, vjust= 2, size=3, key_glyph = draw_key_path)+
+                  hjust= -0.1, vjust= 2, size=5, key_glyph = draw_key_path)+
         scale_color_manual(values = "red")+
         theme_bw() +
         theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
@@ -146,8 +146,8 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
         plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF,col = group))+
           facet_grid(Type ~ Order.q, scales = facets_scale) +
           geom_point(size=0.9,alpha=0.2)+
-          geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.8, formula = y ~ x)+
-          geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)
+          geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.5, formula = y ~ x)+
+          geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
       }
       else{
         lm_data <- output %>% group_by(Type, Order.q) %>%
@@ -165,7 +165,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           facet_grid(Type ~ Order.q, scales = facets_scale) +
           geom_point(size=0.9,alpha=0.2)+
           geom_segment(aes(x=x0,xend=x1,y=Intercept+Slope*x0,yend=Intercept+Slope*x1),size=0.5)+
-          geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)
+          geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
       }
       
       
@@ -184,7 +184,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
       
       if(text == "Slope"){
         plot_output <- plot_output +
-          geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path)+
+          geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=5,key_glyph = draw_key_path)+
           scale_colour_manual(values = col_manual) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
@@ -203,7 +203,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                  v=2)
         
         plot_output <- plot_output +
-          geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path, parse = T,col="red")+
+          geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=5,key_glyph = draw_key_path, parse = T,col="red")+
           scale_colour_manual(values = col_manual) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
@@ -231,9 +231,9 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF))+
             facet_grid(~Order.q, scales = facets_scale) +
             geom_point(size=0.7,alpha=0.2)+
-            geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=1.2, formula = y ~ x)+
+            geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=0.5, formula = y ~ x)+
             geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
-                      hjust= -0.1, vjust= 2, size=3, key_glyph = draw_key_path)+
+                      hjust= -0.1, vjust= 2, size=5, key_glyph = draw_key_path)+
             scale_color_manual(values = "red")+
             theme_bw() +
             theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6), legend.title = element_blank(),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
@@ -279,8 +279,8 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
             plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF,col = group))+
               facet_grid( ~ Order.q, scales = facets_scale) +
               geom_point(size=0.7,alpha=0.05)+
-              geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.8, formula = y ~ x)+
-              geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)
+              geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.5, formula = y ~ x)+
+              geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
           }
           else{
             lm_data <- out %>% group_by(Order.q) %>%
@@ -298,7 +298,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               facet_grid(~Order.q, scales = facets_scale) +
               geom_point(size=0.7,alpha=0.05)+
               geom_segment(aes(x=x0,xend=x1,y=Intercept+Slope*x0,yend=Intercept+Slope*x1),size=0.5)+
-              geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.3, col="red",key_glyph = draw_key_path)
+              geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
           }
           
           
@@ -318,7 +318,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           
           if(text == "Slope"){
             plot_output <- plot_output +
-              geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path)+
+              geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=5,key_glyph = draw_key_path)+
               scale_colour_manual(values = col_manual) +
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
@@ -337,7 +337,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                      v=2)
             
             plot_output <- plot_output +
-              geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path, parse = T,col="red")+
+              geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=5,key_glyph = draw_key_path, parse = T,col="red")+
               scale_colour_manual(values = col_manual) +
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
@@ -399,12 +399,12 @@ Lmm_fit <- function(data, r_effect = "intercept", each_group = FALSE){
   if(r_effect == "intercept") x <- lmerTest::lmer(qMF~Species.diversity+(1|group),data) %>% suppressWarnings()
   else if(r_effect == "slope") x <- lmerTest::lmer(qMF~Species.diversity+(0+Species.diversity|group),data) %>% suppressWarnings()
   else if(r_effect == "both") x <- lmerTest::lmer(qMF~Species.diversity+(1+Species.diversity|group),data) %>% suppressWarnings()
-
+  
   if(each_group){
     ret <- as_tibble(data.frame(group=rownames(coef(x)$group),coef(x)$group))
     colnames(ret) <- c("group","Intercept","Slope")
   }
-
+  
   else{
     johnson_r2 <- function(model){
       X <- model.matrix(model)
@@ -425,13 +425,14 @@ Lmm_fit <- function(data, r_effect = "intercept", each_group = FALSE){
       total.var <- Sf + Sl + Se + Sd
       Rsq.m <- Sf / total.var
       Rsq.c <- (Sf + Sl) / total.var
-
+      
       return(c(Rsq.c,Rsq.m))
     }
     r2_j <- johnson_r2(x)
     ret <- as_tibble(cbind(summary(x)$coefficients[,-3],"R2_C"=r2_j[1],"R2_M"=r2_j[2]), rownames = "term")
     colnames(ret) <- c("term", "estimate", "std.error","statistic","p.value","R2_C","R2_M")
   }
-
+  
   ret
 }
+
