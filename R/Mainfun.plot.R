@@ -23,6 +23,8 @@
 #' @return For \code{MF_single} output, return a figure for multifunctionality with uncorrelated and correlated functions. For \code{MF_multiple} output, return a list of uncorrelated and correlated figures.
 #'
 #' @examples
+#' 
+#' # Not run:
 #'
 #' ## single ecosystem
 #' data("Europe_Forest")
@@ -50,7 +52,8 @@
 #' fit = "lm",
 #' text = "Slope"
 #' )
-#'
+#' 
+#' # End(Not run)
 #'
 #' @export
 

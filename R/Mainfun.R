@@ -19,7 +19,9 @@
 #' @importFrom dplyr %>%
 #'
 #' @return a data.frame with columns 'Type', 'Order.q' and 'qMF'. For \code{species_data} is not \code{NULL}, the data.frame will contain 'Species.diversity'.
+#' 
 #' @examples
+#' # Not run:
 #'
 #' data("Europe_Forest")
 #' data("Europe_Forest_species")
@@ -27,6 +29,7 @@
 #' rownames(Europe_Forest_function) <- Europe_Forest$plotid
 #' MF_single(func_data = Europe_Forest_function, species_data = Europe_Forest_species)
 #'
+#' # End(Not run)
 #' @export
 
 
@@ -128,6 +131,16 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 #' @param by_group name of the column to be paired by group. Default is \code{NULL}.
 #'
 #' @return a data.frame with columns 'Order.q' , 'Type' , 'Scale' , 'qMF' , 'Species diversity' .
+#' 
+#' @examples
+#' # Not run:
+#' data("Europe_Forest")
+#' output3 = MF_multiple(func_data = Europe_Forest[,4:30],
+#'                      species_data = Europe_Forest_species,
+#'                      by_group = "Country")
+#'                      
+#' # End(Not run)
+#' 
 #' @export
 
 MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group = NULL){
@@ -390,10 +403,12 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
 #' @return a data.frame with normalized functions.
 #'
 #' @examples
+#' # Not run:
 #' data("Europe_Forest_raw")
 #' func_normalized(data = Europe_Forest_raw, fun_cols = 4:29,
 #' negative = c("soil_cn_ff_10","wue"), by_group = "Country")
 #'
+#' # End(Not run)
 #' @export
 
 
