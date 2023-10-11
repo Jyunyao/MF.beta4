@@ -100,7 +100,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
         geom_point(size=0.7)+
         geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=1.9, formula = y ~ x)+
         geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
-                  hjust= -0.1, vjust= 2, size=3.2, key_glyph = draw_key_path)+
+                  hjust= -0.1, vjust= 2, size=3, key_glyph = draw_key_path)+
         scale_color_manual(values = "red")+
         theme_bw() +
         theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
@@ -184,7 +184,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
       
       if(text == "Slope"){
         plot_output <- plot_output +
-          geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3.2,key_glyph = draw_key_path)+
+          geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path)+
           scale_colour_manual(values = col_manual) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
@@ -203,7 +203,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
                  v=2)
         
         plot_output <- plot_output +
-          geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3.2,key_glyph = draw_key_path, parse = T,col="red")+
+          geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path, parse = T,col="red")+
           scale_colour_manual(values = col_manual) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
