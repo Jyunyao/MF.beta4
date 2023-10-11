@@ -104,7 +104,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
         scale_color_manual(values = "red")+
         theme_bw() +
         theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-              strip.text = element_text(size=9),axis.text = element_text(size=8),axis.title=element_text(size=18),
+              strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
               legend.title = element_text(size=12))+
         guides(
           linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
@@ -190,7 +190,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                strip.text = element_text(size=9),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                 legend.title = element_text(size=12))+
           labs(x = "Species diversity", y = "Multifunctionality")
       }
@@ -209,7 +209,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                strip.text = element_text(size=9),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                 legend.title = element_text(size=12))+
           labs(x = "Species diversity", y = "Multifunctionality")
       }
@@ -237,7 +237,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
             scale_color_manual(values = "red")+
             theme_bw() +
             theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6), legend.title = element_blank(),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                  strip.text = element_text(size=9),axis.text = element_text(size=8),axis.title=element_text(size=18))+
+                  strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18))+
             guides(
               linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
             )+
@@ -324,7 +324,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
                      col = guide_legend(title = by_group))+
               theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                    strip.text = element_text(size=9),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                    strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                     legend.title = element_text(size=12))+
               labs(x = xlab, y = ylab)
           }
@@ -343,7 +343,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
                      col = guide_legend(title = by_group))+
               theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                    strip.text = element_text(size=9),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                    strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                     legend.title = element_text(size=12))+
               labs(x = xlab, y = ylab)
           }
