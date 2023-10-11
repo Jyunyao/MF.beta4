@@ -28,7 +28,7 @@ load("Demo_EF.rda")
 <font color=#FF6600>
 </font>
 
-`MF.beta4c is a R package for measuring ecosystem multifunctionality and assessing BEF relationships. It was originally developed for the Beta4 project (Müller et al. 2022) on the effect of enhancing the beta diversity between forest patches on ecosystem multifunctionality and forest resilience across spatial scales.
+`MF.beta4` is a R package for measuring ecosystem multifunctionality and assessing BEF relationships. It was originally developed for the Beta4 project (Müller et al. 2022) on the effect of enhancing the beta diversity between forest patches on ecosystem multifunctionality and forest resilience across spatial scales.
 
 Based on a framework of Hill-Chao numbers of orders q = 0, 1 and 2, `MF.beta4` features the following multifunctionality measures for a single and multiple ecosystems; see Chao et al. (2023) for pertinent methodology and decomposition theory.  
 
@@ -409,7 +409,7 @@ column used for grouping. Default is <code>NULL</code>.
 </table>
 
 
-The `ggMF()` function is a wrapper around the `ggplot2` package to display the relationship between species diversity and multi-functionality when <code>output</code> is from <code>MF_single</code>, or to display the relationship between the decomposition of species diversity and multi-functionality (MF alpha vs. species alpha, MF beta vs. species beta, and MF gamma vs. species gamma) when <code>output</code> is from <code>MF_multiple</code> using a single line of code. The resulting object is of class `"ggplot"` or `"list"` containing two lists of `ggplot` objects, so it can be manipulated using the `ggplot2` tools. Users can visualize the output with different methods of the fitted line by setting the parameter <code>**fit**</code>:
+The `ggMF()` function is a wrapper around the `ggplot2` package to display the relationship between species diversity and multi-functionality when <code>output</code> is from <code>MF_single</code>, or to display the relationship between the decomposition of species diversity and multi-functionality (MF alpha vs. species alpha, MF beta vs. species beta, and MF gamma vs. species gamma) when <code>output</code> is from <code>MF_multiple</code> using a single line of code. The resulting object is of class `"ggplot"` or `"list"` containing two lists of `ggplot` objects, so it can be manipulated using the `ggplot2` tools. Users can visualize the output with different methods of the fitted line by setting the parameter <code>**fit**</code>
 
 
 We first display multi-functionality in single ecosystem with `by_group` and without `by_group`.
