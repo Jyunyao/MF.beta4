@@ -130,14 +130,14 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 #'
 #' @return a data.frame with columns 'Order.q' , 'Type' , 'Scale' , 'qMF' , 'Species diversity' .
 #' 
-#' @examples
-#' # Not run:
+#' @example
+#' Not run:
 #' data("Europe_Forest")
 #' output3 = MF_multiple(func_data = Europe_Forest[,4:30],
 #'                      species_data = Europe_Forest_species,
 #'                      by_group = "Country")
 #'                      
-#' # End(Not run)
+#' End(Not run)
 #' 
 #' @export
 
