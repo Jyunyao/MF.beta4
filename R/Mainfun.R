@@ -22,13 +22,11 @@
 #' 
 #' @examples
 #' # Not run:
-#'
 #' data("Europe_Forest")
 #' data("Europe_Forest_species")
 #' Europe_Forest_function <- Europe_Forest[,4:29]
 #' rownames(Europe_Forest_function) <- Europe_Forest$plotid
 #' MF_single(func_data = Europe_Forest_function, species_data = Europe_Forest_species)
-#'
 #' # End(Not run)
 #' @export
 
