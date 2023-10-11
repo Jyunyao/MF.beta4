@@ -21,13 +21,13 @@
 #' @return a data.frame with columns 'Type', 'Order.q' and 'qMF'. For \code{species_data} is not \code{NULL}, the data.frame will contain 'Species.diversity'.
 #' 
 #' @examples
-#' # Not run:
+#' Not run:
 #' data("Europe_Forest")
 #' data("Europe_Forest_species")
 #' Europe_Forest_function <- Europe_Forest[,4:29]
 #' rownames(Europe_Forest_function) <- Europe_Forest$plotid
 #' MF_single(func_data = Europe_Forest_function, species_data = Europe_Forest_species)
-#' # End(Not run)
+#' End(Not run)
 #' @export
 
 
