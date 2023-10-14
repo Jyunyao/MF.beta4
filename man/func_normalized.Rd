@@ -12,11 +12,11 @@ func_normalized(
 )
 }
 \arguments{
-\item{data}{data can be input as a matrix/data.frame (multiple plots by functions).}
+\item{data}{data can be input as a matrix/data.frame (assemblages by functions). Data should be without NA, if does, the missing values need to impute first and then use the function.}
 
 \item{fun_cols}{the order number of the columns which be used as the ecosystem function.}
 
-\item{negative}{name of columns to be normalized negatively.}
+\item{negative}{names of columns which need to be normalized negatively.}
 
 \item{by_group}{name of the column to normalized by group. Default is \code{NULL}.}
 }
@@ -25,11 +25,14 @@ a data.frame with normalized functions.
 }
 \description{
 \code{func_normalized}:\cr
-To get the normalized functions between 0 and 1.
+To get normalized functions between 0 and 1.
 }
 \examples{
+\dontrun{
 data("Europe_Forest_raw")
-func_normalized(data = Europe_Forest_raw, fun_cols = 4:29,
-negative = c("soil_cn_ff_10","wue"), by_group = "Country")
+GER_SPA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="SPA")
+func_normalized(data = GER_SPA_Forest_raw, fun_cols = 4:29,
+                negative = c("soil_cn_ff_10","wue"), by_group = "Country")
 
+}
 }

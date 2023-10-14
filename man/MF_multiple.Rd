@@ -7,9 +7,8 @@
 MF_multiple(func_data, species_data = NULL, q = c(0, 1, 2), by_group = NULL)
 }
 \arguments{
-\item{func_data}{the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions).\cr
-The data input must be normalized between 0 and 1 already.\cr
-For \code{by_group = NULL} the func_data must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data.
+\item{func_data}{the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions). The data input must be normalized between 0 and 1 already.\cr
+For \code{by_group = NULL}, the func_data must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data.
 For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.}
 
 \item{species_data}{the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.}
@@ -23,5 +22,18 @@ a data.frame with columns 'Order.q' , 'Type' , 'Scale' , 'qMF' , 'Species divers
 }
 \description{
 \code{MF_multiple}:\cr
-Multi-functionality measures in multiple ecosystems. This is a function in the framework of Hill-Chao numbers
+Multifunctionality measures in multiple ecosystems. This is a function in the framework of Hill-Chao numbers
+}
+\examples{
+\dontrun{
+data("Europe_Forest")
+data("Europe_Forest_species")
+GER_SPA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="SPA")
+GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
+MF_multiple(func_data = GER_SPA_Forest[,4:30],
+                          species_data = GER_SPA_Forest_species,
+                          by_group = "Country")
+                     
+}
+
 }

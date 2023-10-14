@@ -1,10 +1,9 @@
 #' MF measures (single)
 #'
 #' \code{MF_single}:\cr
-#' Multi-functionality measures in a single ecosystem. This is a function in the framework of Hill-Chao numbers
+#' Multifunctionality measures in a single ecosystem. This is a function in the framework of Hill-Chao numbers
 #'
-#' @param func_data the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions).\cr
-#' The data input must be normalized between 0 and 1 already and must contain only the ecosystem function columns.\cr
+#' @param func_data the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions). The data input must be normalized between 0 and 1 already and must contain only the ecosystem function columns.\cr
 #' For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.
 #' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
 #' @param q a numerical vector specifying the diversity orders. Default is 0, 1 and 2.
@@ -18,16 +17,16 @@
 #' @importFrom stats cor
 #' @importFrom dplyr %>%
 #'
-#' @return a data.frame with columns 'Type', 'Order.q' and 'qMF'. For \code{species_data} is not \code{NULL}, the data.frame will contain 'Species.diversity'.
+#' @return a data.frame with columns 'plotID', 'Type', 'Order.q' and 'qMF'. For \code{species_data} is not \code{NULL}, the data.frame will contain 'Species.diversity'.
 #' 
 #' @examples
-#' Not run:
+#' \dontrun{
 #' data("Europe_Forest")
 #' data("Europe_Forest_species")
-#' Europe_Forest_function <- Europe_Forest[,4:29]
-#' rownames(Europe_Forest_function) <- Europe_Forest$plotid
-#' MF_single(func_data = Europe_Forest_function, species_data = Europe_Forest_species)
-#' End(Not run)
+#' GER_SPA_Forest_function <- filter(Europe_Forest,Country=="GER"|Country=="SPA")[,4:29]
+#' GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
+#' MF_single(func_data = GER_SPA_Forest_function, species_data = GER_SPA_Forest_species)
+#' }
 #' @export
 
 
@@ -118,11 +117,10 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 #' MF measures (multiple)
 #'
 #' \code{MF_multiple}:\cr
-#' Multi-functionality measures in multiple ecosystems. This is a function in the framework of Hill-Chao numbers
+#' Multifunctionality measures in multiple ecosystems. This is a function in the framework of Hill-Chao numbers
 #'
-#' @param func_data the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions).\cr
-#' The data input must be normalized between 0 and 1 already.\cr
-#' For \code{by_group = NULL} the func_data must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data.
+#' @param func_data the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions). The data input must be normalized between 0 and 1 already.\cr
+#' For \code{by_group = NULL}, the func_data must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data.
 #' For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.
 #' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
 #' @param q a numerical vector specifying the diversity orders. Default is 0, 1 and 2.
@@ -131,13 +129,16 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 #' @return a data.frame with columns 'Order.q' , 'Type' , 'Scale' , 'qMF' , 'Species diversity' .
 #' 
 #' @examples
-#' Not run:
+#' \dontrun{
 #' data("Europe_Forest")
-#' output3 = MF_multiple(func_data = Europe_Forest[,4:30],
-#'                      species_data = Europe_Forest_species,
-#'                      by_group = "Country")
+#' data("Europe_Forest_species")
+#' GER_SPA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="SPA")
+#' GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
+#' MF_multiple(func_data = GER_SPA_Forest[,4:30],
+#'                           species_data = GER_SPA_Forest_species,
+#'                           by_group = "Country")
 #'                      
-#' End(Not run)
+#' }
 #' 
 #' @export
 
@@ -391,22 +392,23 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
 #' For functions normalized
 #'
 #' \code{func_normalized}:\cr
-#' To get the normalized functions between 0 and 1.
+#' To get normalized functions between 0 and 1.
 #'
-#' @param data data can be input as a matrix/data.frame (multiple plots by functions).
+#' @param data data can be input as a matrix/data.frame (assemblages by functions). Data should be without NA, if does, the missing values need to impute first and then use the function.
 #' @param fun_cols the order number of the columns which be used as the ecosystem function.
-#' @param negative name of columns to be normalized negatively.
+#' @param negative names of columns which need to be normalized negatively.
 #' @param by_group name of the column to normalized by group. Default is \code{NULL}.
 #'
 #' @return a data.frame with normalized functions.
 #'
 #' @examples
-#' # Not run:
+#' \dontrun{
 #' data("Europe_Forest_raw")
-#' func_normalized(data = Europe_Forest_raw, fun_cols = 4:29,
-#' negative = c("soil_cn_ff_10","wue"), by_group = "Country")
+#' GER_SPA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="SPA")
+#' func_normalized(data = GER_SPA_Forest_raw, fun_cols = 4:29,
+#'                 negative = c("soil_cn_ff_10","wue"), by_group = "Country")
 #'
-#' # End(Not run)
+#' }
 #' @export
 
 

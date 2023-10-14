@@ -13,51 +13,63 @@ ggMF(
 )
 }
 \arguments{
-\item{output}{the output from \code{MF_single} or \code{MF_multiple}.\cr
-For \code{fit} is selected to be linear mixed model, you must offer the \code{by_group} argument.}
+\item{output}{the output from \code{MF_single} or \code{MF_multiple}.}
 
-\item{by_group}{whether classify by group or not.}
+\item{by_group}{whether the MF object to classify by group or not. If does, input name of the column used for grouping. Default is \code{NULL}.
+For \code{fit} is selected to be linear mixed model, you must offer the \code{by_group} argument.}
 
 \item{facets_scale}{Are scales shared across all facets (the default, \code{"fixed"}), or do they vary across rows (\code{"free_x"}), columns (\code{"free_y"}), or both rows and columns (\code{"free"})?}
 
-\item{fit}{method of the fitted line. Select \code{fit = "lm"} for the linear model, or \code{fit = "LMM.intercept"}, \code{fit = "LMM.slope"} and \code{fit = "LMM.both"} for the linear mixed model with random effect 'intercept', 'slope' and 'both intercept and slope', respectively. Default is \code{fit = "LMM.intercept"}}
+\item{fit}{method of the fitted line. Select \code{fit = "lm"} for the linear model, or \code{fit = "LMM.intercept"}, \code{fit = "LMM.slope"} and \code{fit = "LMM.both"} for the linear mixed model with random effect 'intercept', 'slope' and 'both intercept and slope', respectively.
+Default is \code{fit = "LMM.intercept"}.}
 
-\item{text}{what text information would show in plots? Select \code{text = "Slope"} to see estimated of slopes, or \code{text = "R.squared"} to see model performance.Default is \code{text = "Slope"}.}
+\item{text}{type of text information show in the plots. Select \code{text = "Slope"} to see estimated of slopes, or \code{text = "R.squared"} to see model performance. Default is \code{text = "Slope"}.}
 }
 \value{
-For \code{MF_single} output, return a figure for multi-functionality with uncorrelated and correlated functions. For \code{MF_multiple} output, return a list of uncorrelated and correlated figures.
+For \code{MF_single} output, return a figure for multi-functionality with functions that are uncorrected and corrected for correlations.
+For \code{MF_multiple} output, return a list of figures with uncorrected and corrected for correlations.
 }
 \description{
-\code{ggMF}: the \code{\link[ggplot2]{ggplot}} extension for \code{MF} object to plot the correlation between species diversity and multi-functionality
+\code{ggMF}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF} object to plot the correlation between species diversity and multifunctionality.
 }
 \examples{
+
+\dontrun{
 
 ## single ecosystem
 data("Europe_Forest")
 data("Europe_Forest_species")
-Europe_Forest_function <- Europe_Forest[,4:29]
-rownames(Europe_Forest_function) <- Europe_Forest$plotid
-output1 <- MF_single(func_data = Europe_Forest_function, species_data = Europe_Forest_species)
+GER_SPA_Forest_function <- filter(Europe_Forest,Country=="GER"|Country=="SPA")[,4:29]
+GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
+output1<-MF_single(func_data = GER_SPA_Forest_function, species_data = GER_SPA_Forest_species)
 
-## Display fitted line of linear mixed model with random effect 'intercept'.
 
-output1 <- data.frame(output1, Country = rep(Europe_Forest$Country, each = 6))
-ggMF(output1, facets_scale = 'fixed', fit = "LMM.intercept",by_group="Country")
+## Display fitted line of linear model
+
+GER_SPA_Forest<-filter(Europe_Forest,Country=="GER"|Country=="SPA")
+output1 <- data.frame(output1,
+ Country = rep(GER_SPA_Forest$Country, each = 6))
+ggMF(output1, facets_scale = 'fixed', fit = "lm",by_group="Country")
 
 
 ## multiple ecosystems
-multiple_data <- data.frame(Country = Europe_Forest$Country, Europe_Forest[4:29])
-multiple_Eur <- MF_multiple(func_data = multiple_data, species_data = Europe_Forest_species,
- q = c(0, 1, 2), by_group = "Country")
+data("Europe_Forest")
+data("Europe_Forest_species")
+GER_SPA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="SPA")
+GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
+output2 <- MF_multiple(func_data = GER_SPA_Forest[,4:30],
+                          species_data = GER_SPA_Forest_species,
+                          by_group = "Country")
 
-## Display fitted line of linear model
+## Display fitted line of linear mixed model with random effect 'intercept'
 ggMF(
-output = multiple_Eur,
+output = output2,
 by_group = "Country",
 facets_scale = "free_x",
-fit = "lm",
+fit = "LMM.intercept",
 text = "Slope"
 )
 
+}
 
 }
