@@ -31,26 +31,26 @@
 #' ## single ecosystem
 #' data("Europe_Forest")
 #' data("Europe_Forest_species")
-#' GER_SPA_Forest_function <- filter(Europe_Forest,Country=="GER"|Country=="SPA")[,4:29]
-#' GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
-#' output1<-MF_single(func_data = GER_SPA_Forest_function, species_data = GER_SPA_Forest_species)
+#' GER_ITA_Forest_function <- filter(Europe_Forest,Country=="GER"|Country=="ITA")[,4:29]
+#' GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+#' output1<-MF_single(func_data = GER_ITA_Forest_function, species_data = GER_ITA_Forest_species)
 #'
 #'
 #' ## Display fitted line of linear model
 #'
-#' GER_SPA_Forest<-filter(Europe_Forest,Country=="GER"|Country=="SPA")
+#' GER_ITA_Forest<-filter(Europe_Forest,Country=="GER"|Country=="ITA")
 #' output1 <- data.frame(output1,
-#'  Country = rep(GER_SPA_Forest$Country, each = 6))
+#'  Country = rep(GER_ITA_Forest$Country, each = 6))
 #' ggMF(output1, facets_scale = 'fixed', fit = "lm",by_group="Country")
 #'
 #'
 #' ## multiple ecosystems
 #' data("Europe_Forest")
 #' data("Europe_Forest_species")
-#' GER_SPA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="SPA")
-#' GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
-#' output2 <- MF_multiple(func_data = GER_SPA_Forest[,4:30],
-#'                           species_data = GER_SPA_Forest_species,
+#' GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
+#' GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+#' output2 <- MF_multiple(func_data = GER_ITA_Forest[,4:30],
+#'                           species_data = GER_ITA_Forest_species,
 #'                           by_group = "Country")
 #'
 #' ## Display fitted line of linear mixed model with random effect 'intercept'

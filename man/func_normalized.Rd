@@ -30,8 +30,8 @@ To get normalized functions between 0 and 1.
 \examples{
 \dontrun{
 data("Europe_Forest_raw")
-GER_SPA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="SPA")
-func_normalized(data = GER_SPA_Forest_raw, fun_cols = 4:29,
+GER_ITA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="ITA")
+func_normalized(data = GER_ITA_Forest_raw, fun_cols = 4:29,
                 negative = c("soil_cn_ff_10","wue"), by_group = "Country")
 
 }

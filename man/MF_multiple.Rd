@@ -28,10 +28,10 @@ Multifunctionality measures in multiple ecosystems. This is a function in the fr
 \dontrun{
 data("Europe_Forest")
 data("Europe_Forest_species")
-GER_SPA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="SPA")
-GER_SPA_Forest_species<-Europe_Forest_species[c(49:140,411:481),]
-MF_multiple(func_data = GER_SPA_Forest[,4:30],
-                          species_data = GER_SPA_Forest_species,
+GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
+GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+MF_multiple(func_data = GER_ITA_Forest[,4:30],
+                          species_data = GER_ITA_Forest_species,
                           by_group = "Country")
                      
 }
