@@ -85,6 +85,9 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
     stop("Error: the argument text should be `Slope` or `R.squared`.")
   
   stdPalette <- c("#FF88C2","gray55","purple2", "darkorange", "#00AAAA", "blue")
+  abc<-scale_linetype_manual(values = c( "Significant slope (P < 0.05)" = "solid","Insignificant slope" = "dashed"), name = NULL, drop = FALSE)
+  
+  
   #"steelblue1"
   #cbPalette <- c("#8DD3C7", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3", "#FDB462", "#B3DE69", "#FCCDE5", "#D9D9D9", "#BC80BD", "#CCEBC5", "#FFED6F")
   
