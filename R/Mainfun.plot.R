@@ -119,9 +119,9 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
               legend.title = element_text(size=12))+
         guides(
-          linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
+          linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
         )+
-        labs(x = "Species diversity", y = "Multifunctionality")
+        labs(x = "Species diversity", y = "Multifunctionality")+abc
       
     }
     else{
@@ -199,12 +199,12 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path)+
           scale_colour_manual(values = col_manual) +
           theme_bw() +
-          guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
+          guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6,linewidth = 0.7)),
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
                 strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                 legend.title = element_text(size=12))+
-          labs(x = "Species diversity", y = "Multifunctionality")
+          labs(x = "Species diversity", y = "Multifunctionality")+abc
       }
       else{
         lm_text <- lm_all %>% select(Type, Order.q,R2_C,R2_M) %>%
@@ -218,12 +218,12 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path, parse = T,col="red")+
           scale_colour_manual(values = col_manual) +
           theme_bw() +
-          guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
+          guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6,linewidth = 0.7)),
                  col = guide_legend(title = by_group))+
           theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
                 strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                 legend.title = element_text(size=12))+
-          labs(x = "Species diversity", y = "Multifunctionality")
+          labs(x = "Species diversity", y = "Multifunctionality")+abc
       }
     }
   }
@@ -251,9 +251,9 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
             theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6), legend.title = element_blank(),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
                   strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18))+
             guides(
-              linetype = guide_legend(override.aes = list(col = "#000000",size=0.7))
+              linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
             )+
-            labs(x = xlab, y = ylab)
+            labs(x = xlab, y = ylab)+abc
           
           
         }
@@ -333,12 +333,12 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=2.7,key_glyph = draw_key_path)+
               scale_colour_manual(values = col_manual) +
               theme_bw() +
-              guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6)),
+              guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6,linewidth = 0.7)),
                      col = guide_legend(title = by_group))+
               theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
                     strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                     legend.title = element_text(size=12))+
-              labs(x = xlab, y = ylab)
+              labs(x = xlab, y = ylab)+abc
           }
           else{
             lm_text <- lm_all %>% select(Order.q,R2_C,R2_M) %>%
@@ -352,12 +352,12 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
               geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=2.7,key_glyph = draw_key_path, parse = T,col="red")+
               scale_colour_manual(values = col_manual) +
               theme_bw() +
-              guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6)),
+              guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6,linewidth = 0.7)),
                      col = guide_legend(title = by_group))+
               theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
                     strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
                     legend.title = element_text(size=12))+
-              labs(x = xlab, y = ylab)
+              labs(x = xlab, y = ylab)+abc
           }
           
           plot_output
@@ -396,6 +396,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
   }
   return(plot_output)
 }
+
 
 
 # Get the summary table of the linear mixed model fitted.
