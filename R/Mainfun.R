@@ -49,6 +49,8 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
       stop("Error: There exists NA values in species_data.")
   }
   
+  func_data[which(func_data==0,arr.ind = TRUE)]<-NA
+  
   if (is.vector(func_data)) func_data <- matrix(func_data,nrow=1)
   
   
@@ -158,6 +160,8 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
     else if(sum(is.na(species_data))!=0)
       stop("Error: There exists NA values in species_data.")
   }
+  
+  func_data[which(func_data==0,arr.ind = TRUE)]<-NA
   
   if (is.vector(func_data)) func_data <- matrix(func_data,nrow=1)
   
@@ -424,7 +428,8 @@ func_normalized <- function(data, fun_cols = 1:ncol(data), negative = NULL, by_g
     ma <- max(x,na.rm = T)
     if(positive) y <- (x-mi)/(ma-mi)
     else y <- (ma-x)/(ma-mi)
-    y[x==0] <- NA
+    y[which.min(y)]<-10^-9
+    y[x==0] <- 0
     return(y)
   }
   

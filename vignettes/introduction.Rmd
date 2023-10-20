@@ -21,7 +21,7 @@ library(MF.beta4)
 library(tidyverse)
 library(grid)
 library(dplyr)
-load("EF_multiple.rda")
+#load("EF_multiple.rda")
 ```
 
 <font color=#FF6600>
@@ -63,7 +63,7 @@ The `MF.beta4` package can be downloaded from Anne Chao's [MF.beta4_github](http
 ## install the latest version from github
 install.packages('devtools')
 library(devtools)
-install_github("Jyunyao/MF.beta4")
+install_github("AnneChao/MF.beta4")
 
 ## import packages
 library(MF.beta4)
@@ -152,7 +152,7 @@ The arguments of this function are briefly described below, and will be explaine
 <tbody>
 <tr class="odd">
 <td align="center"><code>func_data</code></td>
-<td align="left">The ecosystem function data can be input as a vector of functions (for a single assemblage), <code>matrix</code>/<code>data.frame</code> (assemblages by functions).\cr
+<td align="left">The ecosystem function data can be input as a vector of functions (for a single assemblage), <code>matrix</code>/<code>data.frame</code> (assemblages by functions).
 The data input must be normalized between 0 and 1 already and must contain only the ecosystem function columns.</br>
 For <code>species_data</code> is not <code>NULL</code>, the rownames of <code>func_data</code> should be names of 'plotID'.</td>
 
@@ -197,7 +197,7 @@ The arguments of this function are briefly described below, and will be explaine
 <tbody>
 <tr class="odd">
 <td align="center"><code>func_data</code></td>
-<td align="left">The ecosystem function data can be input as a vector of functions (for a single assemblage), <code>matrix</code>/<code>data.frame</code> (assemblages by functions).\cr
+<td align="left">The ecosystem function data can be input as a vector of functions (for a single assemblage), <code>matrix</code>/<code>data.frame</code> (assemblages by functions).
 The data input must be normalized between 0 and 1 already.</br>
 For <code>by_group = NULL</code> the <code>func_data</code> must contain only the ecosystem function columns. Otherwise, you must add the <code>by_group</code> column in data.
 For <code>species_data</code> is not <code>NULL</code>, the rownames of <code>func_data</code> should be names of 'plotID'.</td>
@@ -239,28 +239,30 @@ Run the following code to view raw forest data: (Here we only show the first ten
 
 ```{r eval=FALSE, fig.width=10}
 data("Europe_Forest_raw")
-Europe_Forest_raw
+GER_ITA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="ITA")
+GER_ITA_Forest_raw
 ```
 
 ```{r echo=FALSE, fig.width=10}
 data("Europe_Forest_raw")
-head(cbind(Europe_Forest_raw[1:3], round(Europe_Forest_raw[4:5], 3)), 10)
+GER_ITA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="ITA")
+head(cbind(GER_ITA_Forest_raw[1:3], round(GER_ITA_Forest_raw[4:5], 3)), 10)
 ```
 
 Since the data is not normalized, we then use `func_normalized()` to do normalization. Note that, in this data, the ecosystem functions are column 4 to column 29. And there are two ecosystem functions should be normalized negatively: `"soil_cn_ff_10"` and `"wue"`. Furthermore, the performance of the ecosystem functions are quite different between six countries, thus, we do normalization and analysis among each countries.
 
 ```{r eval=FALSE}
 data("Europe_Forest_raw")
-func_normalized(data = Europe_Forest_raw, fun_cols = 4:29,
+func_normalized(data = GER_ITA_Forest_raw, fun_cols = 4:29,
                 negative = c("soil_cn_ff_10","wue"), by_group = "Country")
 ```
 
 ```{r, echo=FALSE}
-norm_Europe_Forest = func_normalized(data = Europe_Forest_raw, 
+norm_GER_ITA_Forest = func_normalized(data = GER_ITA_Forest_raw, 
                                      fun_cols = 4:29, 
                                      negative = c("soil_cn_ff_10","wue"), 
                                      by_group = "Country")
-head(cbind(norm_Europe_Forest[1:3], round(norm_Europe_Forest[4:5], 3)), 10)
+head(cbind(norm_GER_ITA_Forest[1:3], round(norm_GER_ITA_Forest[4:5], 3)), 10)
 ```
 
 
@@ -275,14 +277,16 @@ Run the following code to view complete species abundance data:
 
 ```{r eval=FALSE}
 data("Europe_Forest_species")
-Europe_Forest_species
+GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+GER_ITA_Forest_species
 ```
 
 Here, we only show the first ten rows.
 
 ```{r echo=FALSE}
 data("Europe_Forest_species")
-head(Europe_Forest_species,10)
+GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+head(GER_ITA_Forest_species,10)
 ```
 
 ### Computing Multifunctionality in Single Ecosystem Via Example
@@ -293,7 +297,8 @@ For example, given a normalized data, we run the `MF_single()` function without 
 
 ```{r echo=TRUE}
 data("Europe_Forest")
-output1 <- MF_single(func_data = Europe_Forest[,4:29])
+GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
+output1 <- MF_single(func_data = GER_ITA_Forest[,4:29])
 ```
 
 ```{r, echo=FALSE}
@@ -310,13 +315,15 @@ The output contains ID of plot (`plotID`) which is according to the row names of
 ```{r echo=TRUE}
 data("Europe_Forest")
 data("Europe_Forest_species")
-output2 <- MF_single(func_data = Europe_Forest[,4:29],species_data = Europe_Forest_species)
+GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
+GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+output2 <- MF_single(func_data = GER_ITA_Forest[,4:29],species_data = GER_ITA_Forest_species)
 ```
 
 ```{r echo=FALSE}
-output2 %>% mutate(qMF = round(qMF,3),
-                          Species.diversity = round(Species.diversity,3)) %>% 
-  head(6)
+output2[13:18,] %>% mutate(qMF = round(qMF,3),
+                          Species.diversity = round(Species.diversity,3))
+
 ```
 
 
@@ -328,13 +335,24 @@ For example, we run the `MF_multiple()` function with forest data to compute unc
 
 ```{r eval=FALSE}
 data("Europe_Forest")
-output3 = MF_multiple(func_data = Europe_Forest[,4:30],
-                      species_data = Europe_Forest_species,
+data("Europe_Forest_species")
+GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
+GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+output3 = MF_multiple(func_data = GER_ITA_Forest[,4:30],
+                      species_data = GER_ITA_Forest_species,
                       by_group = "Country")
 ```
 
 ```{r include=FALSE}
-output3 <- EF_multiple %>% 
+data("Europe_Forest")
+data("Europe_Forest_species")
+GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
+GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
+Demo_multiple = MF_multiple(func_data = GER_ITA_Forest[,4:30],
+                      species_data = GER_ITA_Forest_species,
+                      by_group = "Country")
+
+output3 <- Demo_multiple %>% 
   mutate(Type=factor(Type,levels = unique(Type)),
          Scale=factor(Scale,levels = unique(Scale))) %>%
   group_by(plotID,Country,Type,Scale) %>%
@@ -346,7 +364,7 @@ output3 <- EF_multiple %>%
 
 ```{r echo=FALSE}
 head(output3, 6)
-output3 <- EF_multiple
+output3 <- Demo_multiple
 ```
 
 
@@ -422,8 +440,8 @@ ggMF(output2, facets_scale = 'fixed', fit = "lm")
 
 
 ```{r, fig.align='center', fig.height=6.5, fig.width=6.5}
-output2 <- data.frame("plotID"=rownames(Europe_Forest),
-                      "Country"=Europe_Forest$Country) %>% 
+output2 <- data.frame("plotID"=rownames(GER_ITA_Forest),
+                      "Country"=GER_ITA_Forest$Country) %>% 
   left_join(output2,.,by="plotID")
 ggMF(output2, by_group = "Country", facets_scale = 'fixed', 
      fit = "LMM.intercept")  
