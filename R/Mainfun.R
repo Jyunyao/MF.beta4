@@ -428,8 +428,15 @@ func_normalized <- function(data, fun_cols = 1:ncol(data), negative = NULL, by_g
     ma <- max(x,na.rm = T)
     if(positive) y <- (x-mi)/(ma-mi)
     else y <- (ma-x)/(ma-mi)
-    y[which.min(y)]<-10^-9
-    y[x==0] <- 0
+    ### revise
+    y[y==0] <- 10^(-15)
+    #y[x==0] <- 0
+    if (mi<0){
+      y[x==0] <- y[x==0]
+    }else{
+      y[x==0] <- 0
+    }
+    
     return(y)
   }
   

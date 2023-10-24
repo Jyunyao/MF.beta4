@@ -84,7 +84,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
   if(!(text %in% c("Slope","R.squared")))
     stop("Error: the argument text should be `Slope` or `R.squared`.")
   
-  stdPalette <- c("#FF88C2","gray55","purple2", "darkorange", "#00AAAA", "blue")
+  stdPalette <- c("#FF88C2", "blue", "darkorange","gray55","purple2", "#00AAAA")
   abc<-scale_linetype_manual(values = c( "Significant slope (P < 0.05)" = "solid","Insignificant slope" = "dashed"), name = NULL, drop = FALSE)
   
   
@@ -160,7 +160,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
         
         plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF,col = group))+
           facet_grid(Type ~ Order.q, scales = facets_scale) +
-          geom_point(size=0.9,alpha=0.2)+
+          geom_point(size=0.9,alpha=0.5)+
           geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.5, formula = y ~ x)+
           geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
       }
@@ -178,7 +178,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
         
         plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF,col = group))+
           facet_grid(Type ~ Order.q, scales = facets_scale) +
-          geom_point(size=0.9,alpha=0.2)+
+          geom_point(size=0.9,alpha=0.5)+
           geom_segment(aes(x=x0,xend=x1,y=Intercept+Slope*x0,yend=Intercept+Slope*x1),size=0.5)+
           geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
       }
@@ -245,7 +245,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
           out <- suppressMessages(out %>% dplyr::left_join(lm_data))
           plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF))+
             facet_grid(~Order.q, scales = facets_scale) +
-            geom_point(size=0.7,alpha=0.2)+
+            geom_point(size=0.7,alpha=0.5)+
             geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=0.5, formula = y ~ x)+
             geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
                       hjust= -0.1, vjust= 2, size=2.7, key_glyph = draw_key_path)+
@@ -293,7 +293,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
             
             plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF,col = group))+
               facet_grid( ~ Order.q, scales = facets_scale) +
-              geom_point(size=0.7,alpha=0.05)+
+              geom_point(size=0.7,alpha=0.1)+
               geom_smooth(aes(lty = Significance), method = "lm", se = F, size=0.5, formula = y ~ x)+
               geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
           }
@@ -311,7 +311,7 @@ ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.int
             
             plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF,col = group))+
               facet_grid(~Order.q, scales = facets_scale) +
-              geom_point(size=0.7,alpha=0.05)+
+              geom_point(size=0.7,alpha=0.1)+
               geom_segment(aes(x=x0,xend=x1,y=Intercept+Slope*x0,yend=Intercept+Slope*x1),size=0.5)+
               geom_abline(data = lm_overall, aes(slope=estimate, intercept=Intercept, lty = Significance), size=1.9, col="red",key_glyph = draw_key_path)
           }
