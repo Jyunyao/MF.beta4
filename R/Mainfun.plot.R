@@ -1,14 +1,17 @@
-#' ggplot2 extension for a MF object
+#' ggplot2 extension for a MF_single or MF_multiple object
 #'
-#' \code{ggMF}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF} object to plot the correlation between species diversity and multifunctionality.
+#' \code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF} object to plot the correlation between species diversity and multifunctionality.
 #'
-#' @param output the output from \code{MF_single} or \code{MF_multiple}.
+#' @param output the output obtained from \code{MF1_single} or \code{MF2_multiple}. \cr 
+#' If using output obtained from \code{MF1_single} and want to draw the plot with \code{by_group}, must add the \code{by_group} column in output.
 #' @param facets_scale Are scales shared across all facets (the default, \code{"fixed"}), or do they vary across rows (\code{"free_x"}), columns (\code{"free_y"}), or both rows and columns (\code{"free"})?
-#' @param fit method of the fitted line. Select \code{fit = "lm"} for the linear model, or \code{fit = "LMM.intercept"}, \code{fit = "LMM.slope"} and \code{fit = "LMM.both"} for the linear mixed model with random effect 'intercept', 'slope' and 'both intercept and slope', respectively.
-#' Default is \code{fit = "LMM.intercept"}.
-#' @param text type of text information show in the plots. Select \code{text = "Slope"} to see estimated of slopes, or \code{text = "R.squared"} to see model performance. Default is \code{text = "Slope"}.
-#' @param by_group whether the MF object to classify by group or not. If does, input name of the column used for grouping. Default is \code{NULL}.
-#' For \code{fit} is selected to be linear mixed model, you must offer the \code{by_group} argument.
+#' @param model specifying the fitting model. Specify \code{model = "lm"} for the linear model,
+#' or \code{"LMM.intercept"}, \code{"LMM.slope"}, \code{"LMM.both"} for the linear mixed model with random effects for intercept,
+#' slope, and both, respectively. Default is \code{model = "LMM.both"}.
+#' @param caption caption information that will be shown in the BEF plots. Select \code{caption = "slope"} to show the estimated slopes,
+#' or \code{caption = "R.squared"} to show the marginal and conditional R-squared. Default is \code{caption = "slope"}.}
+#' @param by_group name of the column for normalization and decomposition i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column. Default is \code{NULL}. \cr
+#' For linear mixed model is selected in the \code{model}, the \code{by_group} argument must be specified.
 #'
 #' @import tidyverse
 #' @import dplyr
@@ -21,52 +24,51 @@
 #' @import purrr
 #' @importFrom dplyr %>%
 #'
-#' @return For \code{MF_single} output, return a figure for multi-functionality with functions that are uncorrected and corrected for correlations.
-#' For \code{MF_multiple} output, return a list of figures with uncorrected and corrected for correlations.
+#' @return For \code{MF1_single} object, return a figure that shows multifunctionality for uncorrected and corrected for correlations two cases.
+#' And also contains the fitted lines for the chosen fitting model on the figure. \cr
+#' For \code{MF2_multiple} object, return a list of figures which show alpha, gamma,
+#' beta multifunctionality for uncorrected and corrected for correlations two cases, respectively.
+#' And also contains the fitted lines for the chosen fitting model on the figures.
 #'
 #' @examples
 #' 
 #' \dontrun{
 #'
 #' ## single ecosystem
-#' data("Europe_Forest")
-#' data("Europe_Forest_species")
-#' GER_ITA_Forest_function <- filter(Europe_Forest,Country=="GER"|Country=="ITA")[,4:29]
-#' GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
-#' output1<-MF_single(func_data = GER_ITA_Forest_function, species_data = GER_ITA_Forest_species)
-#'
-#'
-#' ## Display fitted line of linear model
-#'
-#' GER_ITA_Forest<-filter(Europe_Forest,Country=="GER"|Country=="ITA")
-#' output1 <- data.frame(output1,
-#'  Country = rep(GER_ITA_Forest$Country, each = 6))
-#' ggMF(output1, facets_scale = 'fixed', fit = "lm",by_group="Country")
-#'
-#'
+#' data("forest_function_data_normalized")
+#' data("forest_biodiversity_data")
+#' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
+#'                                              country=="GER"|country=="ITA")
+#' GER_ITA_forest_biodiversity <- forest_biodiversity_data[49:229,]
+#' output1 <- MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
+#'                       species_data = GER_ITA_forest_biodiversity)
+#' 
+#'  ## Display fitted line of linear model
+#' output1 <- data.frame(output1, country=rep(GER_ITA_forest_function_normalized$country, each = 6))
+#' MFggplot(output1, model = "lm", by_group="country")
+#' 
+#' 
 #' ## multiple ecosystems
-#' data("Europe_Forest")
-#' data("Europe_Forest_species")
-#' GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
-#' GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
-#' output2 <- MF_multiple(func_data = GER_ITA_Forest[,4:30],
-#'                           species_data = GER_ITA_Forest_species,
-#'                           by_group = "Country")
-#'
-#' ## Display fitted line of linear mixed model with random effect 'intercept'
-#' ggMF(
-#' output = output2,
-#' by_group = "Country",
-#' facets_scale = "free_x",
-#' fit = "LMM.intercept",
-#' text = "Slope"
-#' )
+#' data("forest_function_data_normalized")
+#' data("forest_biodiversity_data")
+#' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
+#'                                              country=="GER"|country=="ITA")
+#' GER_ITA_forest_biodiversity <- forest_biodiversity_data[49:229,]
+#' output2 <- MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
+#'                         species_data = GER_ITA_forest_biodiversity,
+#'                         by_group = "country")
+#' 
+#' ## Display fitted line of linear mixed model with random effect 'both'
+#' MFggplot(output2, model = "LMM.both", by_group = "country")
 #' 
 #' }
 #'
 #' @export
 
-ggMF <- function(output, by_group = NULL, facets_scale = 'fixed', fit = "LMM.intercept", text = "Slope"){
+MFggplot <- function(output, by_group = NULL, facets_scale = 'fixed', model = "LMM.both", caption = "Slope"){
+  
+  fit<-model
+  text<-caption
   
   if(!(fit %in% c("lm","LMM.intercept","LMM.slope","LMM.both")))
     stop("Error: the argument fit should be `lm`, `LMM.intercept`, `LMM.slope` or `LMM.both`.")
