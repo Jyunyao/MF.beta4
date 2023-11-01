@@ -4,9 +4,11 @@
 \alias{MF_single}
 \title{MF measures (single)}
 \usage{
-MF_single(func_data, species_data = NULL, q = c(0, 1, 2))
+MF_single(weight, func_data, species_data = NULL, q = c(0, 1, 2))
 }
 \arguments{
+\item{weight}{weight.}
+
 \item{func_data}{the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions). The data input must be normalized between 0 and 1 already and must contain only the ecosystem function columns.\cr
 For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.}
 

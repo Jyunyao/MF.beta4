@@ -4,9 +4,17 @@
 \alias{MF_multiple}
 \title{MF measures (multiple)}
 \usage{
-MF_multiple(func_data, species_data = NULL, q = c(0, 1, 2), by_group = NULL)
+MF_multiple(
+  weight,
+  func_data,
+  species_data = NULL,
+  q = c(0, 1, 2),
+  by_group = NULL
+)
 }
 \arguments{
+\item{weight}{weight.}
+
 \item{func_data}{the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions). The data input must be normalized between 0 and 1 already.\cr
 For \code{by_group = NULL}, the func_data must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data.
 For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.}

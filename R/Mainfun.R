@@ -3,11 +3,11 @@
 #' \code{MF_single}:\cr
 #' Multifunctionality measures in a single ecosystem. This is a function in the framework of Hill-Chao numbers
 #'
+#' @param weight weight.
 #' @param func_data the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions). The data input must be normalized between 0 and 1 already and must contain only the ecosystem function columns.\cr
 #' For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.
 #' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
 #' @param q a numerical vector specifying the diversity orders. Default is 0, 1 and 2.
-#' @param weight weight
 #'
 #' @import devtools
 #' @import ggplot2
@@ -123,13 +123,15 @@ MF_single <- function(weight,func_data, species_data = NULL, q = c(0,1,2)){
 #' \code{MF_multiple}:\cr
 #' Multifunctionality measures in multiple ecosystems. This is a function in the framework of Hill-Chao numbers
 #'
+#'
+#' @param weight weight.
 #' @param func_data the ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (assemblages by functions). The data input must be normalized between 0 and 1 already.\cr
 #' For \code{by_group = NULL}, the func_data must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data.
 #' For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.
 #' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
 #' @param q a numerical vector specifying the diversity orders. Default is 0, 1 and 2.
 #' @param by_group name of the column to be paired by group. Default is \code{NULL}.
-#' @param weight weight.
+#' 
 #'
 #' @return a data.frame with columns 'Order.q' , 'Type' , 'Scale' , 'qMF' , 'Species diversity' .
 #' 
