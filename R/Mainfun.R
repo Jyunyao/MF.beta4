@@ -7,6 +7,7 @@
 #' For \code{species_data} is not \code{NULL}, the rownames of func_data should be names of plotID.
 #' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
 #' @param q a numerical vector specifying the diversity orders. Default is 0, 1 and 2.
+#' @param weight weight
 #'
 #' @import devtools
 #' @import ggplot2
@@ -30,7 +31,7 @@
 #' @export
 
 
-MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
+MF_single <- function(weight,func_data, species_data = NULL, q = c(0,1,2)){
   
   if ((length(func_data) == 1) && (inherits(func_data, c("numeric", "integer"))))
     stop("Error: Your data does not have enough information.")
@@ -63,7 +64,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
   func_data[is.na(func_data)] <- 0
   id_data <- data.frame(plotID = rownames(func_data))
   
-  qMF_output <- sapply(q,function(i) apply(func_data,1,function(x) qMF(v=x,q=i))) %>% as.data.frame()
+  qMF_output <- sapply(q,function(i) apply(func_data,1,function(x) qMF(w=weight,v=x,q=i))) %>% as.data.frame()
   # if(nrow(data)==1) qMF_output <- t(qMF_output)
   names(qMF_output) <- paste0("qMF_Uncorrected_for_correlations_",q)
   
@@ -72,7 +73,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
     transform_D <- sqrt(1-abs(cor(func_data)))
     qMF_tau_output <- sapply(q,function(i) {
       out <- lapply(tau,function(t){
-        apply(func_data,1,function(x) qMF(v=x,q=i,tau=t,di=transform_D))
+        apply(func_data,1,function(x) qMF(w=weight,v=x,q=i,tau=t,di=transform_D))
       }) %>% do.call(cbind,.)
       AUC <- apply(out,1,function(x){
         AUC_L <- sum(x[seq_along(x[-1])]*diff(tau))
@@ -116,6 +117,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
   return(output)
 }
 
+
 #' MF measures (multiple)
 #'
 #' \code{MF_multiple}:\cr
@@ -127,6 +129,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 #' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
 #' @param q a numerical vector specifying the diversity orders. Default is 0, 1 and 2.
 #' @param by_group name of the column to be paired by group. Default is \code{NULL}.
+#' @param weight weight.
 #'
 #' @return a data.frame with columns 'Order.q' , 'Type' , 'Scale' , 'qMF' , 'Species diversity' .
 #' 
@@ -144,7 +147,7 @@ MF_single <- function(func_data, species_data = NULL, q = c(0,1,2)){
 #' 
 #' @export
 
-MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group = NULL){
+MF_multiple <- function(weight, func_data, species_data = NULL, q = c(0,1,2), by_group = NULL){
   
   if ((length(func_data) == 1) && (inherits(func_data, c("numeric", "integer"))))
     stop("Error: Your data does not have enough information.")
@@ -182,8 +185,8 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
     output <- lapply(1:ncol(two_idx),function(i){
       d_x <- cbind(x1=t(spe_data[two_idx[1,i],]),
                    x2=t(spe_data[two_idx[2,i],]))
-      rF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "gamma"))
-      aF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "alpha"))
+      rF <- sapply(q,function(y) qMF_diversity(w=weight,d_x,y,diversity = "gamma"))
+      aF <- sapply(q,function(y) qMF_diversity(w=weight,d_x,y,diversity = "alpha"))
       bF <- rF/aF
       
       two_plot <- rownames(spe_data)[c(two_idx[1,i],two_idx[2,i])]
@@ -197,14 +200,14 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
       if(ncol(fun_data)>1){
         rF_tau <- lapply(tau,function(t){
           out <- data.frame("Order.q"=paste0("q = ",q),
-                            "value"=sapply(q,function(y) qMF_diversity(d_x,y,t,transform_D,diversity = "gamma")),
+                            "value"=sapply(q,function(y) qMF_diversity(w=weight,d_x,y,t,transform_D,diversity = "gamma")),
                             "Tau"=t)
           out
         }) %>% do.call(rbind,.)
         
         aF_tau <- parallel::mclapply(tau,function(t){
           out <- data.frame("Order.q"=paste0("q = ",q),
-                            "value"=sapply(q,function(y) qMF_diversity(d_x,y,t,transform_D,diversity = "alpha")),
+                            "value"=sapply(q,function(y) qMF_diversity(w=weight,d_x,y,t,transform_D,diversity = "alpha")),
                             "Tau"=t)
         }) %>% do.call(rbind,.)
         bF_tau <- rF_tau$value/aF_tau$value
@@ -282,8 +285,8 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
       out <- lapply(1:ncol(two_idx),function(i){
         d_x <- cbind(x1=t(spe_data[two_idx[1,i],]),
                      x2=t(spe_data[two_idx[2,i],]))
-        rF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "gamma"))
-        aF <- sapply(q,function(y) qMF_diversity(d_x,y,diversity = "alpha"))
+        rF <- sapply(q,function(y) qMF_diversity(w=weight,d_x,y,diversity = "gamma"))
+        aF <- sapply(q,function(y) qMF_diversity(w=weight,d_x,y,diversity = "alpha"))
         bF <- rF/aF
         
         two_plot <- rownames(spe_data)[c(two_idx[1,i],two_idx[2,i])]
@@ -299,14 +302,14 @@ MF_multiple <- function(func_data, species_data = NULL, q = c(0,1,2), by_group =
         if(ncol(fun_data)>1){
           rF_tau <- lapply(tau,function(t){
             out <- data.frame("Order.q"=paste0("q = ",q),
-                              "value"=sapply(q,function(y) qMF_diversity(d_x,y,t,transform_D,diversity = "gamma")),
+                              "value"=sapply(q,function(y) qMF_diversity(w=weight,d_x,y,t,transform_D,diversity = "gamma")),
                               "Tau"=t)
             out
           }) %>% do.call(rbind,.)
           
           aF_tau <- parallel::mclapply(tau,function(t){
             out <- data.frame("Order.q"=paste0("q = ",q),
-                              "value"=sapply(q,function(y) qMF_diversity(d_x,y,t,transform_D,diversity = "alpha")),
+                              "value"=sapply(q,function(y) qMF_diversity(w=weight,d_x,y,t,transform_D,diversity = "alpha")),
                               "Tau"=t)
           }) %>% do.call(rbind,.)
           bF_tau <- rF_tau$value/aF_tau$value
@@ -478,15 +481,20 @@ func_normalized <- function(data, fun_cols = 1:ncol(data), negative = NULL, by_g
 # @param di a distance matrix used in the correlated MF measures.
 # @return a value of correlated/uncorrelated MF measure in a single ecosystem.
 
-qMF <- function(w=1,v,q,tau=0.5,di=NULL){
+qMF <- function(w,v,q,tau=0.5,di=NULL){
+  if(length(w)==1){
+    w<-rep(w,length(v))
+  }
   if(is.null(di) | tau == 0){
     ai_tau <- v[v>0]
+    w<-w[v>0]
     V <- w*ai_tau
   }
   else{
     d_tau <- ifelse(di<tau,di,tau)
     ai <- (1-d_tau/tau)%*%v
     ai_tau <- ai[ai>0]
+    w<-w[ai>0]
     v <- v[ai>0]
     V <- w*v*v/ai_tau
   }
@@ -504,10 +512,11 @@ qMF <- function(w=1,v,q,tau=0.5,di=NULL){
 # @param tau a single value used in the correlated MF measures.
 # @param di a distance matrix used in the correlated MF measures.
 # @param diversity decide to compute whether 'gamma' diversity or 'alpha' diversity.
+# @param w weight.
 # @return a value of correlated/uncorrelated MF measure in multiple ecosystems.
 
-qMF_diversity <- function(v,q,tau=0.5,di=NULL,diversity="gamma"){
-  F_alpha <- function(w=1,v,q,R=c(0.5,0.5),N=2){
+qMF_diversity <- function(w, v,q,tau=0.5,di=NULL,diversity="gamma"){
+  F_alpha <- function(v,q,R=c(0.5,0.5),N=2){
     v <- as.matrix(v)
     v1 <- v
     v[is.na(v)] <- 0
@@ -525,7 +534,7 @@ qMF_diversity <- function(v,q,tau=0.5,di=NULL,diversity="gamma"){
       1/N*(sum(V*rowSums(Vv)))^(1/(1-q))
     }
   }
-  F_gamma <- function(w=1,v,q,R=c(0.5,0.5),N=2){
+  F_gamma <- function(v,q,R=c(0.5,0.5),N=2){
     v <- as.matrix(v)
     v[is.na(v)] <- 0
     V <- w*(v%*%R)
@@ -535,9 +544,13 @@ qMF_diversity <- function(v,q,tau=0.5,di=NULL,diversity="gamma"){
     }
     else (sum(V*((v%*%R)/sum(V*(v%*%R)))^q))^(1/(1-q))
   }
-  F_alpha_tau <- function(w=1,v,q,tau,di,R=c(0.5,0.5),N=2){
+  F_alpha_tau <- function(v,q,tau,di,R=c(0.5,0.5),N=2){
     v <- as.matrix(v)
+    if(length(w)==1){
+      w<-rep(w,dim(di)[1])
+    }
     di <- di[rowSums(is.na(v))!=N,rowSums(is.na(v))!=N]
+    w <- w[rowSums(is.na(v))!=N]
     v <- v[rowSums(is.na(v))!=N,]
     v1 <- v
     v[is.na(v)] <- 0
@@ -557,7 +570,7 @@ qMF_diversity <- function(v,q,tau=0.5,di=NULL,diversity="gamma"){
       1/N*(sum(V*rowSums(Vv)))^(1/(1-q))
     }
   }
-  F_gamma_tau <- function(w=1,v,q,tau,di,R=c(0.5,0.5),N=2){
+  F_gamma_tau <- function(v,q,tau,di,R=c(0.5,0.5),N=2){
     v <- as.matrix(v)
     v[is.na(v)] <- 0
     d_tau <- ifelse(di<tau,di,tau)
@@ -584,6 +597,7 @@ qMF_diversity <- function(v,q,tau=0.5,di=NULL,diversity="gamma"){
   }
   return(out)
 }
+
 
 
 

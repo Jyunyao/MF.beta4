@@ -253,16 +253,16 @@ Since the data is not normalized, we then use `func_normalized()` to do normaliz
 
 ```{r eval=FALSE}
 data("Europe_Forest_raw")
-func_normalized(data = GER_ITA_Forest_raw, fun_cols = 4:29,
+func_normalized(data = Europe_Forest_raw, fun_cols = 4:29,
                 negative = c("soil_cn_ff_10","wue"), by_group = "Country")
 ```
 
 ```{r, echo=FALSE}
-norm_GER_ITA_Forest = func_normalized(data = GER_ITA_Forest_raw, 
+norm_Europe_Forest = func_normalized(data = Europe_Forest_raw, 
                                      fun_cols = 4:29, 
                                      negative = c("soil_cn_ff_10","wue"), 
                                      by_group = "Country")
-head(cbind(norm_GER_ITA_Forest[1:3], round(norm_GER_ITA_Forest[4:5], 3)), 10)
+head(cbind(norm_Europe_Forest[1:3], round(norm_Europe_Forest[4:5], 3)), 10)
 ```
 
 
@@ -277,16 +277,13 @@ Run the following code to view complete species abundance data:
 
 ```{r eval=FALSE}
 data("Europe_Forest_species")
-GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
-GER_ITA_Forest_species
 ```
 
 Here, we only show the first ten rows.
 
 ```{r echo=FALSE}
 data("Europe_Forest_species")
-GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
-head(GER_ITA_Forest_species,10)
+head(Europe_Forest_species,10)
 ```
 
 ### Computing Multifunctionality in Single Ecosystem Via Example
@@ -297,8 +294,7 @@ For example, given a normalized data, we run the `MF_single()` function without 
 
 ```{r echo=TRUE}
 data("Europe_Forest")
-GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
-output1 <- MF_single(func_data = GER_ITA_Forest[,4:29])
+output1 <- MF_single(func_data = Europe_Forest[,4:29])
 ```
 
 ```{r, echo=FALSE}
@@ -315,14 +311,12 @@ The output contains ID of plot (`plotID`) which is according to the row names of
 ```{r echo=TRUE}
 data("Europe_Forest")
 data("Europe_Forest_species")
-GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
-GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
-output2 <- MF_single(func_data = GER_ITA_Forest[,4:29],species_data = GER_ITA_Forest_species)
+output2 <- MF_single(func_data = Europe_Forest[,4:29],species_data = Europe_Forest_species)
 ```
 
 ```{r echo=FALSE}
-output2[13:18,] %>% mutate(qMF = round(qMF,3),
-                          Species.diversity = round(Species.diversity,3))
+output2 %>% mutate(qMF = round(qMF,3),
+                          Species.diversity = round(Species.diversity,3)) %>% head(6)
 
 ```
 
@@ -336,20 +330,16 @@ For example, we run the `MF_multiple()` function with forest data to compute unc
 ```{r eval=FALSE}
 data("Europe_Forest")
 data("Europe_Forest_species")
-GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
-GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
-output3 = MF_multiple(func_data = GER_ITA_Forest[,4:30],
-                      species_data = GER_ITA_Forest_species,
+output3 = MF_multiple(func_data = Europe_Forest[,4:30],
+                      species_data = Europe_Forest_species,
                       by_group = "Country")
 ```
 
 ```{r include=FALSE}
 data("Europe_Forest")
 data("Europe_Forest_species")
-GER_ITA_Forest <- filter(Europe_Forest,Country=="GER"|Country=="ITA")
-GER_ITA_Forest_species<-Europe_Forest_species[49:229,]
-Demo_multiple = MF_multiple(func_data = GER_ITA_Forest[,4:30],
-                      species_data = GER_ITA_Forest_species,
+Demo_multiple = MF_multiple(func_data = Europe_Forest[,4:30],
+                      species_data = Europe_Forest_species,
                       by_group = "Country")
 
 output3 <- Demo_multiple %>% 
@@ -440,8 +430,8 @@ ggMF(output2, facets_scale = 'fixed', fit = "lm")
 
 
 ```{r, fig.align='center', fig.height=6.5, fig.width=6.5}
-output2 <- data.frame("plotID"=rownames(GER_ITA_Forest),
-                      "Country"=GER_ITA_Forest$Country) %>% 
+output2 <- data.frame("plotID"=rownames(Europe_Forest),
+                      "Country"=Europe_Forest$Country) %>% 
   left_join(output2,.,by="plotID")
 ggMF(output2, by_group = "Country", facets_scale = 'fixed', 
      fit = "LMM.intercept")  
