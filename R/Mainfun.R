@@ -1,6 +1,5 @@
 #' multifunctionality measures for a single ecosystem
 #'
-#' \code{MF1_single}:\cr
 #' \code{MF1_single} computes multifunctionality measures for given function weights in a single ecosystem separately for two cases
 #' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 #'
@@ -35,6 +34,7 @@
 #' MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
 #'            species_data = GER_ITA_forest_biodiversity)
 #' }
+#' 
 #' @export
 
 
@@ -127,7 +127,6 @@ MF1_single <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2))
 
 #' multifunctionality measures for multiple ecosystems
 #'
-#' \code{MF2_multiple}:\cr
 #' \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems separately for two cases
 #' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 #'
@@ -416,7 +415,6 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
 
 #' Normalize raw ecosystem function values to [0,1]
 #'
-#' \code{function_normalization}:\cr
 #' \code{function_normalization} transforms raw function values to values between 0 and 1. For positive functionality,
 #' ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
 #' and those with the lowest raw value are transformed to the minimum value of 0. Because the value “0” always implies absent functions,

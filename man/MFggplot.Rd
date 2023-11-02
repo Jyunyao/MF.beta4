@@ -2,9 +2,14 @@
 % Please edit documentation in R/Mainfun.plot.R
 \name{MFggplot}
 \alias{MFggplot}
-\title{ggplot2 extension for a MF_single or MF_multiple object}
+\title{ggplot2 extension for a MF1_single or MF2_multiple object}
 \usage{
-MFggplot(output, model = "LMM.both", caption = "Slope", by_group = NULL)
+MFggplot(
+  output,
+  model = "LMM.both",
+  caption = "Slope",
+  by_group = NULL
+)
 }
 \arguments{
 \item{output}{the output obtained from \code{MF1_single} or \code{MF2_multiple}. \cr 
@@ -23,7 +28,7 @@ For \code{MF1_single} object, return a figure that shows multifunctionality for 
 For \code{MF2_multiple} object, return a list of figures which show alpha, gamma, beta multifunctionality for uncorrected and corrected for correlations two cases, respectively. And also contains the fitted lines for the chosen fitting model on the figures.
 }
 \description{
-\code{MFggplot}:\code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF1_single} or \code{MF2_multiple} object to plot the BEF relationship between biodiversity and multifunctionality.
+\code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF1_single} or \code{MF2_multiple} object to plot the BEF relationship between biodiversity and multifunctionality.
 }
 \examples{
 

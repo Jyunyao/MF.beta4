@@ -4,7 +4,12 @@
 \alias{MF1_single}
 \title{multifunctionality measures for a single ecosystem}
 \usage{
-MF1_single(func_data, species_data = NULL, weight = 1, q = c(0, 1, 2))
+MF1_single(
+  func_data,
+  species_data = NULL,
+  weight = 1,
+  q = c(0, 1, 2)
+)
 }
 \arguments{
 \item{func_data}{ecosystem function data can be input as a vector of functions (for a single ecosystem), matrix/data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1.\cr
@@ -24,7 +29,6 @@ a data.frame with columns ’plotID’, ’Type’ (uncorrected or corrected for
 the data.frame will show an additional column contain ’Species.diversity’.
 }
 \description{
-\code{MF1_single}:\cr
 \code{MF1_single} computes multifunctionality measures for given function weights in a single ecosystem separately for two cases
 (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 }
@@ -38,4 +42,5 @@ GER_ITA_forest_biodiversity <- forest_biodiversity_data[49:229,]
 MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
            species_data = GER_ITA_forest_biodiversity)
 }
+
 }

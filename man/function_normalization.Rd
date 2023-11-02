@@ -29,7 +29,6 @@ a data.frame with relevant ecosystem/plot information (as input data) and normal
 For \code{by_group} is not \code{NULL}, the data.frame also show an additional column which name is the same as the setting of \code{by_group}.
 }
 \description{
-\code{function_normalization}:\cr
 \code{function_normalization} transforms raw function values to values between 0 and 1. For positive functionality,
 ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
 and those with the lowest raw value are transformed to the minimum value of 0. Because the value “0” always implies absent functions,

@@ -36,7 +36,6 @@ a data.frame with columns ’plotID’(combinations of plots by paired), 'Order.
 For \code{by_group} is not \code{NULL}, the data.frame will show an additional column which name is the same as the setting of \code{by_group}.
 }
 \description{
-\code{MF2_multiple}:\cr
 \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems separately for two cases
 (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 }

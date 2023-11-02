@@ -1,6 +1,6 @@
-#' ggplot2 extension for a MF_single or MF_multiple object
+#' ggplot2 extension for a MF1_single or MF2_multiple object
 #'
-#' \code{MFggplot}:\code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF1_single} or \code{MF2_multiple} object to plot the BEF relationship between biodiversity and multifunctionality.
+#' \code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF1_single} or \code{MF2_multiple} object to plot the BEF relationship between biodiversity and multifunctionality.
 #'
 #' @param output the output obtained from \code{MF1_single} or \code{MF2_multiple}. \cr 
 #' If using output obtained from \code{MF1_single} and want to draw the plot with \code{by_group}, must add the \code{by_group} column in output.
