@@ -19,8 +19,8 @@ If \code{by_group} is not \code{NULL}, data must contain the \code{by_group} col
 
 \item{negative}{names of the functions that are negative functionality.}
 
-\item{by_group}{name of the column for normalization and decomposition, i.e., function normalization
-and multifunctionality decomposition will be performed within each group classified by the categories of that column variable.
+\item{by_group}{name of the column for normalization and decomposition,
+i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column variable.
 For example, if \code{by_group = “country”}, then all functions will be normalized to the range of [0, 1] within a country,
 and decomposition is based on all pairs of ecosystems separately within each country. Default is \code{NULL}.}
 }
@@ -30,11 +30,14 @@ For \code{by_group} is not \code{NULL}, the data.frame also show an additional c
 }
 \description{
 \code{function_normalization}:\cr
-\code{function_normalization} transforms raw function values to values between 0 and 1.
-For positive functionality, ecosystems with the highest value in the raw function data are transformed to the maximal value of 1, and those with the lowest raw value are transformed to the minimum value of 0.
-Because the value “0” always implies absent functions, thus if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number, e.g., 10^(-15).
-In a similar manner, for negative functionality, if the highest raw value is not 0, the transformed 0 will also be replaced by a very small number, e.g., 10^(-15).
-These replacements will not affect any numerical computation, but will help indicate that the transformed values represent functions that should be regarded as “present” ones.Thus, present or absent functions can be clearly distinguished in the transformed data, and the information on presence/absence of functions is required in the decomposition of multifunctionality among ecosystems.
+\code{function_normalization} transforms raw function values to values between 0 and 1. For positive functionality,
+ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
+and those with the lowest raw value are transformed to the minimum value of 0. Because the value “0” always implies absent functions,
+thus if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number,
+e.g., 10^(-15). In a similar manner, for negative functionality, if the highest raw value is not 0,
+the transformed 0 will also be replaced by a very small number, e.g., 10^(-15).
+These replacements will not affect any numerical computation, but will help indicate that the transformed values represent functions that should be regarded as “present” ones. Thus, present or absent functions can be clearly distinguished in the transformed data,
+and the information on presence/absence of functions is required in the decomposition of multifunctionality among ecosystems.
 }
 \examples{
 \dontrun{

@@ -4,14 +4,12 @@
 #' \code{MF1_single} computes multifunctionality measures for given function weights in a single ecosystem separately for two cases
 #' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 #'
-#' @param func_data ecosystem function data can be input as a vector of functions (for a single ecosystem),
-#' matrix/data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1.\cr
+#' @param func_data ecosystem function data can be input as a vector of functions (for a single ecosystem), matrix/data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1.\cr
 #' For \code{species_data} is not \code{NULL}, the row names of \code{func_data} should be the names of plotID.
-#' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'.
-#' Default is \code{NULL}.
+#' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
 #' @param weight a numerical vector specifying weights for ecosystem functions.
-#' The length of \code{weight} needs to be equal to the number of functions.
-#' Default is \code{weight = 1}, which means equal weight for all ecosystem functions.
+#' The length of \code{weight} needs to be equal to the number of functions. Default is \code{weight = 1},
+#' which means equal weight for all ecosystem functions.
 #' @param q a numerical vector specifying the diversity orders. Default is q = 0, 1 and 2.
 #'
 #' @import devtools
@@ -130,26 +128,22 @@ MF1_single <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2))
 #' multifunctionality measures for multiple ecosystems
 #'
 #' \code{MF2_multiple}:\cr
-#' \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems
-#' separately for two cases (i) correlations between functions are not corrected for,
-#' and (ii) correlations between functions are corrected.
+#' \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems separately for two cases
+#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 #'
 #'
 #' @param func_data ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1. \cr
 #' For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data. \cr
 #' For \code{species_data} is not \code{NULL}, the row names of \code{func_data} should be the same as 'plotID' in the \code{species_data}.
-#' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'.
-#' Default is \code{NULL}.
-#' @param weight a numerical vector specifying weights for ecosystem functions.
-#' The length of \code{weight} needs to be equal to the number of functions.
+#' @param species_data the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.
+#' @param weight a numerical vector specifying weights for ecosystem functions. The length of \code{weight} needs to be equal to the number of functions.
 #' Default is \code{weight = 1}, which means equal weight for all ecosystem functions.
 #' @param q a numerical vector specifying the diversity orders. Default is q = 0, 1 and 2.
 #' @param by_group name of the column for normalization and decomposition,
 #' i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column variable.
 #' So, the \code{by_group} setting here needs to be the same as the group using for normalization.
 #' For example, if all functions was normalized to the range of [0, 1] within a country (as using function \code{function_normalization} with \code{by_group=“country”}),
-#' then the setting \code{by_group=“country”} is also needed here.
-#' The decomposition is based on all pairs of ecosystems separately within each country. Default is \code{NULL}.
+#' then the setting \code{by_group=“country”} is also needed here. The decomposition is based on all pairs of ecosystems separately within each country. Default is \code{NULL}.
 #' 
 #'
 #' @return a data.frame with columns ’plotID’(combinations of plots by paired), 'Order.q' , 'Type' (uncorrected or corrected for correlations) ,
@@ -423,18 +417,21 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
 #' Normalize raw ecosystem function values to [0,1]
 #'
 #' \code{function_normalization}:\cr
-#' \code{function_normalization} transforms raw function values to values between 0 and 1.
-#' For positive functionality, ecosystems with the highest value in the raw function data are transformed to the maximal value of 1, and those with the lowest raw value are transformed to the minimum value of 0.
-#' Because the value “0” always implies absent functions, thus if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number, e.g., 10^(-15).
-#' In a similar manner, for negative functionality, if the highest raw value is not 0, the transformed 0 will also be replaced by a very small number, e.g., 10^(-15).
-#' These replacements will not affect any numerical computation, but will help indicate that the transformed values represent functions that should be regarded as “present” ones.Thus, present or absent functions can be clearly distinguished in the transformed data, and the information on presence/absence of functions is required in the decomposition of multifunctionality among ecosystems.
+#' \code{function_normalization} transforms raw function values to values between 0 and 1. For positive functionality,
+#' ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
+#' and those with the lowest raw value are transformed to the minimum value of 0. Because the value “0” always implies absent functions,
+#' thus if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number,
+#' e.g., 10^(-15). In a similar manner, for negative functionality, if the highest raw value is not 0,
+#' the transformed 0 will also be replaced by a very small number, e.g., 10^(-15).
+#' These replacements will not affect any numerical computation, but will help indicate that the transformed values represent functions that should be regarded as “present” ones. Thus, present or absent functions can be clearly distinguished in the transformed data,
+#' and the information on presence/absence of functions is required in the decomposition of multifunctionality among ecosystems.
 #'
 #' @param data data can be input as a matrix/data.frame with ecosystem/plot as rows and relevant ecosystem/plot information and ecosystem functions as columns. All missing values should be imputed in the input data. \cr
 #' If \code{by_group} is not \code{NULL}, data must contain the \code{by_group} column.
 #' @param fun_cols the columns represent ecosystem functions.
 #' @param negative names of the functions that are negative functionality.
-#' @param by_group name of the column for normalization and decomposition, i.e., function normalization
-#' and multifunctionality decomposition will be performed within each group classified by the categories of that column variable.
+#' @param by_group name of the column for normalization and decomposition,
+#' i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column variable.
 #' For example, if \code{by_group = “country”}, then all functions will be normalized to the range of [0, 1] within a country,
 #' and decomposition is based on all pairs of ecosystems separately within each country. Default is \code{NULL}.
 #'

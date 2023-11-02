@@ -2,14 +2,16 @@ Package: MF.beta4
 Type: Package
 Title: Measuring ecosystem multifunctionality and assessing BEF relationships
 Version: 0.1.0
-Author: Anne Chao, Chun-Yu Liu
+Author: Anne Chao, Chun-Yu Liu, K. H. Hu
 Maintainer: Anne Chao <chao@stat.nthu.edu.tw>
-Description: Provide simple functions to compute multifunctionality measures for a single and
-       multiple ecosystems and plot for assessing the biodiversity-ecosystem functioning (BEF)
-       relationships across scales. It was originally developed for the Beta4 project 
-       (Müller et al. 2022) on the effect of enhancing the beta diversity between forest patches
-       on ecosystem multifunctionality and forest resilience across spatial scales. See 
-       Chao et al.(2023) for pertinent methodology and decomposition theory. 
+Description: Provide simple functions to (i) compute a class of multifunctionality
+      measures for a single ecosystem for given function weights, (ii) decompose gamma
+      multifunctionality for multiple ecosystems into within-ecosystem component (alpha
+      multifunctionality) and among-ecosystem component (beta multifunctionality). In
+      each case, the correlation between functions can be corrected for. Based on
+      biodiversity and ecosystem function data, this software also facilitates graphics
+      for assessing the biodiversity-ecosystem functioning (BEF) relationships across 
+      scales. 
 License: GPL (>= 3)
 Depends: R (>= 4.0)
 Imports: broom,

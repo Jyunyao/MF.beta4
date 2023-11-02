@@ -17,11 +17,9 @@ MF2_multiple(
 For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data. \cr
 For \code{species_data} is not \code{NULL}, the row names of \code{func_data} should be the same as 'plotID' in the \code{species_data}.}
 
-\item{species_data}{the species abundance data must include three columns: 'plotID', 'species' and 'abundance'.
-Default is \code{NULL}.}
+\item{species_data}{the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.}
 
-\item{weight}{a numerical vector specifying weights for ecosystem functions.
-The length of \code{weight} needs to be equal to the number of functions.
+\item{weight}{a numerical vector specifying weights for ecosystem functions. The length of \code{weight} needs to be equal to the number of functions.
 Default is \code{weight = 1}, which means equal weight for all ecosystem functions.}
 
 \item{q}{a numerical vector specifying the diversity orders. Default is q = 0, 1 and 2.}
@@ -30,8 +28,7 @@ Default is \code{weight = 1}, which means equal weight for all ecosystem functio
 i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column variable.
 So, the \code{by_group} setting here needs to be the same as the group using for normalization.
 For example, if all functions was normalized to the range of [0, 1] within a country (as using function \code{function_normalization} with \code{by_group=“country”}),
-then the setting \code{by_group=“country”} is also needed here.
-The decomposition is based on all pairs of ecosystems separately within each country. Default is \code{NULL}.}
+then the setting \code{by_group=“country”} is also needed here. The decomposition is based on all pairs of ecosystems separately within each country. Default is \code{NULL}.}
 }
 \value{
 a data.frame with columns ’plotID’(combinations of plots by paired), 'Order.q' , 'Type' (uncorrected or corrected for correlations) ,
@@ -40,9 +37,8 @@ For \code{by_group} is not \code{NULL}, the data.frame will show an additional c
 }
 \description{
 \code{MF2_multiple}:\cr
-\code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems
-separately for two cases (i) correlations between functions are not corrected for,
-and (ii) correlations between functions are corrected.
+\code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems separately for two cases
+(i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 }
 \examples{
 \dontrun{

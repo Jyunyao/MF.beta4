@@ -1,15 +1,12 @@
 #' ggplot2 extension for a MF_single or MF_multiple object
 #'
-#' \code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF} object to plot the correlation between species diversity and multifunctionality.
+#' \code{MFggplot}:\code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF1_single} or \code{MF2_multiple} object to plot the BEF relationship between biodiversity and multifunctionality.
 #'
 #' @param output the output obtained from \code{MF1_single} or \code{MF2_multiple}. \cr 
 #' If using output obtained from \code{MF1_single} and want to draw the plot with \code{by_group}, must add the \code{by_group} column in output.
-#' @param facets_scale Are scales shared across all facets (the default, \code{"fixed"}), or do they vary across rows (\code{"free_x"}), columns (\code{"free_y"}), or both rows and columns (\code{"free"})?
-#' @param model specifying the fitting model. Specify \code{model = "lm"} for the linear model,
-#' or \code{"LMM.intercept"}, \code{"LMM.slope"}, \code{"LMM.both"} for the linear mixed model with random effects for intercept,
-#' slope, and both, respectively. Default is \code{model = "LMM.both"}.
-#' @param caption caption information that will be shown in the BEF plots. Select \code{caption = "slope"} to show the estimated slopes,
-#' or \code{caption = "R.squared"} to show the marginal and conditional R-squared. Default is \code{caption = "slope"}.}
+#' @param model specifying the fitting model. Specify \code{model = "lm"} for the linear model, or \code{"LMM.intercept"},
+#' \code{"LMM.slope"}, \code{"LMM.both"} for the linear mixed model with random effects for intercept, slope, and both, respectively. Default is \code{model = "LMM.both"}.
+#' @param caption caption information that will be shown in the BEF plots. Select \code{caption = "slope"} to show the estimated slopes, or \code{caption = "R.squared"} to show the marginal and conditional R-squared. Default is \code{caption = "slope"}.
 #' @param by_group name of the column for normalization and decomposition i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column. Default is \code{NULL}. \cr
 #' For linear mixed model is selected in the \code{model}, the \code{by_group} argument must be specified.
 #'
@@ -24,11 +21,8 @@
 #' @import purrr
 #' @importFrom dplyr %>%
 #'
-#' @return For \code{MF1_single} object, return a figure that shows multifunctionality for uncorrected and corrected for correlations two cases.
-#' And also contains the fitted lines for the chosen fitting model on the figure. \cr
-#' For \code{MF2_multiple} object, return a list of figures which show alpha, gamma,
-#' beta multifunctionality for uncorrected and corrected for correlations two cases, respectively.
-#' And also contains the fitted lines for the chosen fitting model on the figures.
+#' @return For \code{MF1_single} object, return a figure that shows multifunctionality for uncorrected and corrected for correlations two cases. And also contains the fitted lines for the chosen fitting model on the figure. \cr
+#' For \code{MF2_multiple} object, return a list of figures which show alpha, gamma, beta multifunctionality for uncorrected and corrected for correlations two cases, respectively. And also contains the fitted lines for the chosen fitting model on the figures.
 #'
 #' @examples
 #' 
@@ -43,7 +37,7 @@
 #' output1 <- MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
 #'                       species_data = GER_ITA_forest_biodiversity)
 #' 
-#'  ## Display fitted line of linear model
+#' ## Display fitted line of linear model
 #' output1 <- data.frame(output1, country=rep(GER_ITA_forest_function_normalized$country, each = 6))
 #' MFggplot(output1, model = "lm", by_group="country")
 #' 
@@ -61,12 +55,14 @@
 #' ## Display fitted line of linear mixed model with random effect 'both'
 #' MFggplot(output2, model = "LMM.both", by_group = "country")
 #' 
+#' 
 #' }
 #'
 #' @export
 
-MFggplot <- function(output, by_group = NULL, facets_scale = 'fixed', model = "LMM.both", caption = "Slope"){
+MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = NULL){
   
+  facets_scale = 'fixed'
   fit<-model
   text<-caption
   
