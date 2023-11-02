@@ -98,7 +98,11 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
     output$Type <- factor(output$Type, levels = c("Uncorrected_for_correlations", "Corrected_for_correlations"))
     
     if(is.null(by_group)){
+      ##########################
+      ##########11/2 revised
       lm_data <- output %>% group_by(Type, Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .)))
+      papa =  output %>% group_by(Type,Order.q) %>%do(broom::glance(lm(qMF ~ Species.diversity, .)))%>%select(r.squared,Order.q,Type)
+      lm_data <- suppressMessages(lm_all %>% dplyr::full_join(papa))
       lm_data <- mutate(lm_data,
                         Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
                                             levels = c("Significant slope (P < 0.05)", "Insignificant slope")),
@@ -108,28 +112,62 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
       
       output <- suppressMessages(output %>% dplyr::left_join(lm_data))
       
-      plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF))+
-        facet_grid(Type ~ Order.q, scales = facets_scale) +
-        geom_point(size=0.7)+
-        geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=1.9, formula = y ~ x)+
-        geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
-                  hjust= -0.1, vjust= 2, size=3, key_glyph = draw_key_path)+
-        scale_color_manual(values = "red")+
-        theme_bw() +
-        theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-              strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
-              legend.title = element_text(size=12))+
-        guides(
-          linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
-        )+
-        labs(x = "Species diversity", y = "Multifunctionality")+abc
+      ###################################################
+      ########################11/2 revised
+      
+      if(text=="Slope"){
+        plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF))+
+          facet_grid(Type ~ Order.q, scales = facets_scale) +
+          geom_point(size=0.7)+
+          geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=1.9, formula = y ~ x)+
+          geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
+                    hjust= -0.1, vjust= 2, size=3, key_glyph = draw_key_path)+
+          scale_color_manual(values = "red")+
+          theme_bw() +
+          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+                strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                legend.title = element_text(size=12))+
+          guides(
+            linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
+          )+
+          labs(x = "Species diversity", y = "Multifunctionality")+abc
+      }
+      else{
+        
+        lm_text <- lm_data %>% select(Type,Order.q,r.squared) %>%
+          mutate(Label=paste("R^2==",round(r.squared,3),sep=" "),
+                 h=-0.1,
+                 v=2)
+        plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF))+
+          facet_grid(Type ~ Order.q, scales = facets_scale) +
+          geom_point(size=0.7)+
+          geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=1.9, formula = y ~ x)+
+          geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path, parse = T,col="red")+
+          scale_color_manual(values = "red")+
+          theme_bw() +
+          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+                strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                legend.title = element_text(size=12))+
+          guides(
+            linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
+          )+
+          labs(x = "Species diversity", y = "Multifunctionality")+abc
+      }
+      
+      
       
     }
     else{
       output$group <- output %>% dplyr::select(by_group) %>% unlist()
       
-      if(fit == "lm") lm_all <- output %>% group_by(Type, Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .))) %>%
+      if(fit == "lm"){
+        ###########################
+        ############# 11/2 revised
+        lm_all <- output %>% group_by(Type,Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .))) %>% 
           mutate(group="Linear model")
+        papa =  output %>% group_by(Type,Order.q) %>%do(broom::glance(lm(qMF ~ Species.diversity, .)))%>%select(r.squared,Order.q,Type)
+        lm_all <- suppressMessages(lm_all %>% dplyr::full_join(papa))
+      }
       else lm_all <- output %>% group_by(Type, Order.q) %>% do(Lmm_fit(.,r_effect = rand_eff)) %>% suppressMessages %>%
           mutate(group="Linear mixed model")
       
@@ -208,12 +246,23 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
           labs(x = "Species diversity", y = "Multifunctionality")+abc
       }
       else{
-        lm_text <- lm_all %>% select(Type, Order.q,R2_C,R2_M) %>%
-          pivot_longer(cols = c(R2_C,R2_M),names_to = "R2_type",values_to = "Label") %>%
-          mutate(Label=paste(ifelse(R2_type=="R2_C","R[C]^2==","R[M]^2=="),
-                             round(Label,3),sep=" "),
-                 h=ifelse(R2_type=="R2_C",-0.3,-1.8),
-                 v=2)
+        if(fit == "lm"){
+          #######################
+          #### 11/2 revised
+          lm_text <- lm_all %>% select(Type,Order.q,r.squared) %>%
+            mutate(Label=paste("R^2==",round(r.squared,3),sep=" "),
+                   h=-0.3,
+                   v=2)
+        }
+        else{
+          lm_text <- lm_all %>% select(Type, Order.q,R2_C,R2_M) %>%
+            pivot_longer(cols = c(R2_C,R2_M),names_to = "R2_type",values_to = "Label") %>%
+            mutate(Label=paste(ifelse(R2_type=="R2_C","R[C]^2==","R[M]^2=="),
+                               round(Label,3),sep=" "),
+                   h=ifelse(R2_type=="R2_C",-0.3,-1.8),
+                   v=2)
+        }
+        
         
         plot_output <- plot_output +
           geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path, parse = T,col="red")+
@@ -233,7 +282,11 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
       
       scale_plot <- function(out, xlab, ylab, digit=2, h_j=-1.5){
         if(is.null(by_group)){
+          #########################################
+          ##################11/2revised
           lm_data <- out %>% group_by(Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .)))
+          papa =  out %>% group_by(Order.q) %>% do(broom::glance(lm(qMF ~ Species.diversity, .)))%>%select(r.squared,Order.q)
+          lm_data <- suppressMessages(lm_data %>% dplyr::full_join(papa))
           lm_data <- mutate(lm_data,
                             Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
                                                 levels = c("Significant slope (P < 0.05)", "Insignificant slope")),
@@ -241,28 +294,63 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
           ) %>%
             filter(term=="Species.diversity") %>% dplyr::select(-c(term, std.error, statistic, p.value))
           out <- suppressMessages(out %>% dplyr::left_join(lm_data))
-          plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF))+
-            facet_grid(~Order.q, scales = facets_scale) +
-            geom_point(size=0.7,alpha=0.5)+
-            geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=0.5, formula = y ~ x)+
-            geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
-                      hjust= -0.1, vjust= 2, size=2.7, key_glyph = draw_key_path)+
-            scale_color_manual(values = "red")+
-            theme_bw() +
-            theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6), legend.title = element_blank(),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                  strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18))+
-            guides(
-              linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
-            )+
-            labs(x = xlab, y = ylab)+abc
+          #########################################
+          #########################################
+          #########################################
+          #########################################
+          ##################11/2revised
+          if(text=="Slope"){
+            plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF))+
+              facet_grid(~Order.q, scales = facets_scale) +
+              geom_point(size=0.7,alpha=0.5)+
+              geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=0.5, formula = y ~ x)+
+              geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=paste0("Slope = ", round(estimate, 4)), col=group),
+                        hjust= -0.1, vjust= 2, size=2.7, key_glyph = draw_key_path)+
+              scale_color_manual(values = "red")+
+              theme_bw() +
+              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6), legend.title = element_blank(),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+                    strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18))+
+              guides(
+                linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
+              )+
+              labs(x = xlab, y = ylab)+abc
+          }
+          else{
+            lm_text <- lm_data %>% select(Order.q,r.squared) %>%
+              mutate(Label=paste("R^2==",round(r.squared,3),sep=" "),
+                     h=-0.3,
+                     v=2)
+            plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF))+
+              facet_grid(~ Order.q, scales = facets_scale) +
+              geom_point(size=0.7,alpha=0.5)+
+              geom_smooth(aes(lty = Significance, col=group), method = "lm", se = F, size=0.5, formula = y ~ x)+
+              geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=2.7,key_glyph = draw_key_path, parse = T,col="red")+
+              scale_color_manual(values = "red")+
+              theme_bw() +
+              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6), legend.title = element_blank(),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+                    strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18))+
+              guides(
+                linetype = guide_legend(override.aes = list(col = "#000000",size=0.7,linewidth = 0.7))
+              )+
+              labs(x = xlab, y = ylab)+abc
+          }
+          
+          
           
           
         }
         else{
           out$group <- out %>% dplyr::select(by_group) %>% unlist()
           
-          if(fit == "lm") lm_all <- out %>% group_by(Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .))) %>%
+          if(fit == "lm") {
+            #######################
+            #### 11/2 revised
+            lm_all <- out %>% group_by(Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .))) %>% 
               mutate(group="Linear model")
+            papa =  out %>% group_by(Order.q) %>%do(broom::glance(lm(qMF ~ Species.diversity, .)))%>%select(r.squared,Order.q)
+            lm_all <- suppressMessages(lm_all %>% dplyr::full_join(papa))
+            
+          }
           else lm_all <- out %>% group_by(Order.q) %>% do(Lmm_fit(.,r_effect = rand_eff)) %>% suppressMessages %>%
               mutate(group="Linear mixed model")
           
@@ -342,12 +430,26 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
               labs(x = xlab, y = ylab)+abc
           }
           else{
-            lm_text <- lm_all %>% select(Order.q,R2_C,R2_M) %>%
-              pivot_longer(cols = c(R2_C,R2_M),names_to = "R2_type",values_to = "Label") %>%
-              mutate(Label=paste(ifelse(R2_type=="R2_C","R[C]^2==","R[M]^2=="),
-                                 round(Label,3),sep=" "),
-                     h=ifelse(R2_type=="R2_C",-0.3,-1.8),
-                     v=2)
+            if(fit == "lm"){
+              #######################
+              #### 11/2 revised
+              lm_text <- lm_all %>% select(Order.q,r.squared) %>%
+                mutate(Label=paste("R^2==",round(r.squared,3),sep=" "),
+                       h=-0.3,
+                       v=2)
+            }
+            else{
+              lm_text <- lm_all %>% select(Order.q,R2_C,R2_M) %>%
+                pivot_longer(cols = c(R2_C,R2_M),names_to = "R2_type",values_to = "Label") %>%
+                mutate(Label=paste(ifelse(R2_type=="R2_C","R[C]^2==","R[M]^2=="),
+                                   round(Label,3),sep=" "),
+                       h=ifelse(R2_type=="R2_C",-0.3,-1.8),
+                       v=2)
+            }
+            
+            
+            
+            
             
             plot_output <- plot_output +
               geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=2.7,key_glyph = draw_key_path, parse = T,col="red")+
