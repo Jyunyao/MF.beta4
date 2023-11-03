@@ -102,7 +102,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
       ##########11/2 revised
       lm_data <- output %>% group_by(Type, Order.q) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .)))
       papa =  output %>% group_by(Type,Order.q) %>%do(broom::glance(lm(qMF ~ Species.diversity, .)))%>%select(r.squared,Order.q,Type)
-      lm_data <- suppressMessages(lm_all %>% dplyr::full_join(papa))
+      lm_data <- suppressMessages(lm_data %>% dplyr::full_join(papa))
       lm_data <- mutate(lm_data,
                         Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
                                             levels = c("Significant slope (P < 0.05)", "Insignificant slope")),
