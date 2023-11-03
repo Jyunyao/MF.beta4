@@ -60,7 +60,7 @@
 #'
 #' @export
 
-MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = NULL){
+MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = NULL){
   
   facets_scale = 'fixed'
   fit<-model
@@ -79,8 +79,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
     
   }
   
-  if(!(text %in% c("Slope","R.squared")))
-    stop("Error: the argument text should be `Slope` or `R.squared`.")
+  if(!(text %in% c("slope","R.squared")))
+    stop("Error: the argument text should be `slope` or `R.squared`.")
   
   stdPalette <- c("blue", "#00AAAA", "darkorange","gray55","#FF88C2", "purple2")
   abc<-scale_linetype_manual(values = c( "Significant slope (P < 0.05)" = "solid","Insignificant slope" = "dashed"), name = NULL, drop = FALSE)
@@ -115,7 +115,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
       ###################################################
       ########################11/2 revised
       
-      if(text=="Slope"){
+      if(text=="slope"){
         plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF))+
           facet_grid(Type ~ Order.q, scales = facets_scale) +
           geom_point(size=0.7)+
@@ -233,7 +233,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
         `names<-`(levels(output$group))
       
       
-      if(text == "Slope"){
+      if(text == "slope"){
         plot_output <- plot_output +
           geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path)+
           scale_colour_manual(values = col_manual) +
@@ -299,7 +299,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
           #########################################
           #########################################
           ##################11/2revised
-          if(text=="Slope"){
+          if(text=="slope"){
             plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF))+
               facet_grid(~Order.q, scales = facets_scale) +
               geom_point(size=0.7,alpha=0.5)+
@@ -417,7 +417,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "Slope", by_group = N
             `names<-`(levels(out$group))
           
           
-          if(text == "Slope"){
+          if(text == "slope"){
             plot_output <- plot_output +
               geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=2.7,key_glyph = draw_key_path)+
               scale_colour_manual(values = col_manual) +

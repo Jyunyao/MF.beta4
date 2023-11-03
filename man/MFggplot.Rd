@@ -7,7 +7,7 @@
 MFggplot(
   output,
   model = "LMM.both",
-  caption = "Slope",
+  caption = "slope",
   by_group = NULL
 )
 }
