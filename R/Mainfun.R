@@ -43,6 +43,11 @@ MF1_single <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2))
   if ((length(func_data) == 1) && (inherits(func_data, c("numeric", "integer"))))
     stop("Error: Your data does not have enough information.")
   
+  
+  if((length(weight)!=1) && (length(weight)!=length(func_data)))
+    stop("Error: Weight should be a vector with the same length as func_data")
+  
+  
   if (FALSE %in% (0 <= func_data & func_data <= 1))
     stop("Error: Your data does not be normalized, please transform the data between 0 and 1 first.")
   # if (is.vector(data) & (FALSE %in% (0 <= data & data <= 1)))
@@ -168,6 +173,14 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
   
   if ((length(func_data) == 1) && (inherits(func_data, c("numeric", "integer"))))
     stop("Error: Your data does not have enough information.")
+  
+  if(is.null(by_group)){
+    if((length(weight)!=1) && (length(weight)!=length(func_data)))
+      stop("Error: Weight should be a vector with the same length as func_data")
+  }else{
+    if((length(weight)!=1) && (length(weight)!=(length(func_data)-1)))
+      stop("Error: Weight should be a vector with the same length as func_data")
+  }
   
   if (FALSE %in% (0 <= (func_data %>% dplyr::select(-by_group)) & (func_data %>% dplyr::select(-by_group)) <= 1))
     stop("Error: Your data does not be normalized, please transform the data between 0 and 1 first.")
