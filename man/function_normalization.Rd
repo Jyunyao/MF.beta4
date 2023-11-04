@@ -40,6 +40,7 @@ and the information on presence/absence of functions is required in the decompos
 }
 \examples{
 \dontrun{
+library(dplyr)
 data("forest_function_data_raw")
 GER_ITA_forest_function_raw <- filter(forest_function_data_raw, country=="GER"|country=="ITA")
 function_normalization(data = GER_ITA_forest_function_raw, fun_cols = 6:31,

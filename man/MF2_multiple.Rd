@@ -41,6 +41,7 @@ For \code{by_group} is not \code{NULL}, the data.frame will show an additional c
 }
 \examples{
 \dontrun{
+library(dplyr)
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
 GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 

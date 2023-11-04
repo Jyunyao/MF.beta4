@@ -26,6 +26,7 @@
 #' 
 #' @examples
 #' \dontrun{
+#' library(dplyr)
 #' data("forest_function_data_normalized")
 #' data("forest_biodiversity_data")
 #' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
@@ -156,6 +157,7 @@ MF1_single <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2))
 #' 
 #' @examples
 #' \dontrun{
+#' library(dplyr)
 #' data("forest_function_data_normalized")
 #' data("forest_biodiversity_data")
 #' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
@@ -451,6 +453,7 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
 #'
 #' @examples
 #' \dontrun{
+#' library(dplyr)
 #' data("forest_function_data_raw")
 #' GER_ITA_forest_function_raw <- filter(forest_function_data_raw, country=="GER"|country=="ITA")
 #' function_normalization(data = GER_ITA_forest_function_raw, fun_cols = 6:31,

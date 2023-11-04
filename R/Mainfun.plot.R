@@ -27,7 +27,8 @@
 #' @examples
 #' 
 #' \dontrun{
-#'
+#' library(dplyr)
+#' 
 #' ## single ecosystem
 #' data("forest_function_data_normalized")
 #' data("forest_biodiversity_data")

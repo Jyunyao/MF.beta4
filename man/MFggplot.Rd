@@ -4,8 +4,7 @@
 \alias{MFggplot}
 \title{ggplot2 extension for a MF1_single or MF2_multiple object}
 \usage{
-MFggplot(
-  output,
+MFggplot(output,
   model = "LMM.both",
   caption = "slope",
   by_group = NULL
@@ -33,6 +32,7 @@ For \code{MF2_multiple} object, return a list of figures which show alpha, gamma
 \examples{
 
 \dontrun{
+library(dplyr)
 
 ## single ecosystem
 data("forest_function_data_normalized")

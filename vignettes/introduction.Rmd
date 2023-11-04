@@ -1,6 +1,6 @@
 ---
-title: "A Quick Introduction to MF.beta4 via Examples"
-author: "Anne Chao, Chun-Yu Liu"
+title: "An Introduction to MF.beta4 via Examples"
+author: "Anne Chao, Chun-Yu Liu, K. H. Hu"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
@@ -27,26 +27,45 @@ library(dplyr)
 <font color=#FF6600>
 </font>
 
-`MF.beta4` is a R package for measuring ecosystem multifunctionality and assessing BEF relationships. It was originally developed for the Beta4 project (Müller et al. 2022) on the effect of enhancing the beta diversity between forest patches on ecosystem multifunctionality and forest resilience across spatial scales.
+`MF.beta4` is an R package for measuring ecosystem multifunctionality and assessing BEF relationships. The measures are illustrated by use of ecosystem function and biodiversity data collected in
+a total of 209 plots in six European countries (the FunDivEUROPE dataset). All data are available
+from the Dryad repository; see Ratcliffe et al. (2017) and Scherer-Lorenzen et al. (2023) for details. The software was originally developed for the Beta4 project (Müller et al. 2022) on the effect
+of enhancing the beta diversity between forest patches on ecosystem multifunctionality and forest
+resilience across spatial scales.
 
-Based on a framework of Hill-Chao numbers of orders q = 0, 1 and 2, `MF.beta4` features the following multifunctionality measures for a single and multiple ecosystems; see Chao et al. (2023) for pertinent methodology and decomposition theory.  
+Based on a framework of Hill-Chao numbers of orders q = 0, 1 and 2, `MF.beta4` features the following multifunctionality measures for a single and multiple ecosystems; see Chao et al. (2023) for
+pertinent methodology and decomposition theory.
 
-(1) <u>Multifunctionality measures in a single ecosystem</u> 
 
-`MF.beta4` computes a class of weighted multifunctionality measures for given function weights. Multifunctionality measures that correct for strong correlations between ecosystem functions to avoid redundancy are also provided.  
+(1) <u>Multifunctionality measures in a single ecosystem:</u>  
 
-(2) <u>Multifunctionality measures in multiple ecosystems</u>
+`MF.beta4` computes a class of weighted multifunctionality measures for given function weights. Multifunctionality measures that correct
+for strong correlations between ecosystem functions to avoid redundancy are also provided.
 
-`MF.beta4` computes gamma multifunctionality of pooled ecosystems, within-ecosystem component (alpha multifunctionality) and among-ecosystem component (beta multifunctionality).
 
-Based on biodiversity and function data from ecosystems, this package also facilitates graphics for assessing the biodiversity-ecosystem functioning (BEF) relationships across scales by `ggMF`.
+(2) <u>Multifunctionality measures in multiple ecosystems:</u>
+
+For given function weights, `MF.beta4` computes gamma multifunctionality of pooled ecosystems, within-ecosystem component (alpha multifunctionality) and among-ecosystem component (beta multifunctionality).
+
+\
+Based on biodiversity and function data from ecosystems, this package also provides graphics for
+assessing the biodiversity-ecosystem functioning (BEF) relationships across scales.
+
 
 ## How to cite
 
 If you publish your work based on results from `MF.beta4` package, you should make references to the following methodology paper and Online software:
 
 <li> Chao, A., Chiu, C. H., Hu, K. H., van der Plas, F., Cadotte, M. W., Mitesser, O., et al. (2023). Hill-Chao numbers in multifunctionality allows decomposing gamma multifunctionality into alpha and beta components. Under revision, <i>Ecology Letters</i>.</li>
-<li> Chao, A. and Hu, K.-H. (2023) MF.beta4: Software for measuring ecosystem multifunctionality and assessing BEF relationships. . Code and User's guide available from <a href="http://chao.stat.nthu.edu.tw/wordpress/software_download/MF-beta4/">http://chao.stat.nthu.edu.tw/wordpress/software_download/MF-beta4/</a></li>
+\
+<li> Müller, J., Mitesser, O. Cadotte, M. W., van der Plas, F., Mori, A, Ammer, C. . . . , Eisenhauer N.
+(2023). Enhancing the structural diversity between forest patches – a concept and real-world experiment to study biodiversity and multifunctionality across spatial scales. Global Change Biology,
+29, 1437–1450.</li>
+\
+<li> Ratcliffe, S. Wirth, C., Jucker, T. van der Plas, F., Scherer-Lorenzen, M. Verheyen, K. et al. (2017).
+Biodiversity and ecosystem functioning relations in European forests depend on environmental context. Ecology Letters, 20, 1414–1426.</li>
+\
+<li> Scherer-Lorenzen, M. et al. (2023). The functional significance of tree species diversity in European forests - the FunDivEUROPE dataset [Dataset]. Dryad. <a href=" https://doi.org/10.5061/dryad.9ghx3ffpz">  https://doi.org/10.5061/dryad.9ghx3ffpz</a></li>
 
 ## SOFTWARE NEEDED TO RUN MF.beta4 IN R
 - Required: [R](https://cran.r-project.org/)
@@ -70,21 +89,22 @@ library(MF.beta4)
 ```
 
 
-Here are four main functions we provide in this package : 
+This package includes four main functions: 
 
-- **func_normalized** :  Normalizing ecosystem functions data and turn all values between 0 and 1.
-- **MF_single** : Computing quantification of multifuctionality measures in a single ecosystem when all functions are assumed to be independent, and when the correlation between any two functions is adjusted for. In the latter case, our MF value is obtained based on an integrated measure by considering all possible threshold levels.
-- **MF_multiple** : Computing decomposition of multifuctionality measures in multiple ecosystems when all functions are assumed to be independent, and when the correlation between any two functions is adjusted for. In the latter case, our MF value is obtained based on an integrated measure by considering all possible threshold levels.
-- **ggMF** : Visualizing the output from the function `MF_single` or `MF_multiple`.
+- **function_normalization** : transforms ecosystem functions data to values between 0 and 1.
+- **MF1_single** : computes a class of weighted multifuctionality measures in a single ecosystem when all functions are assumed to be independent, or when the correlation between any two functions is adjusted for.
+- **MF2_multiple** : computes alpha, beta and gamma multifuctionality measures in multiple ecosystems for given function weights, when all functions are assumed to be independent, or when the correlation between any two functions is adjusted for.
+- **MFggplot** : provides the graphical BEF relationships based on the output from the function `MF1_single` or `MF2_multiple`.
 
+## Normalize raw ecosystem function values to [0,1]: function_normalization()
 
-## Normalized the raw data: func_normalized()
-
-We first describe the normalized function `func_normalized()` with default arguments, and the arguments of this function are briefly described below.
+We first describe the normalization function `function_normalization()` with default arguments. The arguments of this function are briefly described below, and will be explained in more details by illustrative examples in later text.
 
 ```{r eval=FALSE}
-func_normalized(data, fun_cols = 1:ncol(data), negative = NULL, by_group = NULL) 
+function_normalization(data, fun_cols = 1:ncol(data), negative = NULL, by_group = NULL) 
 ```
+
+<code>function_normalization</code> transforms raw function values to values between 0 and 1. For positive functionality, ecosystems with the highest value in the raw function data are transformed to the maximal value of 1, and those with the lowest raw value are transformed to the minimum value of 0. Because the value “0” always implies absent functions, thus if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number, e.g., $10^{-15}$. In a similar manner, for negative functionality, if the highest raw value is not 0, the transformed 0 will also be replaced by a very small number, e.g., $10^{-15}$. These replacements will not affect any numerical computation, but will help indicate that the transformed values represent functions that should be regarded as “present” ones. Thus, present or absent functions can be clearly distinguished in the transformed data, and the information on presence/absence of functions is required in the decomposition of multifunctionality among ecosystems.
 
 <table style="width:100%;">
 <colgroup>
@@ -102,40 +122,43 @@ func_normalized(data, fun_cols = 1:ncol(data), negative = NULL, by_group = NULL)
 <tr class="odd">
 <td align="center"><code>data</code></td>
 <td align="left">
-Data can be input as a <code>matrix</code>/<code>data.frame</code> (assemblages by functions).</br>
-Data should be without NA, if does, the missing values need to impute first and then use the function.</td>
+
+data can be input as a <code>matrix/data.frame</code> with ecosystem/plot as rows and relevant ecosystem/plot information and ecosystem functions as columns. All missing values should be imputed in the input data.</br>
+If <code>by_group</code> is not NULL, data must contain the <code>by_group</code> column.</td>
 
 </tr>
 <tr class="even">
 <td align="center"><code>fun_cols</code></td>
-<td align="left">The order number of the columns which be used as the ecosystem function.</td>
+<td align="left"> the columns represent ecosystem functions.</td>
 
 </tr>
 <tr class="odd">
 <td align="center"><code>negative</code></td>
-<td align="left">Name of columns which need to be normalized negatively.</td>
+<td align="left"> names of the functions that are negative functionality.</td>
 
 </tr>
 <tr class="even">
 <td align="center"><code>by_group</code></td>
-<td align="left"> Name of the column to be normalized by group. Default is <code>NULL</code>.</td>
+<td align="left"> name of the column for normalization and decomposition, i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column variable. For example, if <code>by_group = “country”</code>, then all functions will be normalized to the range of [0, 1] within a country, and decomposition is based on all pairs of ecosystems separately within each country. Default is <code>NULL</code>.</td>
 </tr>
 
 </tbody>
 </table>
 
-This function returns a data.frame with normalized functions.
+This function returns a data.frame with relevant ecosystem/plot information (as input data) and normalized function values. For by_group is not <code>NULL</code>, the data.frame also show an additional column which name is the same as the setting of <code>by_group</code>.
 
 
-## Multifunctionality: MF_single()
+## multifunctionality measures for a single ecosystem: MF1_single()
 
-One of the main function to measure MF is `MF_single()`, and the following is default arguments of the function: 
+One of the main function to measure MF is `MF1_single()`, the arguments of this function are briefly described below, and will be explained in more details by illustrative examples in later text. 
 
 ```{r eval=FALSE}
-MF_single(func_data, species_data = NULL, q = c(0, 1, 2))
+MF1_single(func_data, species_data = NULL, weight = 1, q = c(0, 1, 2))
 ```
 
-The arguments of this function are briefly described below, and will be explained in more details by illustrative examples in later text. This main function computes quantification multi-fuctionality of order q  in a single ecosystem when all functions are assumed to be independent and when the correlation is considered.
+`MF1_single` computes multifunctionality measures for given function weights in a single ecosystem separately for two cases:\
+(i) correlations between functions are not corrected for.\
+(ii) correlations between functions are corrected.
 
 <table style="width:100%;">
 <colgroup>
@@ -152,35 +175,41 @@ The arguments of this function are briefly described below, and will be explaine
 <tbody>
 <tr class="odd">
 <td align="center"><code>func_data</code></td>
-<td align="left">The ecosystem function data can be input as a vector of functions (for a single assemblage), <code>matrix</code>/<code>data.frame</code> (assemblages by functions).
-The data input must be normalized between 0 and 1 already and must contain only the ecosystem function columns.</br>
-For <code>species_data</code> is not <code>NULL</code>, the rownames of <code>func_data</code> should be names of 'plotID'.</td>
+<td align="left"> ecosystem function data can be input as a vector of functions (for a single ecosystem), <code>matrix/data.frame</code> (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1.</br>
+For <code>species_data</code> is not <code>NULL</code>, the row names of <code>func_data</code> should be the names of 'plotID'.</td>
 
 </tr>
 <tr class="even">
 <td align="center"><code>species_data</code></td>
-<td align="left">The species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is <code>NULL</code>.</td>
+<td align="left">the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is <code>NULL</code>.</td>
+
+</tr>
+<tr class="even">
+<td align="center"><code>weight</code></td>
+<td align="left">a numerical vector specifying weights for ecosystem functions. The length of <code>weight</code> needs to be equal to the number of functions. Default is <code>weight</code> = 1, which means equal weight for all ecosystem functions.</td>
 
 </tr>
 <tr class="odd">
 <td align="center"><code>q</code></td>
-<td align="left">A numerical vector specifying the diversity orders. Default is 0, 1 and 2.</td>
+<td align="left">a numerical vector specifying the diversity orders. Default is q = 0, 1 and 2.</td>
 </tr>
 
 </tbody>
 </table>
 
+This function returns <code>data.frame</code> with columns ’plotID’, ’Type’ (uncorrected or corrected for correlations), ’Order.q’ and ’qMF’. For <code>species_data</code> is <code>not NULL</code>, the <code>data.frame</code> will show an additional column contain ’Species.diversity’.
 
+## multifunctionality measures for multiple ecosystems: MF2_multiple()
 
-## Multifunctionality: MF_multiple()
-
-The other main function to measure MF is `MF_multiple()`, and the following is default arguments of the function: 
+The other main function to measure MF is `MF2_multiple()`, the arguments of this function are briefly described below, and will be explained in more details by illustrative examples in later text.  
 
 ```{r eval=FALSE}
-MF_multiple(func_data, species_data = NULL, q = c(0, 1, 2), by_group = NULL) 
+MF2_multiple(func_data, species_data = NULL, weight = 1, q = c(0, 1, 2), by_group = NULL) 
 ```
 
-The arguments of this function are briefly described below, and will be explained in more details by illustrative examples in later text. This main function computes decomposition multi-fuctionality of order q  in multiple ecosystems when all functions are assumed to be independent and when the correlation is considered.
+`MF2_multiple` computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems separately for two cases: \
+(i) correlations between functions are not corrected for.\
+(ii) correlations between functions are corrected.\
 
 <table style="width:100%;">
 <colgroup>
@@ -197,121 +226,128 @@ The arguments of this function are briefly described below, and will be explaine
 <tbody>
 <tr class="odd">
 <td align="center"><code>func_data</code></td>
-<td align="left">The ecosystem function data can be input as a vector of functions (for a single assemblage), <code>matrix</code>/<code>data.frame</code> (assemblages by functions).
-The data input must be normalized between 0 and 1 already.</br>
-For <code>by_group = NULL</code> the <code>func_data</code> must contain only the ecosystem function columns. Otherwise, you must add the <code>by_group</code> column in data.
-For <code>species_data</code> is not <code>NULL</code>, the rownames of <code>func_data</code> should be names of 'plotID'.</td>
+<td align="left"> ecosystem function data can be input as a vector of functions (for a single assemblage), <code>matrix/data.frame</code> (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1.</br>
+For <code>by_group = NULL</code>, the func_data must contain only the ecosystem function columns. Otherwise, you must add the <code>by_group</code> column in data.</br>
+For species_data is not <code>NULL</code>, the row names of <code>func_data</code> should be the same as 'plotID' in the <code>species_data</code>.</td>
+
 
 </tr>
 <tr class="even">
 <td align="center"><code>species_data</code></td>
-<td align="left">The species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is <code>NULL</code>.</td>
+<td align="left">the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is <code>NULL.</code></td>
+
+</tr>
+<tr class="even">
+<td align="center"><code>weight</code></td>
+<td align="left">a numerical vector specifying weights for ecosystem functions. The length of <code>weight</code> needs to be equal to the number of functions. Default is <code>weight = 1</code>, which means equal weight for all ecosystem functions.</td>
 
 </tr>
 <tr class="odd">
 <td align="center"><code>q</code></td>
-<td align="left">A numerical vector specifying the diversity orders. Default is 0, 1 and 2.</td>
+<td align="left">a numerical vector specifying the diversity orders. Default is q = 0, 1 and 2.</td>
 
 </tr>
 <tr class="even">
 <td align="center"><code>by_group</code></td>
-<td align="left">Name of the column to be paired by group. Default is <code>NULL</code>.</td>
+<td align="left">name of the column for normalization and decomposition, i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column variable. So, the <code>by_group</code> setting here needs to be the same as the group using for normalization. For example, if all functions was normalized to the range of [0, 1] within a country (as using function <code>function_normalization</code> with <code>by_group=“country”</code>), then the setting <code>by_group=“country”</code> is also needed here. The decomposition is based on all pairs of ecosystems separately within each country. Default is <code>NULL</code>.</td>
 </tr>
 </tbody>
 </table>
 
 
 
-The above two functions (`MF_single()` and `MF_multiple()`) returns a data.frame which can be further used to make plots using the function `ggMF()` to be described below. 
-
+This function returns a <code>data.frame</code> with columns ’plotID’(combinations of plots by paired), 'Order.q' , 'Type' (uncorrected or corrected for correlations) , 'Scale' (gamma, alpha or beta) and 'qMF'. For <code>species_data</code> is not <code>NULL</code>, the <code>data.frame</code> will show an additional column contain ’Species.diversity’. For <code>by_group</code> is not <code>NULL</code>, the <code>data.frame</code> will show an additional column which name is the same as the setting of <code>by_group</code>.
 
 
 ## Data input format
 
 #### Ecosystem functions data
 
+The input data for L ecosystem functions should be arranged as a <code>matrix/data.frame</code> with ecosystems/plots in rows, and ecosystem function values in columns; here each plot is designated as an ecosystem. The first row starting from column B lists the names for the L functions; see an example below. Beginning with the second row, the first entry for column A in each row denotes plot id or plot label, followed by L function values. 
 
-The input data for L ecosystem functions should be arranged as a matrix/data.frame with ecosystems/plots in rows, and ecosystem function values in columns; here each plot is designated as an ecosystem. The first row starting from column B lists the names for the L functions; see an example below. Beginning with the second row, the first entry for column A in each row denotes plot id or plot label, followed by L function values. 
+A forest tree species and ecosystem function data is included in `MF.beta4` package for illustration. This dataset includes raw values of 26 ecosystem functions collected from 209 plots (each with 30 m × 30 m) in six European countries, representing six major European forest types: boreal forest (Finland, 28 plots); hemi-boreal (Poland, 43 plots); temperate deciduous (Germany, 38 plots); mountainous deciduous (Romania, 28 plots); thermophilous deciduous (Italy, 36 plots); and Mediterranean mixed (Spain, 36 plots). Each plot is designated as an ecosystem in assessing BEF relationships. See Ratcliffe et al. (2017) and Scherer-Lorenzen et al. (2023) for the original dataset. For each missing value of functions in the original dataset, the mean of the given function within the country was imputed. And for analysis, add a column of countries for each Plot. Thus, the dataset provided with the package is slightly different from the original dataset.
 
-A forest tree species and ecosystem function data is included in `MF.beta4` package for illustration. see Baeten et al. (2013), van der Plas et al. (2016) and Ratcliffe et al. (2017) for a detailed description. In the data, a total of 209 plots (each with 30 m x 30 m) were established in mature forests in six countries, representing six major European forest types. In each country, three to five common tree species were selected for the species pool; each of the 209 plots consisted of one to five tree species. The basal area of each tree species within each plot was used as a proxy for species abundance. Within each country, there are 28 to 43 plots, where each plot is designated as an ecosystem. In each plot, a total of 26 ecosystem functions or properties were measured; see Appendix S3 of Chao et al. (2023) for a list of the 26 functions (with brief description) and their pairwise correlations.
 
-Run the following code to view raw forest data: (Here we only show the first ten rows of the first two ecosystem functions)
+Run the following code to view raw forest data: (Here we only show the first ten rows and the first two ecosystem functions)
 
-```{r eval=FALSE, fig.width=10}
-data("Europe_Forest_raw")
-GER_ITA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="ITA")
-GER_ITA_Forest_raw
+```{r  fig.width=10, eval=FALSE}
+data("forest_function_data_raw")
+head(cbind(forest_function_data_raw[1:3], round(forest_function_data_raw[6:7], 3)), 10)
 ```
 
-```{r echo=FALSE, fig.width=10}
-data("Europe_Forest_raw")
-GER_ITA_Forest_raw <- filter(Europe_Forest_raw,Country=="GER"|Country=="ITA")
-head(cbind(GER_ITA_Forest_raw[1:3], round(GER_ITA_Forest_raw[4:5], 3)), 10)
+```{r  fig.width=10, echo=FALSE}
+data("forest_function_data_raw")
+head(cbind(forest_function_data_raw[1:3], round(forest_function_data_raw[6:7], 3)), 10)
 ```
 
-Since the data is not normalized, we then use `func_normalized()` to do normalization. Note that, in this data, the ecosystem functions are column 4 to column 29. And there are two ecosystem functions should be normalized negatively: `"soil_cn_ff_10"` and `"wue"`. Furthermore, the performance of the ecosystem functions are quite different between six countries, thus, we do normalization and analysis among each countries.
+Since the data is not normalized, we then use `function_normalization` to do normalization. Note that, in this data, the ecosystem functions are column 6 to column 31. And there are two ecosystem functions should be normalized negatively: `"soil_cn_ff_10"` and `"wue"`. Furthermore, the performance of the ecosystem functions are quite different between six countries, thus, we do normalization and analysis among each countries.
+
+Run the following code to view normalized forest function data: (Here we only show the first ten rows and the first two ecosystem functions)
+
+```{r fig.width=10, eval=FALSE}
+data("forest_function_data_raw")
+normalized_forest_function_data <- function_normalization(data = forest_function_data_raw,
+                    fun_cols = 6:31, negative = c("soil_cn_ff_10","wue"), by_group = "country")
+head(cbind(normalized_forest_function_data[1:3], round(normalized_forest_function_data[6:7], 3)), 10)
+```
+
+```{r fig.width=10, echo=FALSE}
+data("forest_function_data_raw")
+normalized_forest_function_data <- function_normalization(data = forest_function_data_raw,
+                    fun_cols = 6:31, negative = c("soil_cn_ff_10","wue"), by_group = "country")
+head(cbind(normalized_forest_function_data[1:3], round(normalized_forest_function_data[6:7], 3)), 10)
+```
+
+This normalized data is same as the data `forest_function_data_normalized` in `MF.beta4` package .
+
+
+#### Biodiversity data
+
+The input data include three columns: the "plotID" column includes the name of ecosystems/plots, the "species" column includes species names, and the "abundance" column includes the corresponding species abundance.
+
+A biodiversity data for six European forests is included in `MF.beta4` package for illustration. In addition to row and column names, the original dataset consists of three columns: the “plot” column indicates the name of plots, the “full_species_original” column includes species names, and the column “basal area” (as a proxy of species abundance). See Scherer-Lorenzen et al. (2023) for the original dataset. Because missing values of “basal area” in the original dataset were imputed by the mean of the same species within the country, and some basal areas were added for almost indistinguishable species, the dataset provided with the package is slightly different from the original dataset. Also ,for analysis, original three column names of the dataset turn into “plotID” (the name of plots), “species” (species names) and “abundance” (species abundance).
+
+Run the following code to view biodiversity data: (Here, we only show the first ten rows.)
 
 ```{r eval=FALSE}
-data("Europe_Forest_raw")
-func_normalized(data = Europe_Forest_raw, fun_cols = 4:29,
-                negative = c("soil_cn_ff_10","wue"), by_group = "Country")
-```
-
-```{r, echo=FALSE}
-norm_Europe_Forest = func_normalized(data = Europe_Forest_raw, 
-                                     fun_cols = 4:29, 
-                                     negative = c("soil_cn_ff_10","wue"), 
-                                     by_group = "Country")
-head(cbind(norm_Europe_Forest[1:3], round(norm_Europe_Forest[4:5], 3)), 10)
-```
-
-
-This normalized data is same as the data `Europe_Forest` in `MF.beta4` package .
-
-
-#### Species abundance data
-
-The input data include three columns: the "plotID" column includes the name of ecosystems/plots, the species" column includes species names, and the "abundance" column includes the corresponding species abundance.
-
-Run the following code to view complete species abundance data:
-
-```{r eval=FALSE}
-data("Europe_Forest_species")
+data("forest_biodiversity_data")
+head(forest_biodiversity_data,10)
 ```
 
 Here, we only show the first ten rows.
 
 ```{r echo=FALSE}
-data("Europe_Forest_species")
-head(Europe_Forest_species,10)
+data("forest_biodiversity_data")
+head(forest_biodiversity_data,10)
 ```
 
 ### Computing Multifunctionality in Single Ecosystem Via Example
 
 #### If the `species_data` is not provided
-For example, given a normalized data, we run the `MF_single()` function without setting `species_data` to compute uncorrected for correlations and corrected for correlations multifunctionality. (Here we only show the first six outputs)
+For demonstration, given a normalized data, we run the `MF1_single()` function without setting `species_data` to compute uncorrected for correlations and corrected for correlations multifunctionality. (Here we only show the first six outputs)
 
 
 ```{r echo=TRUE}
-data("Europe_Forest")
-output1 <- MF_single(func_data = Europe_Forest[,4:29])
+data("forest_function_data_normalized")
+output1 <- MF1_single(func_data = forest_function_data_normalized[,6:31],weight = 1)
 ```
 
 ```{r, echo=FALSE}
-output1 %>% mutate(qMF = round(qMF,3)) %>% head(6)
+output1 %>% mutate(qMF = round(qMF,3)) %>% as.data.frame() %>% head(6)
 ```
 
 
 The output contains ID of plot (`plotID`) which is according to the row names of the input data, `Type` (uncorrected for correlations or corrected for correlations), the diversity order (`Order.q`) and multifunctionality (`qMF`).
 
 
-#### If there is `species_data` given to function `MF_single`
+#### If there is `species_data` given to function `MF1_single`
 
 
 ```{r echo=TRUE}
-data("Europe_Forest")
-data("Europe_Forest_species")
-output2 <- MF_single(func_data = Europe_Forest[,4:29],species_data = Europe_Forest_species)
+data("forest_function_data_normalized")
+data("forest_biodiversity_data")
+output2 <- MF1_single(func_data = forest_function_data_normalized[,6:31],weight = 1 ,
+           species_data = forest_biodiversity_data)
 ```
 
 ```{r echo=FALSE}
@@ -321,31 +357,34 @@ output2 %>% mutate(qMF = round(qMF,3),
 ```
 
 
-The output has only more one column `Species.diversity` than the previous one.
+The output has only one more column `Species.diversity` than the previous one.
 
 
 ### Computing Decomposition of Multifunctionality In Multiple Ecosystems Via Example
-For example, we run the `MF_multiple()` function with forest data to compute uncorrected for correlations and corrected for correlations multifunctionality relationships across spatial scales. (Here we only show the first six outputs)
+
+For demonstration, we run the `MF2_multiple()` function with forest data to compute uncorrected for correlations and corrected for correlations multifunctionality relationships across spatial scales. (Here we only show the first six outputs)
 
 ```{r eval=FALSE}
-data("Europe_Forest")
-data("Europe_Forest_species")
-output3 = MF_multiple(func_data = Europe_Forest[,4:30],
-                      species_data = Europe_Forest_species,
-                      by_group = "Country")
+data("forest_function_data_normalized")
+data("forest_biodiversity_data")
+output3 = MF2_multiple(func_data = forest_function_data_normalized[,6:32],
+                      species_data = forest_biodiversity_data,
+                      weight = 1,
+                      by_group = "country")
 ```
 
 ```{r include=FALSE}
-data("Europe_Forest")
-data("Europe_Forest_species")
-Demo_multiple = MF_multiple(func_data = Europe_Forest[,4:30],
-                      species_data = Europe_Forest_species,
-                      by_group = "Country")
+data("forest_function_data_normalized")
+data("forest_biodiversity_data")
+Demo_multiple = MF2_multiple(func_data =  forest_function_data_normalized[,6:32],
+                      species_data = forest_biodiversity_data,
+                      weight = 1,
+                      by_group = "country")
 
-output3 <- Demo_multiple %>% 
+output3 <- Demo_multiple %>%
   mutate(Type=factor(Type,levels = unique(Type)),
          Scale=factor(Scale,levels = unique(Scale))) %>%
-  group_by(plotID,Country,Type,Scale) %>%
+  group_by(plotID,country,Type,Scale) %>%
   summarise(Order.q=Order.q,
             qMF=round(qMF,3),
             Species.diversity=round(Species.diversity,3))
@@ -353,7 +392,7 @@ output3 <- Demo_multiple %>%
 
 
 ```{r echo=FALSE}
-head(output3, 6)
+head(as.data.frame(output3), 6)
 output3 <- Demo_multiple
 ```
 
@@ -362,13 +401,12 @@ Each row of the output represents the decomposition of species diversity and mul
 
 For `species_data` is not provided, the column of decomposition of species diversity are not included in the output.
 
-## Graphic Display: Function ggMF()
+## ggplot2 extension for a MF1_single or MF2_multiple object: Function MFggplot()
 
-The function `ggMF()`, which extends `ggplot2` to the `"MF"` output object with default arguments, is described as follows: 
+The function `MFggplot()`, which extends `ggplot2` to the `"MF"` output object with default arguments, is described as follows: 
 
 ```{r eval=FALSE}
-ggMF(output, by_group = NULL, facets_scale = "fixed", 
-                 fit = "LMM.intercept", text = "Slope")
+MFggplot(output, by_group = NULL, model = "LMM.both", caption = "slope")
 ```
 
 <table style="width:100%;">
@@ -385,34 +423,31 @@ ggMF(output, by_group = NULL, facets_scale = "fixed",
 <tbody>
 <tr class="odd">
 <td align="center"><code>output</code></td>
-<td align="left">The output from <code>MF_single</code> or <code>MF_multiple</code>.</br>
+<td align="left"> the output obtained from <code>MF1_single</code> or <code>MF2_multiple</code>.</br>
+If using output obtained from <code>MF1_single</code> and want to draw the plot with <code>by_group</code>, must add the <code>by_group</code> column in output.
+
+
+</tr>
+<tr class="even">
+<td align="center"><code>model</code></td>
+<td align="left">specifying the fitting model. Specify model = "lm" for the linear model, or "LMM.intercept", "LMM.slope", "LMM.both" for the linear mixed model with random effects for intercept, slope, and both, respectively. Default is model = "LMM.both".</td>
+
+</tr>
+<tr class="odd">
+<td align="center"><code>caption</code></td>
+<td align="left">caption information that will be shown in the BEF plots. Select <code>caption = "slope"</code> to show the estimated slopes, or <code>caption = "R.squared"</code> to show the marginal and conditional R-squared. Default is <code>caption = "slope"</code>.</td>
 
 
 </tr>
 <tr class="even">
 <td align="center"><code>by_group</code></td>
-<td align="left">Whether the MF object to classify by group or not. If does, input name of the
-column used for grouping. Default is <code>NULL</code>.</br>
-For <code>fit</code> is selected to be linear mixed model, you must offer the <code>by_group</code>
-argument.</td>
+<td align="left">name of the column for normalization and decomposition i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column. Default is <code>NULL</code>.</br>
+For linear mixed model is selected in the <code>model</code>, the <code>by_group</code> argument must be specified.
+</td>
 </td>
 
-</tr>
-<tr class="odd">
-<td align="center"><code>facets_scale</code></td>
-<td align="left">Are scales shared across all facets (the default, <code>"fixed"</code>), or do they vary across rows (<code>"free_x"</code>), columns (<code>"free_y"</code>), or both rows and columns (<code>"free"</code>)?</td>
-
-</tr>
-<tr class="even">
-<td align="center"><code>fit</code></td>
-<td align="left">Method of the fitted line. Select <code>fit = "lm"</code> for the linear model, or <code>fit = "LMM.intercept"</code>, <code>fit = "LMM.slope"</code> and <code>fit = "LMM.both"</code> for the linear mixed model with random effect 'intercept', 'slope' and 'both intercept and slope', respectively.Default is <code>fit = "LMM.intercept"</code>.</td>
 
 
-</tr>
-<tr class="odd">
-<td align="center"><code>text</code></td>
-<td align="left">type of text information show in the plots. Select <code>text = "Slope"</code> to see estimated of slopes, or <code>text = "R.squared"</code> to see model performance. Default is
-<code>text = "Slope"</code>.</td>
 
 </tr>
 
@@ -420,43 +455,44 @@ argument.</td>
 </table>
 
 
-The `ggMF()` function is a wrapper around the `ggplot2` package to display the relationship between species diversity and multifunctionality when <code>output</code> is from <code>MF_single</code>, or to display the relationship between the decomposition of species diversity and multifunctionality (MF alpha vs. species alpha, MF beta vs. species beta, and MF gamma vs. species gamma) when <code>output</code> is from <code>MF_multiple</code> using a single line of code. The resulting object is of class `"ggplot"` or `"list"` containing two lists of `ggplot` objects, so it can be manipulated using the `ggplot2` tools. Users can visualize the output with different methods of the fitted line by setting the parameter <code>**fit**</code>
+For <code>MF1_single</code> object, return a figure that shows multifunctionality for uncorrected and corrected for correlations two cases. And also contains the fitted lines for the chosen fitting model on the figure.
+For <code>MF2_multiple</code> object, return a list of figures which show alpha, gamma, beta multifunctionality for uncorrected and corrected for correlations two cases, respectively. And also contains the fitted lines for the chosen fitting model on the figures.
 
 
 We first display multifunctionality in single ecosystem without `by_group` and with `by_group`.
 ```{r, fig.align='center', fig.height=6.5, fig.width=6.5}
-ggMF(output2, facets_scale = 'fixed', fit = "lm")
+MFggplot(output2, model = "lm")
 ```
 
 
 ```{r, fig.align='center', fig.height=6.5, fig.width=6.5}
-output2 <- data.frame("plotID"=rownames(Europe_Forest),
-                      "Country"=Europe_Forest$Country) %>% 
+output2 <- data.frame("plotID"=rownames(forest_function_data_raw),
+                      "country"=forest_function_data_raw$country) %>%
   left_join(output2,.,by="plotID")
-ggMF(output2, by_group = "Country", facets_scale = 'fixed', 
-     fit = "LMM.intercept")  
+MFggplot(output2, model = "LMM.both", by_group = "country")
 ```
 
-Without `by_group`, we can only fit linear model, and for the example with `by_group`, we fit linear mixed model with random effect 'intercept' of fitted line.
+Without `by_group`, we can only fit linear model, and for the example with `by_group`, we fit linear mixed model with random effect 'intercept' and 'slope' of fitted line.
 
-And then, display decomposition of multifunctionality in multiple ecosystems with linear model fitted line and linear mixed model with random effect 'intercept' fitted line.
+And then, display decomposition of multifunctionality in multiple ecosystems with linear model fitted line and linear mixed model with random effect 'intercept' and 'slope' of fitted line.
 
 ```{r}
-figure_lm <- ggMF(output3, by_group = "Country", facets_scale = 'fixed', fit = "lm")
-figure_LMM <- ggMF(output3, by_group = "Country", facets_scale = 'fixed', fit = "LMM.intercept",text = "R.squared")
+figure_lm <- MFggplot(output3, by_group = "country", model = "lm")
+figure_LMM <- MFggplot(output3, by_group = "country",  model = "LMM.both",caption = "R.squared")
+```
+
+```{r, fig.align='center', fig.height=12, fig.width=6.2}
+figure_lm$Corrected_for_correlations$ALL
 ```
 
 ```{r, fig.align='center', fig.height=12, fig.width=6.2}
 figure_lm$Uncorrected_for_correlations$ALL
-figure_LMM$Uncorrected_for_correlations$ALL
 ```
 
 ```{r, fig.align='center', fig.height=12, fig.width=6.2}
 figure_LMM$Corrected_for_correlations$ALL
 ```
 
-```{r, fig.align='center', fig.height=5, fig.width=6.2}
-figure_LMM$Corrected_for_correlations$Gamma
-figure_LMM$Corrected_for_correlations$Alpha
-figure_LMM$Corrected_for_correlations$Beta
+```{r, fig.align='center', fig.height=12, fig.width=6.2}
+figure_LMM$Uncorrected_for_correlations$ALL
 ```
