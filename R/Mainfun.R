@@ -475,7 +475,7 @@ function_normalization <- function(data, fun_cols = 1:ncol(data), negative = NUL
     if(positive) y <- (x-mi)/(ma-mi)
     else y <- (ma-x)/(ma-mi)
     ### revise
-    y[y==0] <- 10^(-15)
+    y[y==0] <- 10^(-5)
     #y[x==0] <- 0
     if (mi<0){
       y[x==0] <- y[x==0]
