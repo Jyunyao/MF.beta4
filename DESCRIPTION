@@ -5,13 +5,12 @@ Version: 0.1.0
 Author: Anne Chao, Chun-Yu Liu, K. H. Hu
 Maintainer: Anne Chao <chao@stat.nthu.edu.tw>
 Description: Provide simple functions to (i) compute a class of multifunctionality
-      measures for a single ecosystem for given function weights, (ii) decompose gamma
-      multifunctionality for multiple ecosystems into within-ecosystem component (alpha
-      multifunctionality) and among-ecosystem component (beta multifunctionality). In
-      each case, the correlation between functions can be corrected for. Based on
-      biodiversity and ecosystem function data, this software also facilitates graphics
-      for assessing the biodiversity-ecosystem functioning (BEF) relationships across 
-      scales. 
+             measures for a single ecosystem for given function weights, (ii) decompose gamma
+             multifunctionality for multiple ecosystems into a within-ecosystem component
+             (alpha multifunctionality) and an among-ecosystem component (beta
+             multifunctionality). In each case, the correlation between functions can be corrected
+             for. Based on biodiversity and ecosystem function data, this software also facilitates graphics
+             for assessing the biodiversity-ecosystem functioning (BEF) relationships across scales.
 License: GPL (>= 3)
 Depends: R (>= 4.0)
 Imports: broom,

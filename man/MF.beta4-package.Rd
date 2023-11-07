@@ -4,14 +4,14 @@
 
 \description{
 
-\code{MF.beta4} is an R package for measuring ecosystem multifunctionality and assessing BEF relationships. The measures are illustrated by use of ecosystem function and biodiversity data collected in a total of 209 plots in six European countries (the FunDivEUROPE dataset). All data are available from the Dryad repository; see Ratcliffe et al. (2017) and Scherer-Lorenzen et al. (2023) for details. The software was originally developed for the Beta4 project (Müller et al. 2022) on the effect of enhancing the beta diversity between forest patches on ecosystem multifunctionality and forest resilience across spatial scales.    \cr
+\code{MF.beta4} is an R package for measuring ecosystem multifunctionality and assessing BEF relationships. The measures are illustrated by using ecosystem function and biodiversity data collected in a total of 209 plots in six European countries (the FunDivEUROPE dataset). All data are available from the Dryad repository; see Ratcliffe et al. (2017) and Scherer-Lorenzen et al. (2023) for details. The software was originally developed for the Beta4 project (Müller et al. 2022) on the effect of enhancing the beta diversity between forest patches on ecosystem multifunctionality and forest resilience across spatial scales.    \cr
 
 
 Based on a framework of Hill-Chao numbers of orders q = 0, 1 and 2, \code{MF.beta4} features the following multifunctionality measures for a single and multiple ecosystems; see Chao et al. (2023) for pertinent methodology and decomposition theory. \cr
 
 (1)	Multifunctionality measures in a single ecosystem: \code{MF.beta4} computes a class of weighted multifunctionality measures for given function weights. Multifunctionality measures that correct for strong correlations between ecosystem functions to avoid redundancy are also provided. \cr
 
-(2)	Multifunctionality measures in multiple ecosystems: for given function weights, \code{MF.beta4} computes gamma multifunctionality of pooled ecosystems, within-ecosystem component (alpha multifunctionality) and among-ecosystem component (beta multifunctionality).    \cr
+(2)	Multifunctionality measures in multiple ecosystems: for given function weights, \code{MF.beta4} computes the gamma multifunctionality of pooled ecosystems, the within-ecosystem component (alpha multifunctionality) and among-ecosystem component (beta multifunctionality).    \cr
 
 Based on biodiversity and function data from ecosystems, this package also provides graphics for assessing the biodiversity-ecosystem functioning (BEF) relationships across scales.   \cr
 
@@ -20,9 +20,9 @@ This package includes four main functions:   \cr
 
 1. \code{function_normalization} transforms ecosystem functions data to values between 0 and 1. \cr 
 
-2. \code{MF1_single} computes a class of weighted multifuctionality measures in a single ecosystem when all functions are assumed to be independent, or when the correlation between any two functions is adjusted for. \cr
+2. \code{MF1_single} computes a class of weighted multifuctionality measures in a single ecosystem for given individual function weights separately for two cases: (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected. \cr
 
-3. \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures in multiple ecosystems for given function weights, when all functions are assumed to be independent, or when the correlation between any two functions is adjusted for.\cr
+3. \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures in multiple ecosystems for given function weights separately for two cases (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.\cr
 
 4. \code{MFggplot} provides the graphical BEF relationships based on the output from the function \code{MF1_single} or \code{MF2_multiple}.
 

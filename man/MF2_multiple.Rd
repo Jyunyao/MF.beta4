@@ -13,35 +13,41 @@ MF2_multiple(
 )
 }
 \arguments{
-\item{func_data}{ecosystem function data can be input as a vector of functions (for a single assemblage), matrix/data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1. \cr
-For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns. Otherwise, you must add the \code{by_group} column in data. \cr
-For \code{species_data} is not \code{NULL}, the row names of \code{func_data} should be the same as 'plotID' in the \code{species_data}.}
+\item{func_data}{ecosystem function data can be input as a data.frame (ecosystems by functions for multiple ecosystems).
+All function values must be normalized between 0 and 1. \cr
+For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns.
+(e.g., those columns specified in the argument \code{fun_cols} if user use \code{function_normalization} to do normalization).
+If \code{by_group} is not \code{NULL},in addition to ecosystem function columns, the group name column must be included. \cr
+The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if the latter is not \code{NULL}.}
 
-\item{species_data}{the species abundance data must include three columns: 'plotID', 'species' and 'abundance'. Default is \code{NULL}.}
+\item{species_data}{species abundance data can be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’. Default is \code{NULL}.}
 
-\item{weight}{a numerical vector specifying weights for ecosystem functions. The length of \code{weight} needs to be equal to the number of functions.
-Default is \code{weight = 1}, which means equal weight for all ecosystem functions.}
+\item{weight}{a constant number (if all weights are equal) or a numerical vector specifying weights for ecosystem functions. In the latter case,
+the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1},
+which means equal weight and weight = 1 for all ecosystem functions.}
 
-\item{q}{a numerical vector specifying the diversity orders. Default is q = 0, 1 and 2.}
+\item{q}{a numerical vector specifying the multifunctionality and diversity orders. Default is q = 0, 1 and 2.}
 
-\item{by_group}{name of the column for normalization and decomposition,
-i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column variable.
-So, the \code{by_group} setting here needs to be the same as the group using for normalization.
-For example, if all functions was normalized to the range of [0, 1] within a country (as using function \code{function_normalization} with \code{by_group=“country”}),
-then the setting \code{by_group=“country”} is also needed here. The decomposition is based on all pairs of ecosystems separately within each country. Default is \code{NULL}.}
+\item{by_group}{name name of the column for decomposition, i.e.,
+multifunctionality decomposition will be performed within each group classified by the categories of that column variable. \cr
+The \code{by_group} setting must be the same as that set in \code{function_normalization}. Default is \code{NULL}.}
 }
 \value{
-a data.frame with columns ’plotID’(combinations of plots by paired), 'Order.q' , 'Type' (uncorrected or corrected for correlations) ,
-'Scale' (gamma, alpha or beta) and 'qMF'. For \code{species_data} is not \code{NULL}, the data.frame will show an additional column contain ’Species.diversity’.
-For \code{by_group} is not \code{NULL}, the data.frame will show an additional column which name is the same as the setting of \code{by_group}.
+a data.frame with columns ’plotID’ (combinations of plots by paired), 'Order.q' ,
+'Type' (uncorrected or corrected for correlations) , 'Scale' (gamma, alpha or beta) and 'qMF'.
+For \code{species_data} is not \code{NULL}, the data.frame will show an additional column contain ’Species.diversity’.
+When \code{by_group} is not \code{NULL}, the data.frame will include an additional column whose name is the same as the setting of \code{by_group}.
 }
 \description{
-\code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures for given function weights in multiple ecosystems separately for two cases
+\code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures of orders q = 0, 1 and 2 for given function weights in multiple ecosystems separately for two cases
 (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
 }
 \examples{
 \dontrun{
+### (use data from two countries for illustration)
+
 library(dplyr)
+
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
 GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 

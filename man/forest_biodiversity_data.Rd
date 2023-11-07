@@ -3,7 +3,7 @@
 \title{Biodiversity data for six European forests}
 
 \description{
-In addition to row and column names, the original dataset consists of three columns: the “plot” column indicates the name of plots, the “full_species_original” column includes species names, and the column “basal area” (as a proxy of species abundance). See Scherer-Lorenzen et al. (2023) for the original dataset. Because missing values of “basal area” in the original dataset were imputed by the mean of the same species within the country, and some basal areas were added for almost indistinguishable species, the dataset provided with the package is slightly different from the original dataset. Also ,for analysis, original three column names of the dataset turn into “plotID” (the name of plots), “species” (species names) and “abundance” (species abundance). 
+In addition to row and column names, the original dataset consists of three columns: the “plotID” column indicates the names of plots, the “species” column includes species names, and the column “abundance” (basal area as a proxy of species abundance); see Scherer-Lorenzen et al. (2023) for the original dataset. Because missing values of “basal area” in the original dataset were imputed by the mean of the same species within the country, and basal areas were combined for two almost indistinguishable species (Betula pendula and Betula pubescens), the dataset provided with the package is slightly different from the original dataset. 
 }
 
 \usage{

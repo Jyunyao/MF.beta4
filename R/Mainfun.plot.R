@@ -1,14 +1,20 @@
 #' ggplot2 extension for a MF1_single or MF2_multiple object
 #'
-#' \code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for \code{MF1_single} or \code{MF2_multiple} object to plot the BEF relationship between biodiversity and multifunctionality.
+#' \code{MFggplot}:the \code{\link[ggplot2]{ggplot}} extension for an \code{MF1_single} or \code{MF2_multiple} object to plot the BEF relationship between biodiversity and multifunctionality.
 #'
 #' @param output the output obtained from \code{MF1_single} or \code{MF2_multiple}. \cr 
-#' If using output obtained from \code{MF1_single} and want to draw the plot with \code{by_group}, must add the \code{by_group} column in output.
-#' @param model specifying the fitting model. Specify \code{model = "lm"} for the linear model, or \code{"LMM.intercept"},
-#' \code{"LMM.slope"}, \code{"LMM.both"} for the linear mixed model with random effects for intercept, slope, and both, respectively. Default is \code{model = "LMM.both"}.
-#' @param caption caption information that will be shown in the BEF plots. Select \code{caption = "slope"} to show the estimated slopes, or \code{caption = "R.squared"} to show the marginal and conditional R-squared. Default is \code{caption = "slope"}.
-#' @param by_group name of the column for normalization and decomposition i.e., function normalization and multifunctionality decomposition will be performed within each group classified by the categories of that column. Default is \code{NULL}. \cr
-#' For linear mixed model is selected in the \code{model}, the \code{by_group} argument must be specified.
+#' For output obtained from \code{MF1_single}, if BEF relationships are desired within each category specified \code{by_group},
+#' the \code{by_group} column must be included in the input.
+#' @param model specifying the fitting model, \code{model = "lm"} for linear model;
+#' \code{model = "LMM.intercept"}, \code{"LMM.slope"} and \code{"LMM.both"} for linear mixed models with random effects for intercepts,
+#' slopes, and both, respectively. Default is \code{model = "LMM.both"}.
+#' @param by_group name of the column for fitting model i.e., model will be fitted within each group classified by the categories of that column.
+#' Default is \code{NULL}. \cr
+#' It is required if a linear mixed model is selected in the \code{model}. \cr
+#' If the output is obtained from \code{MF2_multiple}, the \code{by_group} setting must be the same as that set in \code{MF2_multiple}.
+#' @param caption caption that will be shown in the BEF plots; \code{caption = "slope"} to show the estimated slopes in each plot,
+#' or \code{caption = "R.squared"} to show the ordinary R-squared for linear models or estimated marginal and conditional R-squared for linear mixed models in each plot.
+#' Default is \code{caption = "slope"}.
 #'
 #' @import tidyverse
 #' @import dplyr
@@ -21,15 +27,24 @@
 #' @import purrr
 #' @importFrom dplyr %>%
 #'
-#' @return For \code{MF1_single} object, return a figure that shows multifunctionality for uncorrected and corrected for correlations two cases. And also contains the fitted lines for the chosen fitting model on the figure. \cr
-#' For \code{MF2_multiple} object, return a list of figures which show alpha, gamma, beta multifunctionality for uncorrected and corrected for correlations two cases, respectively. And also contains the fitted lines for the chosen fitting model on the figures.
+#' @return For an \code{MF1_single} object of given individual function weights,
+#' this function plots the BEF relationship between multifunctionality of order q (= 0, 1 and 2) and species diversity of the same order q for two cases
+#' (i) correlations between functions are not corrected for,
+#' and (ii) correlations between functions are corrected. The fitted lines for the chosen fitting model are also shown in the figure. \cr
+#' 
+#' For an \code{MF2_multiple} object of given individual function weights,
+#' this function plots the BEF relationship between alpha/beta/gamma multifunctionality of order q (= 0, 1 and 2) and the corresponding
+#' alpha/beta/gamma species diversity of the same order q for two cases (i) correlations between functions are not corrected for,
+#' and (ii) correlations between functions are corrected. The fitted lines for the chosen fitting model are also shown in the figure.  
 #'
 #' @examples
 #' 
 #' \dontrun{
+#' ###(use data from two countries for illustration)
+#' 
 #' library(dplyr)
 #' 
-#' ## single ecosystem
+#' ### single ecosystem
 #' data("forest_function_data_normalized")
 #' data("forest_biodiversity_data")
 #' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
@@ -38,12 +53,12 @@
 #' output1 <- MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
 #'                       species_data = GER_ITA_forest_biodiversity)
 #' 
-#' ## Display fitted line of linear model
+#' ### Display fitted line of linear model
 #' output1 <- data.frame(output1, country=rep(GER_ITA_forest_function_normalized$country, each = 6))
 #' MFggplot(output1, model = "lm", by_group="country")
 #' 
 #' 
-#' ## multiple ecosystems
+#' ### multiple ecosystems
 #' data("forest_function_data_normalized")
 #' data("forest_biodiversity_data")
 #' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
@@ -53,8 +68,9 @@
 #'                         species_data = GER_ITA_forest_biodiversity,
 #'                         by_group = "country")
 #' 
-#' ## Display fitted line of linear mixed model with random effect 'both'
+#' ### Display fitted line of linear mixed model with random effect 'both'
 #' MFggplot(output2, model = "LMM.both", by_group = "country")
+#' 
 #' 
 #' 
 #' }
