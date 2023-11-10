@@ -112,7 +112,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
   
   # For MF_single output
   else if(!("Scale" %in% names(output))){
-    output$Type <- factor(output$Type, levels = c("Uncorrected_for_correlations", "Corrected_for_correlations"))
+    output$Type <- factor(output$Type, levels = c("corr_uncorrected", "corr_corrected"))
     
     if(is.null(by_group)){
       ##########################
