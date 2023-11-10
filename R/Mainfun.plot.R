@@ -100,7 +100,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
     stop("Error: the argument text should be `slope` or `R.squared`.")
   
   stdPalette <- c("blue", "#00AAAA", "darkorange","gray55","#FF88C2", "purple2")
-  abc<-scale_linetype_manual(values = c( "Significant slope (P < 0.05)" = "solid","Insignificant slope" = "dashed"), name = NULL, drop = FALSE)
+  abc<-scale_linetype_manual(values = c( "Significant slope (P < 0.05)" = "solid","Nonsignificant slope" = "dashed"), name = NULL, drop = FALSE)
   
   
   #"steelblue1"
@@ -121,8 +121,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
       papa =  output %>% group_by(Type,Order.q) %>%do(broom::glance(lm(qMF ~ Species.diversity, .)))%>%select(r.squared,Order.q,Type)
       lm_data <- suppressMessages(lm_data %>% dplyr::full_join(papa))
       lm_data <- mutate(lm_data,
-                        Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
-                                            levels = c("Significant slope (P < 0.05)", "Insignificant slope")),
+                        Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Nonsignificant slope"),
+                                            levels = c("Significant slope (P < 0.05)", "Nonsignificant slope")),
                         group="Linear model"
       ) %>%
         filter(term=="Species.diversity") %>% dplyr::select(-c(term, std.error, statistic, p.value))
@@ -189,8 +189,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           mutate(group="Linear mixed model")
       
       lm_overall <- mutate(lm_all,
-                           Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
-                                               levels = c("Significant slope (P < 0.05)", "Insignificant slope"))
+                           Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Nonsignificant slope"),
+                                               levels = c("Significant slope (P < 0.05)", "Nonsignificant slope"))
       ) %>% dplyr::select(-c(std.error, statistic, p.value)) %>%
         pivot_wider(names_from = term,values_from = estimate) %>%
         group_by(Type,Order.q,group) %>%
@@ -201,8 +201,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
       
       if(fit %in% c("lm","LMM.intercept")){
         lm_data <- output %>% group_by(Type, Order.q, group) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .))) %>%
-          mutate(Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
-                                     levels = c("Significant slope (P < 0.05)", "Insignificant slope"))
+          mutate(Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Nonsignificant slope"),
+                                     levels = c("Significant slope (P < 0.05)", "Nonsignificant slope"))
           ) %>%
           filter(term=="Species.diversity") %>% dplyr::select(-c(term, std.error, statistic, p.value))
         
@@ -305,8 +305,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           papa =  out %>% group_by(Order.q) %>% do(broom::glance(lm(qMF ~ Species.diversity, .)))%>%select(r.squared,Order.q)
           lm_data <- suppressMessages(lm_data %>% dplyr::full_join(papa))
           lm_data <- mutate(lm_data,
-                            Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
-                                                levels = c("Significant slope (P < 0.05)", "Insignificant slope")),
+                            Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Nonsignificant slope"),
+                                                levels = c("Significant slope (P < 0.05)", "Nonsignificant slope")),
                             group="Linear model"
           ) %>%
             filter(term=="Species.diversity") %>% dplyr::select(-c(term, std.error, statistic, p.value))
@@ -372,8 +372,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
               mutate(group="Linear mixed model")
           
           lm_overall <- mutate(lm_all,
-                               Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
-                                                   levels = c("Significant slope (P < 0.05)", "Insignificant slope"))
+                               Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Nonsignificant slope"),
+                                                   levels = c("Significant slope (P < 0.05)", "Nonsignificant slope"))
           ) %>% dplyr::select(-c(std.error, statistic, p.value)) %>%
             pivot_wider(names_from = term,values_from = estimate) %>%
             group_by(Order.q,group) %>%
@@ -384,8 +384,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           
           if(fit %in% c("lm","LMM.intercept")){
             lm_data <- out %>% group_by(Order.q, group) %>% do(broom::tidy(lm(qMF ~ Species.diversity, .))) %>%
-              mutate(Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Insignificant slope"),
-                                         levels = c("Significant slope (P < 0.05)", "Insignificant slope"))
+              mutate(Significance=factor(ifelse(p.value<0.05, "Significant slope (P < 0.05)", "Nonsignificant slope"),
+                                         levels = c("Significant slope (P < 0.05)", "Nonsignificant slope"))
               ) %>%
               filter(term=="Species.diversity") %>% dplyr::select(-c(term, std.error, statistic, p.value))
             

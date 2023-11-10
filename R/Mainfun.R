@@ -81,7 +81,7 @@ MF1_single <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2))
   
   qMF_output <- sapply(q,function(i) apply(func_data,1,function(x) qMF(w=weight,v=x,q=i))) %>% as.data.frame()
   # if(nrow(data)==1) qMF_output <- t(qMF_output)
-  names(qMF_output) <- paste0("qMF_Uncorrected_for_correlations_",q)
+  names(qMF_output) <- paste0("qMF_corr_uncorrected_",q)
   
   if(ncol(func_data)>1){
     tau <- seq(0,1,0.01)
@@ -98,7 +98,7 @@ MF1_single <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2))
       AUC
     }) %>% as.data.frame()
     # if(nrow(norm_data)==1) qMF_tau_output <- t(qMF_tau_output)
-    names(qMF_tau_output) <- paste0("qMF_Corrected_for_correlations_",q)
+    names(qMF_tau_output) <- paste0("qMF_corr_corrected_",q)
     
     output <- cbind(id_data,qMF_output,qMF_tau_output) %>%
       pivot_longer(cols = starts_with("qMF"),
@@ -229,11 +229,11 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
       bF <- rF/aF
       
       two_plot <- rownames(spe_data)[c(two_idx[1,i],two_idx[2,i])]
-      result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " v.s. "),length(q)),
+      result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " vs. "),length(q)),
                            "Order.q"=paste0("q = ",q),
-                           "Uncorrected_for_correlations_Gamma"=rF,
-                           "Uncorrected_for_correlations_Alpha"=aF,
-                           "Uncorrected_for_correlations_Beta"=bF)
+                           "corr_uncorrected_Gamma"=rF,
+                           "corr_uncorrected_Alpha"=aF,
+                           "corr_uncorrected_Beta"=bF)
       
       
       if(ncol(fun_data)>1){
@@ -262,10 +262,10 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
                     R_a = sum(MF_a[-1]*diff(Tau)),
                     L_b = sum(MF_b[seq_along(MF_b[-1])]*diff(Tau)),
                     R_b = sum(MF_b[-1]*diff(Tau))) %>% ungroup %>%
-          mutate(Corrected_for_correlations_Gamma = (L_g+R_g)/2,
-                 Corrected_for_correlations_Alpha = (L_a+R_a)/2,
-                 Corrected_for_correlations_Beta = (L_b+R_b)/2) %>%
-          dplyr::select(c(Corrected_for_correlations_Gamma:Corrected_for_correlations_Beta))
+          mutate(corr_corrected_Gamma = (L_g+R_g)/2,
+                 corr_corrected_Alpha = (L_a+R_a)/2,
+                 corr_corrected_Beta = (L_b+R_b)/2) %>%
+          dplyr::select(c(corr_corrected_Gamma:corr_corrected_Beta))
         
         result <- cbind(result,result_tau)
       }
@@ -329,12 +329,12 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
         bF <- rF/aF
         
         two_plot <- rownames(spe_data)[c(two_idx[1,i],two_idx[2,i])]
-        result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " v.s. "),length(q)),
+        result <- data.frame("plotID"=rep(paste(two_plot[1],two_plot[2],sep = " vs. "),length(q)),
                              "group"=rep(group,length(q)),
                              "Order.q"=paste0("q = ",q),
-                             "Uncorrected_for_correlations_Gamma"=rF,
-                             "Uncorrected_for_correlations_Alpha"=aF,
-                             "Uncorrected_for_correlations_Beta"=bF)
+                             "corr_uncorrected_Gamma"=rF,
+                             "corr_uncorrected_Alpha"=aF,
+                             "corr_uncorrected_Beta"=bF)
         colnames(result)[2] <- by_group
         
         
@@ -364,10 +364,10 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
                       R_a = sum(MF_a[-1]*diff(Tau)),
                       L_b = sum(MF_b[seq_along(MF_b[-1])]*diff(Tau)),
                       R_b = sum(MF_b[-1]*diff(Tau))) %>% ungroup %>%
-            mutate(Corrected_for_correlations_Gamma = (L_g+R_g)/2,
-                   Corrected_for_correlations_Alpha = (L_a+R_a)/2,
-                   Corrected_for_correlations_Beta = (L_b+R_b)/2) %>%
-            dplyr::select(c(Corrected_for_correlations_Gamma:Corrected_for_correlations_Beta))
+            mutate(corr_corrected_Gamma = (L_g+R_g)/2,
+                   corr_corrected_Alpha = (L_a+R_a)/2,
+                   corr_corrected_Beta = (L_b+R_b)/2) %>%
+            dplyr::select(c(corr_corrected_Gamma:corr_corrected_Beta))
           
           result <- cbind(result,result_tau)
         }
@@ -414,7 +414,7 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
   }
   
   if(!is.null(species_data)){
-    output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrected_for_correlations","Corrected_for_correlations")),
+    output <- output %>% tidyr::pivot_longer(cols = starts_with(c("corr_uncorrected","corr_corrected")),
                                              names_to = c("Type","Scale"),
                                              names_pattern = "(.*)_(.*)",
                                              values_to = "qMF") %>%
@@ -423,7 +423,7 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
                                                     Species_Beta))) %>%
       dplyr::select(-c(Species_Gamma:Species_Beta))
   }else{
-    output <- output %>% tidyr::pivot_longer(cols = starts_with(c("Uncorrected_for_correlations","Corrected_for_correlations")),
+    output <- output %>% tidyr::pivot_longer(cols = starts_with(c("corr_uncorrected","corr_corrected")),
                                              names_to = c("Type","Scale"),
                                              names_pattern = "(.*)_(.*)",
                                              values_to = "qMF")
