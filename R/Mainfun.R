@@ -216,7 +216,7 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
     
     fun_data <- func_data
     if(ncol(fun_data)>1){
-      tau <- seq(0,1,0.05)
+      tau <- seq(0,1,0.02)
       fun_data[is.na(fun_data)] <- 0
       transform_D <- sqrt(1-abs(cor(fun_data)))
     }
@@ -316,7 +316,7 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
       
       fun_data <- func_data %>% select(-by_group)
       if(ncol(fun_data)>1){
-        tau <- seq(0,1,0.05)
+        tau <- seq(0,1,0.02)
         fun_data[is.na(fun_data)] <- 0
         transform_D <- sqrt(1-abs(cor(fun_data)))
       }
