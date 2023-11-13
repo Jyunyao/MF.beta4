@@ -20,33 +20,40 @@ If \code{by_group} is not \code{NULL}, data must contain a \code{by_group} colum
 
 \item{negative}{names of the negative functionality.}
 
-\item{by_group}{name of the column for normalization, i.e.,
-function normalization will be performed within each group classified by the categories of that column variable.
+\item{by_group}{name of the column for normalization, i.e., function normalization will be performed within each group classified by the categories of that column variable.
 For example, if \code{by_group = “country”}, then all functions will be normalized to the range of [0, 1] within a country. Default is \code{NULL}.}
 }
 \value{
 a data.frame with all values in functions (specified in \code{fun_cols}) being replaced by the transformed values between 0 and 1.
 }
 \description{
-\code{function_normalization} transforms raw function values to values between 0 and 1. For positive functionality,
-ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
+\code{function_normalization} transforms raw function values to values between 0 and 1.
+For positive functionality, ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
 and those with the lowest raw value are transformed to the minimum value of 0. Because the value “0” always implies absent functions,
-if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number,
-e.g., 10^-5. In a similar manner, for negative functionality, if the highest raw value is not 0,
-the transformed 0 will also be replaced by a very small number, e.g., 10^-5.
+if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number, e.g., 10^{(-5)}.
+In a similar manner, for negative functionality, if the highest raw value is not 0,
+the transformed 0 will also be replaced by a very small number, e.g., 10^{(-5)}.
 These replacements will not affect any numerical computations but will help indicate that the transformed values represent functions that should be regarded as “present” ones.
 Thus, present or absent functions can be clearly distinguished in the transformed data,
 and the information on presence/absence of functions is required in the decomposition of multifunctionality among ecosystems.
 }
 \examples{
-\dontrun{
-### (use data from two countries for illustration)
 
 library(dplyr)
 
+### Use data from six countries
+
 data("forest_function_data_raw")
-GER_ITA_forest_function_raw <- filter(forest_function_data_raw, country=="GER"|country=="ITA")
+function_normalization(data = forest_function_data_raw, fun_cols = 6:31,
+                       negative = c("soil_cn_ff_10","wue"), by_group = "country")
+
+
+### Use data from two countries with last 8 plots for illustration
+
+data("forest_function_data_raw")
+GER_ITA_forest_function_raw<-rbind(filter(forest_function_data_raw, country=="GER")[31:38,],
+                                   filter(forest_function_data_raw, country=="ITA")[29:36,])
 function_normalization(data = GER_ITA_forest_function_raw, fun_cols = 6:31,
                        negative = c("soil_cn_ff_10","wue"), by_group = "country")
-}
+
 }

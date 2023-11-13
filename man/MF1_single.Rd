@@ -4,13 +4,18 @@
 \alias{MF1_single}
 \title{multifunctionality measures for a single ecosystem}
 \usage{
-MF1_single(func_data, species_data = NULL, weight = 1, q = c(0, 1, 2))
+MF1_single(
+  func_data,
+  species_data = NULL,
+  weight = 1,
+  q = c(0, 1, 2)
+)
 }
 \arguments{
-\item{func_data}{ecosystem function data can be input as a data.frame (ecosystems by functions). All function values must be normalized between 0 and 1.\cr
-The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if the latter is not \code{NULL}.}
+\item{func_data}{ecosystem function data should be input as a data.frame (ecosystems by functions). All function values must be normalized between 0 and 1.\cr
+The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if \code{species_data} is not \code{NULL}.}
 
-\item{species_data}{species abundance data can be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’ (or any proxy such as basal area). Default is \code{NULL}.}
+\item{species_data}{species abundance data should be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’ (or any proxy such as basal area). Default is \code{NULL}.}
 
 \item{weight}{a constant number (if all weights are equal) or a numerical vector specifying weights for ecosystem functions.
 In the latter case, the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1},
@@ -19,26 +24,36 @@ which means equal weight and weight = 1 for all ecosystem functions.}
 \item{q}{a numerical vector specifying the multifunctionality and diversity orders. Default is q = 0, 1 and 2.}
 }
 \value{
-a data.frame with columns ’plotID’, ’Type’ (uncorrected or corrected for correlations),
-’Order.q’ and ’qMF’. When \code{species_data} is not \code{NULL}, the data.frame will include an additional column ’Species.diversity’.
+a data.frame with columns ’plotID’, ’Type’ (uncorrected or corrected for correlations), ’Order.q’ and ’qMF’ (multifunctionality of order q).
+When \code{species_data} is not \code{NULL}, the data.frame will include an additional column ’Species.diversity’ in the last column.
 }
 \description{
 \code{MF1_single} computes multifunctionality measures of orders q = 0, 1 and 2 for given function weights in a single ecosystem separately for two cases
-(i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
+(i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected for.
 }
 \examples{
-\dontrun{
-### (use data from two countries for illustration)
 
 library(dplyr)
 
+\dontrun{
+
+### Use data from six countries
+
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
-GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
-                                             country=="GER"|country=="ITA")
-GER_ITA_forest_biodiversity <- forest_biodiversity_data[49:229,]
+MF1_single(func_data = forest_function_data_normalized[,6:31], 
+           species_data = forest_biodiversity_data)
+}
+
+
+### Use data from two countries with last 8 plots for illustration
+
+data("forest_function_data_normalized")
+data("forest_biodiversity_data")
+GER_ITA_forest_function_normalized<-rbind(filter(forest_function_data_normalized,country=="GER")[31:38,],
+                                          filter(forest_function_data_normalized,country=="ITA")[29:36,])
+GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(118:140,207:229),]
 MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
            species_data = GER_ITA_forest_biodiversity)
-}
 
 }

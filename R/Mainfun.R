@@ -1,11 +1,11 @@
 #' multifunctionality measures for a single ecosystem
 #'
 #' \code{MF1_single} computes multifunctionality measures of orders q = 0, 1 and 2 for given function weights in a single ecosystem separately for two cases
-#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
+#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected for.
 #'
-#' @param func_data ecosystem function data can be input as a data.frame (ecosystems by functions). All function values must be normalized between 0 and 1.\cr
-#' The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if the latter is not \code{NULL}.
-#' @param species_data species abundance data can be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’ (or any proxy such as basal area). Default is \code{NULL}.
+#' @param func_data ecosystem function data should be input as a data.frame (ecosystems by functions). All function values must be normalized between 0 and 1.\cr
+#' The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if \code{species_data} is not \code{NULL}.
+#' @param species_data species abundance data should be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’ (or any proxy such as basal area). Default is \code{NULL}.
 #' @param weight a constant number (if all weights are equal) or a numerical vector specifying weights for ecosystem functions.
 #' In the latter case, the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1},
 #' which means equal weight and weight = 1 for all ecosystem functions.
@@ -19,23 +19,33 @@
 #' @importFrom stats cor
 #' @importFrom dplyr %>%
 #'
-#' @return a data.frame with columns ’plotID’, ’Type’ (uncorrected or corrected for correlations),
-#' ’Order.q’ and ’qMF’. When \code{species_data} is not \code{NULL}, the data.frame will include an additional column ’Species.diversity’.
+#' @return a data.frame with columns ’plotID’, ’Type’ (uncorrected or corrected for correlations), ’Order.q’ and ’qMF’ (multifunctionality of order q).
+#' When \code{species_data} is not \code{NULL}, the data.frame will include an additional column ’Species.diversity’ in the last column.
 #' 
 #' @examples
-#' \dontrun{
-#' ### (use data from two countries for illustration)
 #' 
 #' library(dplyr)
 #' 
+#' \dontrun{
+#' 
+#' ### Use data from six countries
+#' 
 #' data("forest_function_data_normalized")
 #' data("forest_biodiversity_data")
-#' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
-#'                                              country=="GER"|country=="ITA")
-#' GER_ITA_forest_biodiversity <- forest_biodiversity_data[49:229,]
+#' MF1_single(func_data = forest_function_data_normalized[,6:31], 
+#'            species_data = forest_biodiversity_data)
+#' }
+#' 
+#' 
+#' ### Use data from two countries with last 8 plots for illustration
+#' 
+#' data("forest_function_data_normalized")
+#' data("forest_biodiversity_data")
+#' GER_ITA_forest_function_normalized<-rbind(filter(forest_function_data_normalized,country=="GER")[31:38,],
+#'                                           filter(forest_function_data_normalized,country=="ITA")[29:36,])
+#' GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(118:140,207:229),]
 #' MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
 #'            species_data = GER_ITA_forest_biodiversity)
-#' }
 #' 
 #' @export
 
@@ -135,45 +145,53 @@ MF1_single <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2))
 #' multifunctionality measures for multiple ecosystems
 #'
 #' \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures of orders q = 0, 1 and 2 for given function weights in multiple ecosystems separately for two cases
-#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
+#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected fo
 #'
 #'
-#' @param func_data ecosystem function data can be input as a data.frame (ecosystems by functions for multiple ecosystems).
-#' All function values must be normalized between 0 and 1. \cr
+#' @param func_data ecosystem function data should be input as a data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1. \cr
 #' For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns.
 #' (e.g., those columns specified in the argument \code{fun_cols} if user use \code{function_normalization} to do normalization).
-#' If \code{by_group} is not \code{NULL},in addition to ecosystem function columns, the group name column must be included. \cr
-#' The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if the latter is not \code{NULL}.
-#' @param species_data species abundance data can be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’. Default is \code{NULL}.
-#' @param weight a constant number (if all weights are equal) or a numerical vector specifying weights for ecosystem functions. In the latter case,
-#' the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1},
+#' If \code{by_group} is not \code{NULL},in addition to ecosystem function columns, the \code{by_group} column must be included. \cr
+#' The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if \code{species_data} is not \code{NULL}.
+#' @param species_data species abundance data should be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’. Default is \code{NULL}.
+#' @param weight a constant number (if all weights are equal) or a numerical vector specifying weights for ecosystem functions.
+#' In the latter case, the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1},
 #' which means equal weight and weight = 1 for all ecosystem functions.
 #' @param q a numerical vector specifying the multifunctionality and diversity orders. Default is q = 0, 1 and 2.
-#' @param by_group name name of the column for decomposition, i.e.,
-#' multifunctionality decomposition will be performed within each group classified by the categories of that column variable. \cr
+#' @param by_group name of the column for decomposition, i.e., multifunctionality decomposition will be performed for any two plots within
+#' each group classified by the categories of that column variable. \cr
 #' The \code{by_group} setting must be the same as that set in \code{function_normalization}. Default is \code{NULL}.
 #'
-#' @return a data.frame with columns ’plotID’ (combinations of plots by paired), 'Order.q' ,
-#' 'Type' (uncorrected or corrected for correlations) , 'Scale' (gamma, alpha or beta) and 'qMF'.
-#' For \code{species_data} is not \code{NULL}, the data.frame will show an additional column contain ’Species.diversity’.
-#' When \code{by_group} is not \code{NULL}, the data.frame will include an additional column whose name is the same as the setting of \code{by_group}.
+#' @return a data.frame with columns ’plotID’ (combinations of paired plots), 'Order.q' , 'Type' (uncorrected or corrected for correlations) ,
+#' 'Scale' (gamma, alpha or beta) and 'qMF' (multifunctionality of order q). When \code{by_group} is not \code{NULL},
+#' the data.frame will include an additional column after ’plotID’ column, whose name is the same as the setting of \code{by_group}.
+#' For \code{species_data} is not \code{NULL}, the data.frame will show an additional column contain ’Species.diversity’ in the last column. 
 #' 
 #' @examples
-#' \dontrun{
-#' ### (use data from two countries for illustration)
 #' 
 #' library(dplyr)
 #' 
+#' \dontrun{
+#' ### Use data from six countries
+#' 
 #' data("forest_function_data_normalized")
 #' data("forest_biodiversity_data")
-#' GER_ITA_forest_function_normalized <- filter(forest_function_data_normalized, 
-#'                                              country=="GER"|country=="ITA")
-#' GER_ITA_forest_biodiversity <- forest_biodiversity_data[49:229,]
-#' MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
-#'              species_data = GER_ITA_forest_biodiversity,
+#' MF2_multiple(func_data = forest_function_data_normalized[,6:32],
+#'              species_data = forest_biodiversity_data,
 #'              by_group = "country")
 #'                      
 #' }
+#' 
+#' ### Use data from two countries with last 8 plots for illustration
+#' 
+#' data("forest_function_data_normalized")
+#' data("forest_biodiversity_data")
+#' GER_ITA_forest_function_normalized<-rbind(filter(forest_function_data_normalized,country=="GER")[31:38,],
+#'                                           filter(forest_function_data_normalized,country=="ITA")[29:36,])
+#' GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(118:140,207:229),]
+#' MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
+#'              species_data = GER_ITA_forest_biodiversity,
+#'              by_group = "country")
 #' 
 #' @export
 
@@ -436,12 +454,12 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
 
 #' Normalize raw ecosystem function values to [0,1]
 #'
-#' \code{function_normalization} transforms raw function values to values between 0 and 1. For positive functionality,
-#' ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
+#' \code{function_normalization} transforms raw function values to values between 0 and 1.
+#' For positive functionality, ecosystems with the highest value in the raw function data are transformed to the maximal value of 1,
 #' and those with the lowest raw value are transformed to the minimum value of 0. Because the value “0” always implies absent functions,
-#' if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number,
-#' e.g., 10^-5. In a similar manner, for negative functionality, if the highest raw value is not 0,
-#' the transformed 0 will also be replaced by a very small number, e.g., 10^-5.
+#' if the lowest raw value is not 0, the transformed 0 from this non-zero raw value will be replaced by a very small number, e.g., 10^{(-5)}.
+#' In a similar manner, for negative functionality, if the highest raw value is not 0,
+#' the transformed 0 will also be replaced by a very small number, e.g., 10^{(-5)}.
 #' These replacements will not affect any numerical computations but will help indicate that the transformed values represent functions that should be regarded as “present” ones.
 #' Thus, present or absent functions can be clearly distinguished in the transformed data,
 #' and the information on presence/absence of functions is required in the decomposition of multifunctionality among ecosystems.
@@ -451,23 +469,30 @@ MF2_multiple <- function(func_data, species_data = NULL, weight = 1, q = c(0,1,2
 #' If \code{by_group} is not \code{NULL}, data must contain a \code{by_group} column.
 #' @param fun_cols the columns represent ecosystem functions.
 #' @param negative names of the negative functionality.
-#' @param by_group name of the column for normalization, i.e.,
-#' function normalization will be performed within each group classified by the categories of that column variable.
+#' @param by_group name of the column for normalization, i.e., function normalization will be performed within each group classified by the categories of that column variable.
 #' For example, if \code{by_group = “country”}, then all functions will be normalized to the range of [0, 1] within a country. Default is \code{NULL}.
 #'
 #' @return a data.frame with all values in functions (specified in \code{fun_cols}) being replaced by the transformed values between 0 and 1. 
 #'
 #' @examples
-#' \dontrun{
-#' ### (use data from two countries for illustration)
 #' 
 #' library(dplyr)
 #' 
+#' ### Use data from six countries
+#' 
 #' data("forest_function_data_raw")
-#' GER_ITA_forest_function_raw <- filter(forest_function_data_raw, country=="GER"|country=="ITA")
+#' function_normalization(data = forest_function_data_raw, fun_cols = 6:31,
+#'                        negative = c("soil_cn_ff_10","wue"), by_group = "country")
+#' 
+#' 
+#' ### Use data from two countries with last 8 plots for illustration
+#' 
+#' data("forest_function_data_raw")
+#' GER_ITA_forest_function_raw<-rbind(filter(forest_function_data_raw, country=="GER")[31:38,],
+#'                                    filter(forest_function_data_raw, country=="ITA")[29:36,])
 #' function_normalization(data = GER_ITA_forest_function_raw, fun_cols = 6:31,
 #'                        negative = c("soil_cn_ff_10","wue"), by_group = "country")
-#' }
+#' 
 #' @export
 
 
