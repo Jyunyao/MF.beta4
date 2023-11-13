@@ -4,12 +4,7 @@
 \alias{MFggplot}
 \title{ggplot2 extension for a MF1_single or MF2_multiple object}
 \usage{
-MFggplot(
-  output,
-  model = "LMM.both",
-  caption = "slope",
-  by_group = NULL
-)
+MFggplot(output, model = "LMM.both", caption = "slope", by_group = NULL)
 }
 \arguments{
 \item{output}{the output obtained from \code{MF1_single} or \code{MF2_multiple}. \cr 

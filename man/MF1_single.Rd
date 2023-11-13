@@ -4,12 +4,7 @@
 \alias{MF1_single}
 \title{multifunctionality measures for a single ecosystem}
 \usage{
-MF1_single(
-  func_data,
-  species_data = NULL,
-  weight = 1,
-  q = c(0, 1, 2)
-)
+MF1_single(func_data, species_data = NULL, weight = 1, q = c(0, 1, 2))
 }
 \arguments{
 \item{func_data}{ecosystem function data can be input as a data.frame (ecosystems by functions). All function values must be normalized between 0 and 1.\cr
