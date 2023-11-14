@@ -48,11 +48,12 @@ function_normalization(data = forest_function_data_raw, fun_cols = 6:31,
                        negative = c("soil_cn_ff_10","wue"), by_group = "country")
 
 
-### Use data from two countries with last 8 plots for illustration
+### Use 18 plots from both Germany and Italy these two country for illustration. 
+### (The 18 plots are the first 9 plots and last 9 plots in each country)
 
 data("forest_function_data_raw")
-GER_ITA_forest_function_raw<-rbind(filter(forest_function_data_raw, country=="GER")[31:38,],
-                                   filter(forest_function_data_raw, country=="ITA")[29:36,])
+GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
+                                      country=="GER"|country=="ITA")[c(1:9,30:47,66:74),]
 function_normalization(data = GER_ITA_forest_function_raw, fun_cols = 6:31,
                        negative = c("soil_cn_ff_10","wue"), by_group = "country")
 

@@ -46,25 +46,32 @@ For \code{species_data} is not \code{NULL}, the data.frame will show an addition
 library(dplyr)
 
 \dontrun{
-### Use data from six countries
-
-data("forest_function_data_normalized")
-data("forest_biodiversity_data")
-MF2_multiple(func_data = forest_function_data_normalized[,6:32],
-             species_data = forest_biodiversity_data,
-             by_group = "country")
-                     
+  
+  ### Use data from six countries
+  
+  data("forest_function_data_normalized")
+  data("forest_biodiversity_data")
+  MF2_multiple(func_data = forest_function_data_normalized[,6:32],
+               species_data = forest_biodiversity_data,
+               by_group = "country")
 }
 
-### Use data from two countries with last 8 plots for illustration
+
+### Use 18 plots from both Germany and Italy these two country for illustration. 
+### (The 18 plots are the first 9 plots and last 9 plots in each country)
 
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
-GER_ITA_forest_function_normalized<-rbind(filter(forest_function_data_normalized,country=="GER")[31:38,],
-                                          filter(forest_function_data_normalized,country=="ITA")[29:36,])
-GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(118:140,207:229),]
+GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
+                                      country=="GER"|country=="ITA")[c(1:9,30:47,66:74),]
+GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_forest_function_raw,
+                                                             fun_cols = 6:31, 
+                                                             negative = c("soil_cn_ff_10","wue"),
+                                                             by_group = "country")
+GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:61,116:159,205:229),]
 MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
              species_data = GER_ITA_forest_biodiversity,
              by_group = "country")
+
 
 }

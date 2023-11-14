@@ -46,57 +46,71 @@ this function plots the BEF relationship between alpha/beta/gamma multifunctiona
 library(dplyr)
 
 \dontrun{
-### Use data from six countries
-
-## single ecosystem
-data("forest_function_data_normalized")
-data("forest_biodiversity_data")
-output1 <- MF1_single(func_data = forest_function_data_normalized[,6:31], 
-                      species_data = forest_biodiversity_data)
-
-## Display fitted line of linear model
-output1 <- data.frame(output1, country=rep(forest_function_data_normalized$country, each = 6))
-MFggplot(output1, model = "lm", by_group="country")
-
-## multiple ecosystems
-data("forest_function_data_normalized")
-data("forest_biodiversity_data")
-output2 <- MF2_multiple(func_data = forest_function_data_normalized[,6:32],
-                        species_data = forest_biodiversity_data,
-                        by_group = "country")
-
-## Display fitted line of linear mixed model with random effect 'both'
-MFggplot(output2, model = "LMM.both", by_group = "country")
-
+  
+  ### Use data from six countries
+  
+  ## single ecosystem
+  data("forest_function_data_normalized")
+  data("forest_biodiversity_data")
+  output1 <- MF1_single(func_data = forest_function_data_normalized[,6:31], 
+                        species_data = forest_biodiversity_data)
+  
+  ## Display fitted line of linear model
+  output1 <- data.frame(output1, country=rep(forest_function_data_normalized$country, each = 6))
+  MFggplot(output1, model = "lm", by_group="country")
+  
+  ## multiple ecosystems
+  data("forest_function_data_normalized")
+  data("forest_biodiversity_data")
+  output2 <- MF2_multiple(func_data = forest_function_data_normalized[,6:32],
+                          species_data = forest_biodiversity_data,
+                          by_group = "country")
+  
+  ## Display fitted line of linear mixed model with random effect 'both'
+  MFggplot(output2, model = "LMM.both", by_group = "country")
 }
 
-### Use data from two countries with last 8 plots respectively for illustration
+
+### Use 18 plots from both Germany and Italy these two country for illustration. 
+### (The 18 plots are the first 9 plots and last 9 plots in each country)
 
 ## single ecosystem
-data("forest_function_data_normalized")
+data("forest_function_data_raw")
 data("forest_biodiversity_data")
-GER_ITA_forest_function_normalized<-rbind(filter(forest_function_data_normalized,country=="GER")[31:38,],
-                                          filter(forest_function_data_normalized,country=="ITA")[29:36,])
-GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(118:140,207:229),]
+GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
+                                      country=="GER"|country=="ITA")[c(1:9,30:47,66:74),]
+GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_forest_function_raw,
+                                                             fun_cols = 6:31, 
+                                                             negative = c("soil_cn_ff_10","wue"),
+                                                             by_group = "country")
+GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:61,116:159,205:229),]
 output3 <- MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
                       species_data = GER_ITA_forest_biodiversity)
+
 
 ## Display fitted line of linear model
 output3 <- data.frame(output3, country=rep(GER_ITA_forest_function_normalized$country, each = 6))
 MFggplot(output3, model = "lm", by_group="country")
 
+
 ## multiple ecosystems
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
-GER_ITA_forest_function_normalized<-rbind(filter(forest_function_data_normalized,country=="GER")[31:38,],
-                                          filter(forest_function_data_normalized,country=="ITA")[29:36,])
-GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(118:140,207:229),]
+GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
+                                      country=="GER"|country=="ITA")[c(1:9,30:47,66:74),]
+GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_forest_function_raw,
+                                                             fun_cols = 6:31, 
+                                                             negative = c("soil_cn_ff_10","wue"),
+                                                             by_group = "country")
+GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:61,116:159,205:229),]
 output4 <- MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
                         species_data = GER_ITA_forest_biodiversity,
                         by_group = "country")
 
+
 ## Display fitted line of linear mixed model with random effect 'both'
 MFggplot(output4, model = "LMM.both", by_group = "country")
+
 
 
 }
