@@ -47,10 +47,11 @@ library(dplyr)
 
 \dontrun{
   
-  ### Use data from six countries
+  ### Use data from five countries (without "FIN")
   
   data("forest_function_data_normalized")
   data("forest_biodiversity_data")
+  forest_function_data_normalized <- forest_function_data_normalized \%>\% filter(country != "FIN")
   MF2_multiple(func_data = forest_function_data_normalized[,6:32],
                species_data = forest_biodiversity_data,
                by_group = "country")

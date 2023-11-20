@@ -63,9 +63,12 @@ library(dplyr)
   output1 <- data.frame(output1, country=rep(forest_function_data_normalized$country, each = 6))
   MFggplot(output1, model = "lm", by_group="country")
   
+  ### Use data from five countries (without "FIN")
+  
   ## multiple ecosystems
   data("forest_function_data_normalized")
   data("forest_biodiversity_data")
+  forest_function_data_normalized <- forest_function_data_normalized \%>\% filter(country != "FIN")
   output2 <- MF2_multiple(func_data = forest_function_data_normalized[,6:32],
                           species_data = forest_biodiversity_data,
                           by_group = "country")
