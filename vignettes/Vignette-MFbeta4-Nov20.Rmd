@@ -187,7 +187,7 @@ single_without_species %>% mutate(qMF = round(qMF,3)) %>% as.data.frame() %>% he
 ```
 
 
-The above output includes the ID of plot (`plotID`), `Type` (uncorrected for correlations or corrected for correlations), the diversity order (`Order.q`) and the multifunctionality measure of order q (`qMF`). When biodiversity data are provided (`species_data = forest_biodiversity_data`), an additional column `Species.diversity` will be added; see the following output:
+The above output includes the ID of plot (`plotID`), `Type` (uncorrected for correlations or corrected for correlations, which are denoted as corr_uncorrected and corr_corrected), the diversity order (`Order.q`) and the multifunctionality measure of order q (`qMF`). When biodiversity data are provided (`species_data = forest_biodiversity_data`), an additional column `Species.diversity` will be added; see the following output:
 
 ```{r echo=TRUE}
 data("forest_function_data_normalized")
@@ -224,6 +224,7 @@ multiple_ecosystem = MF2_multiple(func_data = forest_function_data_normalized[,6
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
 forest_function_data_normalized <- forest_function_data_normalized %>% filter(country != "FIN")
+forest_biodiversity_data <- forest_biodiversity_data[-(1:48),]
 Demo_multiple = MF2_multiple(func_data =  forest_function_data_normalized[,6:32],
                       species_data = forest_biodiversity_data,
                       weight = 1,
@@ -245,7 +246,7 @@ multiple_ecosystem <- Demo_multiple
 ```
 
 
-The above output includes the combinations of two plots (`plotID`), `Country` of the two plots, `Type` (uncorrected or corrected for correlations), `Scale` (gamma, alpha or beta), the diversity order (`Order.q`), multifunctionality value of order q (`qMF`) and the corresponding gamma/alpha/beta species diversity (`Species.diversity`).
+The above output includes the combinations of two plots (`plotID`), `Country` of the two plots, `Type` (uncorrected or corrected for correlations, which are denoted as corr_uncorrected and corr_corrected), `Scale` (gamma, alpha or beta), the diversity order (`Order.q`), multifunctionality value of order q (`qMF`) and the corresponding gamma/alpha/beta species diversity (`Species.diversity`).
 
 NOTE: Because the total number of pair plots is huge for the whole data, it is very time consuming to obtain the output from running the above code. Users can simply select two countries (with 10 plots in each country) to promptly view the output; see the package manual for examples.
 
@@ -278,7 +279,10 @@ If `by_group = NULL`, one can only fit linear model (`model = "lm"`).
 
 For an <code>MF2_multiple</code> object of given individual function weights, this function plots the BEF relationship between alpha/beta/gamma multifunctionality of order q (= 0, 1 and 2) and the corresponding alpha/beta/gamma species diversity of the same order q for two cases: (i) correlations between functions are not corrected for. (ii) correlations between functions are corrected. The fitted lines for the chosen model are also shown in the figure. 
 
-By default, the BEF relationship for each scale is modeled using a linear mixed model with random slopes and random intercepts for each country. Run the following code to obtain the BEF graphical relationships when correlations are not corrected for. 
+
+By default, the BEF relationship for each scale is modeled using a linear mixed model with random slopes and random intercepts for each country. Run the following code to obtain the BEF graphical relationships when correlations are not corrected for.
+
+Due to sparse data from Finland, data from Finland are excluded for following BEF figures.
 
 ```{r}
 figure_LMM <- MFggplot(multiple_ecosystem, by_group = "country",  model = "LMM.both",caption = "slope")
@@ -295,9 +299,7 @@ Then the BEF graphical relationships when correlations are corrected for are sho
 figure_LMM$corr_corrected$ALL
 ```
 
-NOTE 1: Because the total number of pair plots is huge for the whole data, it is very time consuming to obtain the BEF graphical relationships from running the above code for alpha/beta/gamma scales. Users can simply select two countries (with 10 plots in each country) to promptly view the graphical results; see the package manual for examples. 
-
-NOTE 2: The BEF relationships shown in the above two figures (uncorrected and corrected for correlations) are slightly different from those in Chao et al. (2023). This is because in Chao et al.'s paper, data from Finland are excluded (due to sparse data), whereas all data are included in the above BEF analysis.
+NOTE 1: Because the total number of pair plots is huge for the whole data, it is very time consuming to obtain the BEF graphical relationships from running the above code for alpha/beta/gamma scales. Users can simply select two countries (with 18 plots in each country) to promptly view the graphical results; see the package manual for examples. 
 
 
 ## References
