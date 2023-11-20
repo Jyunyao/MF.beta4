@@ -32,7 +32,7 @@ each group classified by the categories of that column variable. \cr
 The \code{by_group} setting must be the same as that set in \code{function_normalization}. Default is \code{NULL}.}
 }
 \value{
-a data.frame with columns ’plotID’ (combinations of paired plots), 'Order.q' , 'Type' (uncorrected or corrected for correlations) ,
+a data.frame with columns ’plotID’ (combinations of paired plots), 'Order.q' , 'Type' (uncorrected or corrected for correlations, which are denoted as corr_uncorrected and corr_corrected) ,
 'Scale' (gamma, alpha or beta) and 'qMF' (multifunctionality of order q). When \code{by_group} is not \code{NULL},
 the data.frame will include an additional column after ’plotID’ column, whose name is the same as the setting of \code{by_group}.
 For \code{species_data} is not \code{NULL}, the data.frame will show an additional column contain ’Species.diversity’ in the last column.
@@ -58,17 +58,17 @@ library(dplyr)
 
 
 ### Use 18 plots from both Germany and Italy these two country for illustration. 
-### (The 18 plots are the first 9 plots and last 9 plots in each country)
+### (Take the first 18 plots in Germany and the last 18 plots in Italy)
 
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
 GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
-                                      country=="GER"|country=="ITA")[c(1:9,30:47,66:74),]
+                                      country=="GER"|country=="ITA")[c(1:18,57:74),]
 GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_forest_function_raw,
                                                              fun_cols = 6:31, 
                                                              negative = c("soil_cn_ff_10","wue"),
                                                              by_group = "country")
-GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:61,116:159,205:229),]
+GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:82,181:229),]
 MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
              species_data = GER_ITA_forest_biodiversity,
              by_group = "country")

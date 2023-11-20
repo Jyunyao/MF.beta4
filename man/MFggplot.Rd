@@ -31,12 +31,16 @@ If \code{output} is obtained from \code{MF2_multiple}, the \code{by_group} setti
 }
 \value{
 For an \code{MF1_single} object of given individual function weights,
-this function plots the BEF relationship between multifunctionality of order q (= 0, 1 and 2) and species diversity of the same order q for two cases
+this function return a figure that plots the BEF relationship between multifunctionality of order q (= 0, 1 and 2) and species diversity of the same order q for two cases
 (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected. The fitted lines for the chosen model are also shown in the figure. \cr  
 
 For an \code{MF2_multiple} object of given individual function weights,
-this function plots the BEF relationship between alpha/beta/gamma multifunctionality of order q (= 0, 1 and 2) and the corresponding alpha/beta/gamma species diversity of the same order q for two cases
-(i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected. The fitted lines for the chosen model are also shown in the figure.
+this function return eight figures that plots the BEF relationship between alpha/beta/gamma multifunctionality of order q (= 0, 1 and 2) and the corresponding alpha/beta/gamma species diversity of the same order q for two cases
+(i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
+First figure simultaneously show the alpha, beta and gamma multifunctionality under the case of uncorrected for correlations.
+Second to fourth figures respectively show the alpha, beta and gamma multifunctionality under the case of uncorrected for correlations.
+The last four figures are similar to the first four figures, but performed with the case of corrected for correlations.
+And the fitted lines for the chosen model are also shown in the figure.
 }
 \description{
 \code{MFggplot} provides graphical BEF relationships based on the output from the function \code{MF1_single} or \code{MF2_multiple}.
@@ -72,18 +76,18 @@ library(dplyr)
 
 
 ### Use 18 plots from both Germany and Italy these two country for illustration. 
-### (The 18 plots are the first 9 plots and last 9 plots in each country)
+### (Take the first 18 plots in Germany and the last 18 plots in Italy)
 
 ## single ecosystem
 data("forest_function_data_raw")
 data("forest_biodiversity_data")
 GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
-                                      country=="GER"|country=="ITA")[c(1:9,30:47,66:74),]
+                                      country=="GER"|country=="ITA")[c(1:18,57:74),]
 GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_forest_function_raw,
                                                              fun_cols = 6:31, 
                                                              negative = c("soil_cn_ff_10","wue"),
                                                              by_group = "country")
-GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:61,116:159,205:229),]
+GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:82,181:229),]
 output3 <- MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
                       species_data = GER_ITA_forest_biodiversity)
 
@@ -97,12 +101,12 @@ MFggplot(output3, model = "lm", by_group="country")
 data("forest_function_data_normalized")
 data("forest_biodiversity_data")
 GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
-                                      country=="GER"|country=="ITA")[c(1:9,30:47,66:74),]
+                                      country=="GER"|country=="ITA")[c(1:18,57:74),]
 GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_forest_function_raw,
                                                              fun_cols = 6:31, 
                                                              negative = c("soil_cn_ff_10","wue"),
                                                              by_group = "country")
-GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:61,116:159,205:229),]
+GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:82,181:229),]
 output4 <- MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
                         species_data = GER_ITA_forest_biodiversity,
                         by_group = "country")
