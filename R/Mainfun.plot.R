@@ -252,6 +252,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           dplyr::add_row(lm_overall %>% dplyr::select(-Intercept)) %>%
           mutate(group=factor(group,levels = unique(group)))
         
+        output$group <- factor(output$group,levels = levels(lm_data$group))
         plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF,col = group))+
           facet_grid(Type ~ Order.q, scales = facets_scale) +
           geom_point(size=0.9,alpha=0.5)+
@@ -270,6 +271,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           dplyr::add_row(lm_overall %>% dplyr::select(-c(Significance,Intercept))) %>%
           mutate(group=factor(group,levels = unique(group)))
         
+        output$group <- factor(output$group,levels = levels(lm_data$group))
         plot_output <- ggplot(data = output, aes(x = Species.diversity, y = qMF,col = group))+
           facet_grid(Type ~ Order.q, scales = facets_scale) +
           geom_point(size=0.9,alpha=0.5)+
@@ -286,7 +288,6 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
         mutate(h=rep(c(-0.1,-1.5),(length(unique(group))+1)/2)[1:length(unique(group))],
                v=rep(2+(0:((length(unique(group))+1)/2-1))*1.5,each=2)[1:length(unique(group))]) %>% suppressMessages
       
-      output$group <- factor(output$group,levels = levels(lm_data$group))
       col_manual <- c(stdPalette[1:(length(levels(output$group))-1)],"red") %>%
         `names<-`(levels(output$group))
       
@@ -294,7 +295,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
       if(text == "slope"){
         plot_output <- plot_output +
           geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path)+
-          scale_colour_manual(values = col_manual) +
+          scale_colour_manual(values = col_manual, drop = F) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6,linewidth = 0.7)),
                  col = guide_legend(title = by_group))+
@@ -324,7 +325,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
         
         plot_output <- plot_output +
           geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path, parse = T,col="red")+
-          scale_colour_manual(values = col_manual) +
+          scale_colour_manual(values = col_manual, drop = F) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6,linewidth = 0.7)),
                  col = guide_legend(title = by_group))+
@@ -435,6 +436,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
               dplyr::add_row(lm_overall %>% dplyr::select(-Intercept)) %>%
               mutate(group=factor(group,levels = unique(group)))
             
+            out$group <- factor(out$group,levels = levels(lm_data$group))
             plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF,col = group))+
               facet_grid( ~ Order.q, scales = facets_scale) +
               geom_point(size=0.7,alpha=0.1)+
@@ -453,6 +455,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
               dplyr::add_row(lm_overall %>% dplyr::select(-c(Significance,Intercept))) %>%
               mutate(group=factor(group,levels = unique(group)))
             
+            out$group <- factor(out$group,levels = levels(lm_data$group))
             plot_output <- ggplot(data = out, aes(x = Species.diversity, y = qMF,col = group))+
               facet_grid(~Order.q, scales = facets_scale) +
               geom_point(size=0.7,alpha=0.1)+
@@ -470,7 +473,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
             mutate(h=rep(c(-0.1,h_j),(length(unique(group))+1)/2)[1:length(unique(group))],
                    v=rep(2+(0:((length(unique(group))+1)/2-1))*1.5,each=2)[1:length(unique(group))]) %>% suppressMessages
           
-          out$group <- factor(out$group,levels = levels(lm_data$group))
+          
           col_manual <- c(stdPalette[1:(length(levels(out$group))-1)],"red") %>%
             `names<-`(levels(out$group))
           
@@ -478,7 +481,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           if(text == "slope"){
             plot_output <- plot_output +
               geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=2.7,key_glyph = draw_key_path)+
-              scale_colour_manual(values = col_manual) +
+              scale_colour_manual(values = col_manual, drop = F) +
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6,linewidth = 0.7)),
                      col = guide_legend(title = by_group))+
@@ -511,7 +514,7 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
             
             plot_output <- plot_output +
               geom_text(data = lm_text, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=2.7,key_glyph = draw_key_path, parse = T,col="red")+
-              scale_colour_manual(values = col_manual) +
+              scale_colour_manual(values = col_manual, drop = F) +
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6,linewidth = 0.7)),
                      col = guide_legend(title = by_group))+
