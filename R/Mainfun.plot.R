@@ -290,18 +290,20 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
       
       col_manual <- c(stdPalette[1:(length(levels(output$group))-1)],"red") %>%
         `names<-`(levels(output$group))
-      
+      #####新增#####
+      num_group <- length(unique(output$group))
       
       if(text == "slope"){
+        
         plot_output <- plot_output +
-          geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3,key_glyph = draw_key_path)+
+          geom_text(data = lm_data, aes(x = -Inf, y = Inf, label=Label, hjust= h, vjust= v), size=3, key_glyph = draw_key_path)+
           scale_colour_manual(values = col_manual, drop = F) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6,linewidth = 0.7)),
-                 col = guide_legend(title = by_group))+
-          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                legend.title = element_text(size=12))+
+                 col = guide_legend(title = by_group, override.aes = list(linewidth=c(rep(1,num_group),2))))+ #####新增#####
+        theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+              strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
+              legend.title = element_text(size=12))+
           labs(x = "Species diversity", y = "Multifunctionality")+abc
       }
       else{
@@ -328,10 +330,10 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           scale_colour_manual(values = col_manual, drop = F) +
           theme_bw() +
           guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6,linewidth = 0.7)),
-                 col = guide_legend(title = by_group))+
-          theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                legend.title = element_text(size=12))+
+                 col = guide_legend(title = by_group, override.aes = list(linewidth=c(rep(1,num_group),2))))+ #####新增#####
+        theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+              strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
+              legend.title = element_text(size=12))+
           labs(x = "Species diversity", y = "Multifunctionality")+abc
       }
     }
@@ -476,7 +478,8 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
           
           col_manual <- c(stdPalette[1:(length(levels(out$group))-1)],"red") %>%
             `names<-`(levels(out$group))
-          
+          #####新增#####
+          num_group <- length(unique(out$group))
           
           if(text == "slope"){
             plot_output <- plot_output +
@@ -484,10 +487,10 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
               scale_colour_manual(values = col_manual, drop = F) +
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "#000000",size=0.6,linewidth = 0.7)),
-                     col = guide_legend(title = by_group))+
-              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                    strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                    legend.title = element_text(size=12))+
+                     col = guide_legend(title = by_group, override.aes = list(linewidth=c(rep(1,num_group),2))))+ #####新增#####
+            theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+                  strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                  legend.title = element_text(size=12))+
               labs(x = xlab, y = ylab)+abc
           }
           else{
@@ -517,10 +520,10 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
               scale_colour_manual(values = col_manual, drop = F) +
               theme_bw() +
               guides(linetype = guide_legend(title = "",order = 1,override.aes = list(col = "red",size=0.6,linewidth = 0.7)),
-                     col = guide_legend(title = by_group))+
-              theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
-                    strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
-                    legend.title = element_text(size=12))+
+                     col = guide_legend(title = by_group, override.aes = list(linewidth=c(rep(1,num_group),2))))+ #####新增#####
+            theme(legend.position = "bottom", legend.box = "vertical", legend.margin=margin(-6,-6,0,-6),legend.text = element_text(size=12, margin = margin(r = 1, unit = 'cm')),
+                  strip.text = element_text(size=12),axis.text = element_text(size=8),axis.title=element_text(size=18),
+                  legend.title = element_text(size=12))+
               labs(x = xlab, y = ylab)+abc
           }
           
@@ -560,8 +563,6 @@ MFggplot <- function(output, model = "LMM.both", caption = "slope", by_group = N
   }
   return(plot_output)
 }
-
-
 
 # Get the summary table of the linear mixed model fitted.
 #
