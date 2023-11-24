@@ -6,12 +6,12 @@
 #' For output obtained from \code{MF1_single}, if BEF relationships are desired within each category specified \code{by_group},
 #' the \code{by_group} column must be included in the input.
 #' @param model specifying the fitting model, \code{model = "lm"} for linear model; \code{model = "LMM.intercept"},
-#' \code{"LMM.slope"} and \code{"LMM.both"} for linear mixed models with random effects for intercepts, slopes,
-#' and both, respectively. Default is \code{model = "LMM.both"}.
-#' @param by_group name of the column for fitting model i.e., model will be fitted within each group classified by the categories of that column.
-#' Default is \code{NULL}. \cr
+#' \code{"LMM.slope"} and \code{"LMM.both"} for linear mixed models with random effects for intercepts, slopes, and both, respectively.
+#' Default is \code{model = "LMM.both"}.
+#' @param by_group the column name of the stratifying variable that is used to group data for model fitting. For example,
+#' if \code{by_group = “country”}, then model will be fitted within each country. Default is \code{NULL}. \cr
 #' It is required if a linear mixed model is selected in the \code{model}. \cr
-#' If \code{output} is obtained from \code{MF2_multiple}, the \code{by_group} setting must be the same as that set in \code{MF2_multiple}.
+#' If \code{output} is obtained from \code{MF2_multiple}, the \code{by_group} setting must be the same as that set in \code{MF2_multiple}. 
 #' @param caption caption that will be shown in the BEF plots; \code{caption = "slope"} to show the estimated slopes in each plot,
 #' or \code{caption = "R.squared"} to show the ordinary R-squared for linear models or estimated marginal and conditional R-squared for linear mixed models in each plot.
 #' Default is \code{caption = "slope"}.
@@ -28,16 +28,15 @@
 #' @importFrom dplyr %>%
 #'
 #' @return For an \code{MF1_single} object of given individual function weights,
-#' this function return a figure that plots the BEF relationship between multifunctionality of order q (= 0, 1 and 2) and species diversity of the same order q for two cases
-#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected. The fitted lines for the chosen model are also shown in the figure. \cr  
-#' 
-#' For an \code{MF2_multiple} object of given individual function weights,
-#' this function return eight figures that plots the BEF relationship between alpha/beta/gamma multifunctionality of order q (= 0, 1 and 2) and the corresponding alpha/beta/gamma species diversity of the same order q for two cases
+#' this function returns a figure that plots the BEF relationship between multifunctionality of order q (= 0, 1 and 2) and species diversity of the same order q for two cases
 #' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
-#' First figure simultaneously show the alpha, beta and gamma multifunctionality under the case of uncorrected for correlations.
-#' Second to fourth figures respectively show the alpha, beta and gamma multifunctionality under the case of uncorrected for correlations.
-#' The last four figures are similar to the first four figures, but performed with the case of corrected for correlations.
-#' And the fitted lines for the chosen model are also shown in the figure. 
+#' The fitted lines for the chosen model are also shown in the figure. \cr  
+#' 
+#' For an \code{MF2_multiple} object of given individual function weights, this function returns eight figures that plots the BEF relationship
+#' between alpha/beta/gamma multifunctionality of order q (= 0, 1 and 2) and the corresponding alpha/beta/gamma species diversity of the same order q for two cases
+#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected. First figure simultaneously show the alpha, beta and gamma multifunctionality
+#' under the case of uncorrected for correlations. Second to fourth figures respectively show the alpha, beta and gamma multifunctionality under the case of uncorrected for correlations.
+#' The last four figures are similar to the first four figures, but performed with the case of corrected for correlations. And the fitted lines for the chosen model are also shown in the figure.
 #' 
 #' @examples
 #' 
@@ -50,31 +49,34 @@
 #'   ## single ecosystem
 #'   data("forest_function_data_normalized")
 #'   data("forest_biodiversity_data")
-#'   output1 <- MF1_single(func_data = forest_function_data_normalized[,6:31], 
+#'   output1 <- MF1_single(func_data = forest_function_data_normalized[,6:31], weight = 1,
 #'                         species_data = forest_biodiversity_data)
 #'   
-#'   ## Display fitted line of linear model
+#'   ## Display fitted line of linear mixed model with random effect 'both'
 #'   output1 <- data.frame(output1, country=rep(forest_function_data_normalized$country, each = 6))
-#'   MFggplot(output1, model = "lm", by_group="country")
+#'   MFggplot(output1, model = "LMM.both", by_group="country", caption = "slope")
 #'   
-#'   ### Use data from five countries (without "FIN")
+#'   ### Use data from five countries (data in Finland are excluded)
 #'   
 #'   ## multiple ecosystems
 #'   data("forest_function_data_normalized")
 #'   data("forest_biodiversity_data")
-#'   forest_function_data_normalized <- filter(forest_function_data_normalized,
-#'     country != "FIN")
+#'   forest_function_data_normalized <- filter(forest_function_data_normalized, country != "FIN")
 #'   forest_biodiversity_data <- forest_biodiversity_data[-(1:48),]
 #'   output2 <- MF2_multiple(func_data = forest_function_data_normalized[,6:32],
 #'                           species_data = forest_biodiversity_data,
+#'                           weight = 1,
 #'                           by_group = "country")
 #'   
 #'   ## Display fitted line of linear mixed model with random effect 'both'
-#'   MFggplot(output2, model = "LMM.both", by_group = "country")
+#'   figure_LMM <- MFggplot(output2, model = "LMM.both", by_group = "country", 
+#'                          caption = "slope")
+#'   figure_LMM$corr_uncorrected$ALL
+#'   figure_LMM$corr_corrected$ALL
 #' }
 #' 
 #' 
-#' ### Use 18 plots from both Germany and Italy these two country for illustration. 
+#' ### Use partial data to quickly obtain output  
 #' ### (Take the first 18 plots in Germany and the last 18 plots in Italy)
 #' 
 #' ## single ecosystem
@@ -87,17 +89,17 @@
 #'                                                              negative = c("soil_cn_ff_10","wue"),
 #'                                                              by_group = "country")
 #' GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:82,181:229),]
-#' output3 <- MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
+#' output3 <- MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], weight = 1,
 #'                       species_data = GER_ITA_forest_biodiversity)
 #' 
 #' 
-#' ## Display fitted line of linear model
+#' ## Display fitted line of linear mixed model with random effect 'both'
 #' output3 <- data.frame(output3, country=rep(GER_ITA_forest_function_normalized$country, each = 6))
-#' MFggplot(output3, model = "lm", by_group="country")
+#' MFggplot(output3, model = "LMM.both", by_group="country", caption = "slope")
 #' 
 #' 
 #' ## multiple ecosystems
-#' data("forest_function_data_normalized")
+#' data("forest_function_data_raw")
 #' data("forest_biodiversity_data")
 #' GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
 #'                                       country=="GER"|country=="ITA")[c(1:18,57:74),]
@@ -108,13 +110,15 @@
 #' GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:82,181:229),]
 #' output4 <- MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
 #'                         species_data = GER_ITA_forest_biodiversity,
+#'                         weight = 1,
 #'                         by_group = "country")
 #' 
 #' 
 #' ## Display fitted line of linear mixed model with random effect 'both'
-#' MFggplot(output4, model = "LMM.both", by_group = "country")
-#' 
-#' 
+#' figure_LMM_GER_ITA <- MFggplot(output4, model = "LMM.both", by_group = "country", 
+#'                                caption = "slope")
+#' figure_LMM_GER_ITA$corr_uncorrected$ALL
+#' figure_LMM_GER_ITA$corr_corrected$ALL
 #'
 #' @export
 

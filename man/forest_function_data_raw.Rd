@@ -11,7 +11,7 @@ data("forest_function_data_raw")
 }
 
 \format{
-a data.frame with 209 plots (rows) and 32 columns, in addition to row and column names; the first 5 columns show the relevant plot information, followed by 26 raw ecosystem functions. The last column shows the corresponding country for each plot.
+a data.frame with 209 plots (rows) and 32 columns, in addition to row and column names; the first 5 columns show the relevant plot information, followed by 26 raw ecosystem functions (columns 6 to 31). The last column shows the corresponding country for each plot.
 }
 
 

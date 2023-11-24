@@ -18,13 +18,13 @@ The row names of \code{func_data} should be set the same as the names of plotID 
 \item{species_data}{species abundance data should be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’ (or any proxy such as basal area). Default is \code{NULL}.}
 
 \item{weight}{a constant number (if all weights are equal) or a numerical vector specifying weights for ecosystem functions.
-In the latter case, the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1},
-which means equal weight and weight = 1 for all ecosystem functions.}
+In the latter case, the length of \code{weight} must be equal to the number of functions.
+Default is \code{weight = 1}, which means equal weight and weight = 1 for all ecosystem functions.}
 
 \item{q}{a numerical vector specifying the multifunctionality and diversity orders. Default is q = 0, 1 and 2.}
 }
 \value{
-a data.frame with columns ’plotID’, ’Type’ (uncorrected or corrected for correlations, which are denoted as corr_uncorrected and corr_corrected), ’Order.q’ and ’qMF’ (multifunctionality of order q).
+a data.frame with columns ’plotID’, ’Type’ (corr_uncorrected or corr_corrected), ’Order.q’ and ’qMF’ (multifunctionality of order q).
 When \code{species_data} is not \code{NULL}, the data.frame will include an additional column ’Species.diversity’ in the last column.
 }
 \description{
@@ -41,12 +41,12 @@ library(dplyr)
   
   data("forest_function_data_normalized")
   data("forest_biodiversity_data")
-  MF1_single(func_data = forest_function_data_normalized[,6:31], 
+  MF1_single(func_data = forest_function_data_normalized[,6:31], weight = 1,
              species_data = forest_biodiversity_data)
 }
 
 
-### Use 18 plots from both Germany and Italy these two country for illustration. 
+### Use partial data to quickly obtain output 
 ### (Take the first 18 plots in Germany and the last 18 plots in Italy)
 
 data("forest_function_data_raw")
@@ -58,7 +58,7 @@ GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_fore
                                                              negative = c("soil_cn_ff_10","wue"),
                                                              by_group = "country")
 GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:82,181:229),]
-MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], 
+MF1_single(func_data = GER_ITA_forest_function_normalized[,6:31], weight = 1,
            species_data = GER_ITA_forest_biodiversity)
 
 }

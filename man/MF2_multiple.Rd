@@ -13,9 +13,9 @@ MF2_multiple(
 )
 }
 \arguments{
-\item{func_data}{ecosystem function data should be input as a data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1. \cr
-For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns.
-(e.g., those columns specified in the argument \code{fun_cols} if user use \code{function_normalization} to do normalization).
+\item{func_data}{ecosystem function data should be input as a data.frame (ecosystems by functions for multiple ecosystems).
+All function values must be normalized between 0 and 1. \cr
+For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns. (e.g., those columns specified in the argument \code{fun_cols} if user use \code{function_normalization} to do normalization).
 If \code{by_group} is not \code{NULL},in addition to ecosystem function columns, the \code{by_group} column must be included. \cr
 The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if \code{species_data} is not \code{NULL}.}
 
@@ -27,19 +27,20 @@ which means equal weight and weight = 1 for all ecosystem functions.}
 
 \item{q}{a numerical vector specifying the multifunctionality and diversity orders. Default is q = 0, 1 and 2.}
 
-\item{by_group}{name of the column for decomposition, i.e., multifunctionality decomposition will be performed for any two plots within
-each group classified by the categories of that column variable. \cr
+\item{by_group}{the column name of the stratifying variable that is used to group data for performing decomposition.
+For example, if \code{by_group = “country”}, then multifunctionality decomposition is performed for any pair of plots selected within a country. \cr
 The \code{by_group} setting must be the same as that set in \code{function_normalization}. Default is \code{NULL}.}
 }
 \value{
-a data.frame with columns ’plotID’ (combinations of paired plots), 'Order.q' , 'Type' (uncorrected or corrected for correlations, which are denoted as corr_uncorrected and corr_corrected) ,
-'Scale' (gamma, alpha or beta) and 'qMF' (multifunctionality of order q). When \code{by_group} is not \code{NULL},
-the data.frame will include an additional column after ’plotID’ column, whose name is the same as the setting of \code{by_group}.
-For \code{species_data} is not \code{NULL}, the data.frame will show an additional column contain ’Species.diversity’ in the last column.
+a data.frame with columns ’plotID’ (combinations of plot pairs), ’Order.q’ , ’Type’ (corr_uncorrected or corr_corrected) ,
+’Scale’ (gamma, alpha or beta) and ’qMF’ (multifunctionality of order q). When \code{by_group} is not \code{NULL}
+(i.e., the column name of the stratifying variable is specified), an additional column with stratification variable (e.g., “country” of the plot pairs)
+is also shown after the plotID column. For \code{species_data} is not \code{NULL},
+the data.frame will show an additional column contain ’Species.diversity’ in the last column.
 }
 \description{
 \code{MF2_multiple} computes alpha, beta and gamma multifuctionality measures of orders q = 0, 1 and 2 for given function weights in multiple ecosystems separately for two cases
-(i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected fo
+(i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected for.
 }
 \examples{
 
@@ -47,23 +48,23 @@ library(dplyr)
 
 \dontrun{
   
-  ### Use data from five countries (without "FIN")
+  ### Use data from five countries (data in Finland are excluded)
   
   data("forest_function_data_normalized")
   data("forest_biodiversity_data")
-  forest_function_data_normalized <- filter(forest_function_data_normalized,
-    country != "FIN")
+  forest_function_data_normalized <- filter(forest_function_data_normalized, country != "FIN")
   forest_biodiversity_data <- forest_biodiversity_data[-(1:48),]
   MF2_multiple(func_data = forest_function_data_normalized[,6:32],
                species_data = forest_biodiversity_data,
+               weight = 1,
                by_group = "country")
 }
 
 
-### Use 18 plots from both Germany and Italy these two country for illustration. 
+### Use partial data to quickly obtain output 
 ### (Take the first 18 plots in Germany and the last 18 plots in Italy)
 
-data("forest_function_data_normalized")
+data("forest_function_data_raw")
 data("forest_biodiversity_data")
 GER_ITA_forest_function_raw <- filter(forest_function_data_raw, 
                                       country=="GER"|country=="ITA")[c(1:18,57:74),]
@@ -74,6 +75,7 @@ GER_ITA_forest_function_normalized <- function_normalization(data = GER_ITA_fore
 GER_ITA_forest_biodiversity <- forest_biodiversity_data[c(49:82,181:229),]
 MF2_multiple(func_data = GER_ITA_forest_function_normalized[,6:32],
              species_data = GER_ITA_forest_biodiversity,
+             weight = 1,
              by_group = "country")
 
 
