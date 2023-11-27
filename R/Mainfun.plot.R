@@ -3,13 +3,11 @@
 #' \code{MFggplot} provides graphical BEF relationships based on the output from the function \code{MF1_single} or \code{MF2_multiple}.
 #'
 #' @param output the output obtained from \code{MF1_single} or \code{MF2_multiple}. \cr
-#' For output obtained from \code{MF1_single}, if BEF relationships are desired within each category specified \code{by_group},
-#' the \code{by_group} column must be included in the input.
+#' For output obtained from \code{MF1_single}, if BEF relationships are desired within each category specified \code{by_group}, the \code{by_group} column must be included in the input.
 #' @param model specifying the fitting model, \code{model = "lm"} for linear model; \code{model = "LMM.intercept"},
 #' \code{"LMM.slope"} and \code{"LMM.both"} for linear mixed models with random effects for intercepts, slopes, and both, respectively.
 #' Default is \code{model = "LMM.both"}.
-#' @param by_group the column name of the stratifying variable that is used to group data for model fitting. For example,
-#' if \code{by_group = “country”}, then model will be fitted within each country. Default is \code{NULL}. \cr
+#' @param by_group the column name of the stratifying variable that is used to group data for model fitting. For example, if \code{by_group = “country”}, then model will be fitted within each country. Default is \code{NULL}. \cr
 #' It is required if a linear mixed model is selected in the \code{model}. \cr
 #' If \code{output} is obtained from \code{MF2_multiple}, the \code{by_group} setting must be the same as that set in \code{MF2_multiple}. 
 #' @param caption caption that will be shown in the BEF plots; \code{caption = "slope"} to show the estimated slopes in each plot,
@@ -27,16 +25,16 @@
 #' @import purrr
 #' @importFrom dplyr %>%
 #'
-#' @return For an \code{MF1_single} object of given individual function weights,
-#' this function returns a figure that plots the BEF relationship between multifunctionality of order q (= 0, 1 and 2) and species diversity of the same order q for two cases
-#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected.
-#' The fitted lines for the chosen model are also shown in the figure. \cr  
+#' @return For an \code{MF1_single} object, this function returns a figure that plots the BEF relationship between multifunctionality of
+#' order q (= 0, 1 and 2) and species diversity of the same order q for two cases (i) correlations between functions are not corrected for, and (ii) correlations between
+#' functions are corrected. The fitted lines for the chosen model are also shown in the figure. \cr
 #' 
-#' For an \code{MF2_multiple} object of given individual function weights, this function returns eight figures that plots the BEF relationship
-#' between alpha/beta/gamma multifunctionality of order q (= 0, 1 and 2) and the corresponding alpha/beta/gamma species diversity of the same order q for two cases
-#' (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected. First figure simultaneously show the alpha, beta and gamma multifunctionality
-#' under the case of uncorrected for correlations. Second to fourth figures respectively show the alpha, beta and gamma multifunctionality under the case of uncorrected for correlations.
-#' The last four figures are similar to the first four figures, but performed with the case of corrected for correlations. And the fitted lines for the chosen model are also shown in the figure.
+#' For an \code{MF2_multiple} object of given individual function weights, this function returns a list of two objects (\code{$corr_uncorrected} and \code{$corr_corrected})
+#' that respectively for two cases: (i) correlations between functions are not corrected for, and (ii) correlations between functions are corrected for. \cr
+#' 
+#' Each object consists of four figures: “\code{$ALL}” returns a figure that depicts the BEF relationship between alpha/beta/gamma multifunctionality of
+#' order q (= 0, 1 and 2) and the corresponding species diversity of the same order q. The fitted lines for the chosen model are also shown in the figure.
+#' “\code{$Gamma}” returns only the gamma part of “\code{$ALL}”, “\code{$Alpha}” returns only the alpha part of “\code{$ALL}”, and “\code{$Beta}” returns only the beta part of “\code{$ALL}”. 
 #' 
 #' @examples
 #' 
@@ -52,7 +50,7 @@
 #'   output1 <- MF1_single(func_data = forest_function_data_normalized[,6:31], weight = 1,
 #'                         species_data = forest_biodiversity_data)
 #'   
-#'   ## Display fitted line of linear mixed model with random effect 'both'
+#'   ## Display fitted line of linear mixed model with random slopes and random intercepts  
 #'   output1 <- data.frame(output1, country=rep(forest_function_data_normalized$country, each = 6))
 #'   MFggplot(output1, model = "LMM.both", by_group="country", caption = "slope")
 #'   
@@ -68,7 +66,7 @@
 #'                           weight = 1,
 #'                           by_group = "country")
 #'   
-#'   ## Display fitted line of linear mixed model with random effect 'both'
+#'   ## Display fitted line of linear mixed model with random slopes and random intercepts  
 #'   figure_LMM <- MFggplot(output2, model = "LMM.both", by_group = "country", 
 #'                          caption = "slope")
 #'   figure_LMM$corr_uncorrected$ALL
@@ -93,7 +91,7 @@
 #'                       species_data = GER_ITA_forest_biodiversity)
 #' 
 #' 
-#' ## Display fitted line of linear mixed model with random effect 'both'
+#' ## Display fitted line of linear mixed model with random slopes and random intercepts  
 #' output3 <- data.frame(output3, country=rep(GER_ITA_forest_function_normalized$country, each = 6))
 #' MFggplot(output3, model = "LMM.both", by_group="country", caption = "slope")
 #' 
@@ -114,7 +112,7 @@
 #'                         by_group = "country")
 #' 
 #' 
-#' ## Display fitted line of linear mixed model with random effect 'both'
+#' ## Display fitted line of linear mixed model with random slopes and random intercepts  
 #' figure_LMM_GER_ITA <- MFggplot(output4, model = "LMM.both", by_group = "country", 
 #'                                caption = "slope")
 #' figure_LMM_GER_ITA$corr_uncorrected$ALL

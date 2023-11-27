@@ -242,7 +242,7 @@ output2 <- Demo_multiple
 
 The above output includes the combinations of two plots (`plotID`), `Country` of the two plots, `Type` (corr_uncorrected or corr_corrected), `Scale` (gamma, alpha or beta), the diversity order (`Order.q`), multifunctionality value of order q (`qMF`) and the corresponding gamma/alpha/beta species diversity (`Species.diversity`).
 
-NOTE: Because the total number of pair plots is huge, it is very time consuming to obtain the numerical output and graphical displays from running the above code. Users can simply select part of the data to promptly view/obtain the output. See the package manual for a simple example where the code for analyzing 18 plots from Germany and Italy is available. 
+NOTE: Because the total number of pair plots is huge, it is very time consuming to obtain the numerical output and graphical displays from running the above code. Users can simply select part of the data to quickly view/obtain the output. See later part for a simple example based on only 18 plots from Germany and Italy. 
 
 
 
@@ -291,13 +291,13 @@ figure_LMM$corr_corrected$ALL
 ```
 
 
-NOTE: Because the total number of pair plots is huge for the whole data, it is very time consuming to obtain the BEF graphical relationships from running the above code for alpha/beta/gamma scales. Users can simply select two countries (with 18 plots in each country) to promptly view the graphical results; see the package manual for examples. 
+NOTE: Because the total number of pair plots is huge, it is very time consuming to obtain the BEF graphical relationships from running the above code for alpha/beta/gamma scales. Users can use partial data to quickly view the graphical results; see below for an example. 
 
-## Computing multifunctionality in a single ecosystem (Use 18 plots from both Germany and Italy these two country for illustration.)
 
-Consider the calculating time, here we only use the first 18 plots from Germany and the last 18 plots from Italy as our demo data.
+## Computing multifunctionality in a single ecosystem for partial data
 
-Run the following code to view the first ten rows of the output:
+
+Here we only use the first 18 plots from Germany and the last 18 plots from Italy for illustration. Run the following code to view the first ten rows of the output:
 
 ```{r echo=TRUE}
 data("forest_function_data_raw")
@@ -319,11 +319,9 @@ output3 %>% mutate(qMF = round(qMF,3),
 
 ```
 
-## Computing alpha, beta and gamma multifunctionality for any pair of plots within a country (Use 18 plots from both Germany and Italy these two country for illustration.)
+## Computing alpha, beta and gamma multifunctionality for partial data
 
-Consider the calculating time, here we only use the first 18 plots from Germany and the last 18 plots from Italy as our demo data.
-
-Run the following code to view the first ten rows of the output:
+Here we only use the first 18 plots from Germany and the last 18 plots from Italy for illustration. Run the following code to view the first ten rows of the output:
 
 ```{r eval=FALSE}
 data("forest_function_data_raw")
@@ -375,9 +373,9 @@ output4 <- Demo_multiple2
 
 ## Assessing BEF Relationships by MFggplot()
 
-#### Within-plot BEF relationship (Use 18 plots from both Germany and Italy these two country for illustration.)
+#### Within-plot BEF relationship for partial data
 
-Run the following code to obtain the within-plot BEF graphical relationships in 18 plots from both Germany and Italy when correlations are not corrected for and corrected for.
+Run the following code to obtain the within-plot BEF graphical relationships based on 18 plots from Germany and Italy when correlations are not corrected for and corrected for.
 
 ```{r}
 output3 <- data.frame(output3, country=rep(GER_ITA_forest_function_normalized$country, each = 6))
@@ -385,9 +383,9 @@ MFggplot(output3, model = "LMM.both", by_group="country", caption = "slope")
 ```
 
 
-#### BEF relationships at gamma, alpha and beta scales (Use 18 plots from both Germany and Italy these two country for illustration.)
+#### BEF relationships at gamma, alpha and beta scales for partial data
 
-Run the following code to obtain the BEF graphical relationships in 18 plots from both Germany and Italy when correlations are not corrected for.
+Run the following code to obtain the BEF graphical relationships in 18 plots from Germany and Italy when correlations are not corrected for.
 
 ```{r}
 figure_LMM_GER_ITA <- MFggplot(output4, model = "LMM.both", by_group = "country", caption = "slope")
@@ -398,7 +396,7 @@ figure_LMM_GER_ITA$corr_uncorrected$ALL
 ```
 
 
-The BEF graphical relationships in 18 plots from both Germany and Italy when correlations are corrected for are shown below. 
+The BEF graphical relationships based on 18 plots from Germany and Italy when correlations are corrected for are shown below. 
 
 ```{r, fig.align='center', fig.height=10, fig.width=6.5}
 figure_LMM_GER_ITA$corr_corrected$ALL

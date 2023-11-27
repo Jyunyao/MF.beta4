@@ -13,8 +13,7 @@ MF2_multiple(
 )
 }
 \arguments{
-\item{func_data}{ecosystem function data should be input as a data.frame (ecosystems by functions for multiple ecosystems).
-All function values must be normalized between 0 and 1. \cr
+\item{func_data}{ecosystem function data should be input as a data.frame (ecosystems by functions for multiple ecosystems). All function values must be normalized between 0 and 1. \cr
 For \code{by_group = NULL}, the \code{func_data} must contain only the ecosystem function columns. (e.g., those columns specified in the argument \code{fun_cols} if user use \code{function_normalization} to do normalization).
 If \code{by_group} is not \code{NULL},in addition to ecosystem function columns, the \code{by_group} column must be included. \cr
 The row names of \code{func_data} should be set the same as the names of plotID specified in \code{species_data} if \code{species_data} is not \code{NULL}.}
@@ -22,8 +21,7 @@ The row names of \code{func_data} should be set the same as the names of plotID 
 \item{species_data}{species abundance data should be input as a data.frame and must include three columns: ’plotID’, ’species’ and ’abundance’. Default is \code{NULL}.}
 
 \item{weight}{a constant number (if all weights are equal) or a numerical vector specifying weights for ecosystem functions.
-In the latter case, the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1},
-which means equal weight and weight = 1 for all ecosystem functions.}
+In the latter case, the length of \code{weight} must be equal to the number of functions. Default is \code{weight = 1}, which means equal weight and weight = 1 for all ecosystem functions.}
 
 \item{q}{a numerical vector specifying the multifunctionality and diversity orders. Default is q = 0, 1 and 2.}
 
@@ -32,10 +30,9 @@ For example, if \code{by_group = “country”}, then multifunctionality decompo
 The \code{by_group} setting must be the same as that set in \code{function_normalization}. Default is \code{NULL}.}
 }
 \value{
-a data.frame with columns ’plotID’ (combinations of plot pairs), ’Order.q’ , ’Type’ (corr_uncorrected or corr_corrected) ,
-’Scale’ (gamma, alpha or beta) and ’qMF’ (multifunctionality of order q). When \code{by_group} is not \code{NULL}
-(i.e., the column name of the stratifying variable is specified), an additional column with stratification variable (e.g., “country” of the plot pairs)
-is also shown after the plotID column. For \code{species_data} is not \code{NULL},
+a data.frame with columns ’plotID’ (combinations of plot pairs), ’Order.q’ , ’Type’ (corr_uncorrected or corr_corrected) , ’Scale’ (gamma, alpha or beta) and ’qMF’ (multifunctionality of order q).
+When \code{by_group} is not \code{NULL} (i.e., the column name of the stratifying variable is specified),
+an additional column with stratification variable (e.g., “country” of the plot pairs) is also shown after the plotID column. For \code{species_data} is not \code{NULL},
 the data.frame will show an additional column contain ’Species.diversity’ in the last column.
 }
 \description{
@@ -49,7 +46,7 @@ library(dplyr)
 \dontrun{
   
   ### Use data from five countries (data in Finland are excluded)
-  
+ 
   data("forest_function_data_normalized")
   data("forest_biodiversity_data")
   forest_function_data_normalized <- filter(forest_function_data_normalized, country != "FIN")
